@@ -401,6 +401,42 @@ void debug() {
 #endif
 
 /* 80006338-80006464       .text main01__Fv */
+#if TARGET_PC
+#include "dusk/main.h"
+
+#include <aurora/aurora.h>
+#include <aurora/event.h>
+
+// The game loop on PC: aurora owns the window and the frame, so each iteration drains window
+// events, begins a frame, fires the VI retrace callbacks the game paces itself with, runs one
+// game frame, and presents it.
+static void mDoMain_pcLoop() {
+    while (dusk::IsRunning) {
+        for (const AuroraEvent* event = aurora_update(); event != nullptr && event->type != AURORA_NONE;
+             event++) {
+            if (event->type == AURORA_EXIT) {
+                dusk::IsRunning = false;
+                return;
+            }
+        }
+
+        if (!aurora_begin_frame()) {
+            continue;
+        }
+        VIWaitForRetrace();
+
+        if (mDoDvdThd::SyncWidthSound) {
+            mDoMemCd_UpDate();
+        }
+        mDoCPd_Read();     // read controller input
+        mDoAud_Execute();  // handle audio execution
+        fapGm_Execute();   // handle game execution
+
+        aurora_end_frame();
+    }
+}
+#endif
+
 void main01() {
     // Setup heaps, setup exception manager, set RNG seed, setup DVDError Thread, setup Memory card
     // Thread
@@ -447,6 +483,11 @@ void main01() {
     g_mDoAud_audioHeap = JKRSolidHeap::create(0x166800, JKRHeap::getCurrentHeap(), false);
 
     static u32 frame;
+#endif
+
+#if TARGET_PC
+    mDoMain_pcLoop();
+    return;
 #endif
 
     do {
@@ -530,7 +571,11 @@ OSThread mainThread;
 #endif
 
 /* 80006464-800065DC       .text main */
+#if TARGET_PC
+int mDoMain_run(int argc, const char* argv[]) {
+#else
 int main(int argc, const char* argv[]) {
+#endif
 #if VERSION == VERSION_DEMO
     OSThread mainThread;
 #endif
@@ -542,7 +587,12 @@ int main(int argc, const char* argv[]) {
     OSReportInit();
     version_check();
 #if VERSION > VERSION_JPN
+#if TARGET_PC
+    static mDoRstData s_resetData;
+    mDoRstData* reset_data = &s_resetData;
+#else
     mDoRstData* reset_data = (mDoRstData*)OSAllocFromArenaLo(0x10, 4);
+#endif
     mDoRst::setResetData(reset_data);
 
     if (!mDoRst::getResetData()) {
@@ -587,9 +637,15 @@ int main(int argc, const char* argv[]) {
     parse_args(argc, argv);
 #endif
 
+#if TARGET_PC
+    // aurora needs the frame loop on the process's main thread, so run the game here.
+    main01();
+    return 0;
+#else
     OSPriority priority = OSGetThreadPriority(current_thread);
     OSCreateThread(&mainThread, (void*)main01, 0, stack + sizeof(stack), sizeof(stack), priority, 0);
     OSResumeThread(&mainThread);
     OSSetThreadPriority(current_thread, 0x1F);
     return OSSuspendThread(current_thread);
+#endif
 }

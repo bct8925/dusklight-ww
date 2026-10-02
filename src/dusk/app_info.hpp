@@ -4,12 +4,14 @@
 
 namespace dusk {
     /** Application identity fields for Borealis modules */
+    // Wind Waker port: its own identity, so it never shares (or overwrites) a Dusklight
+    // installation's settings, saves or cache.
     inline constexpr borealis::AppInfo AppInfo{
-        .orgName = "TwilitRealm",
-        .appName = "Dusklight",
-        .githubOwner = "TwilitRealm",
-        .githubRepo = "dusklight",
-        .discordApplicationId = "1495632471994405035",
+        .orgName = "bct8925",
+        .appName = "Dusklight-WW",
+        .githubOwner = "bct8925",
+        .githubRepo = "dusklight-ww",
+        .discordApplicationId = "",
     };
 
     /**
@@ -17,6 +19,6 @@ namespace dusk {
      *
      * This gets used for file paths and such, and cannot be changed!
      */
-    constexpr auto AppName = "Dusklight";
+    constexpr auto AppName = "Dusklight-WW";
 
 }

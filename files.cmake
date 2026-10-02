@@ -74,6 +74,7 @@ set(DUSK_FILES
 # are rewritten for Wind Waker as the game tree comes up.
 set(DUSK_GAME_GLUE_FILES
         src/dusk/main.cpp
+        src/dusk/ww_game_main.cpp
         src/dusk/ww_profile_list.cpp
         src/dusk/ww_audio_null.cpp
         src/dusk/dvd_asset.cpp

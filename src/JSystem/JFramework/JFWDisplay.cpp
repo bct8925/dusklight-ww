@@ -351,7 +351,37 @@ void JFWDisplay::waitBlanking(int duration) {
     }
 }
 
+#if TARGET_PC
+#include "dusk/dusk.h"
+#include "dusk/time.h"
+
+#include <chrono>
+
+// On PC there are no VI retrace interrupts to wait on; sleep for the same number of retrace
+// periods (NTSC, 59.94 Hz) instead. Adapted from dusklight.
+constexpr auto FRAME_PERIOD = std::chrono::duration_cast<std::chrono::nanoseconds>(
+    std::chrono::duration<double>(1001.0 / 30000.0));
+constexpr auto RETRACE_PERIOD = FRAME_PERIOD / 2;
+
+static void waitPrecise(Limiter& limiter, Limiter::duration_t targetNs) {
+    const auto sleepTime = limiter.Sleep(targetNs);
+    dusk::frameUsagePct =
+        100.0f * (1.0f - static_cast<float>(sleepTime) / static_cast<float>(targetNs));
+}
+#endif
+
 /* 80255D34-80255E54       .text waitForTick__FUlUs */
+#if TARGET_PC
+void waitForTick(u32 p1, u16 p2) {
+    static Limiter limiter;
+    if (p1 != 0) {
+        waitPrecise(limiter, static_cast<Uint64>(OSTicksToMicroseconds(p1)) * 1000ULL);
+    } else {
+        u32 uVar1 = (p2 == 0) ? 1 : p2;
+        waitPrecise(limiter, static_cast<Uint64>((RETRACE_PERIOD * uVar1).count()));
+    }
+}
+#else
 void waitForTick(u32 p1, u16 p2) {
     if (p1 != 0) {
         static s64 nextTick = OSGetTime();
@@ -374,6 +404,7 @@ void waitForTick(u32 p1, u16 p2) {
         nextCount = (int)msg + uVar1;
     }
 }
+#endif
 
 /* 80255E54-80255E78       .text JFWThreadAlarmHandler__FP7OSAlarmP9OSContext */
 void JFWThreadAlarmHandler(OSAlarm* p_alarm, OSContext* p_ctx) {

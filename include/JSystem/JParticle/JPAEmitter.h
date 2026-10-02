@@ -86,6 +86,16 @@ public:
     inline virtual void draw(T);
 };  // Size: 0x04
 
+#if TARGET_PC
+template<>
+inline void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {}
+template<>
+inline void JPACallBackBase<JPABaseEmitter*>::execute(JPABaseEmitter*) {}
+template<>
+inline void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {}
+template<>
+inline void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {}
+#else
 template<>
 void JPACallBackBase<JPABaseEmitter*>::init(JPABaseEmitter*) {}
 template<>
@@ -94,6 +104,7 @@ template<>
 void JPACallBackBase<JPABaseEmitter*>::executeAfter(JPABaseEmitter*) {}
 template<>
 void JPACallBackBase<JPABaseEmitter*>::draw(JPABaseEmitter*) {}
+#endif
 
 template<typename T, typename U>
 class JPACallBackBase2 {
@@ -106,12 +117,21 @@ public:
     inline virtual void draw(T, U);
 };
 
+#if TARGET_PC
+template<>
+inline void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, JPABaseParticle*) {}
+template<>
+inline void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter*, JPABaseParticle*) {}
+template<>
+inline void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::draw(JPABaseEmitter*, JPABaseParticle*) {}
+#else
 template<>
 void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::init(JPABaseEmitter*, JPABaseParticle*) {}
 template<>
 void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::execute(JPABaseEmitter*, JPABaseParticle*) {}
 template<>
 void JPACallBackBase2<JPABaseEmitter*, JPABaseParticle*>::draw(JPABaseEmitter*, JPABaseParticle*) {}
+#endif
 
 struct JPAEmitterInfo {
 public:

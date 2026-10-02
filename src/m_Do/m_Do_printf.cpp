@@ -9,7 +9,11 @@
 #include "dolphin/base/PPCArch.h"
 #include "dolphin/os/OS.h"
 
+#if TARGET_PC
+extern u8 __OSReport_disable;  // Defined by src/dusk/OSReport.cpp.
+#else
 u8 __OSReport_disable;
+#endif
 u8 __OSReport_Error_disable;
 u8 __OSReport_Warning_disable;
 u8 __OSReport_enable;
@@ -162,12 +166,14 @@ void OSVReport(const char* fmt, va_list args) {
 }
 
 /* 80006950-800069D0       .text OSReport */
+#if !TARGET_PC  // src/dusk/OSReport.cpp sends this to the log
 void OSReport(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     OSVReport(fmt, args);
     va_end(args);
 }
+#endif
 
 /* 800069D0-80006A9C       .text OSReport_FatalError */
 void OSReport_FatalError(const char* fmt, ...) {
@@ -215,6 +221,7 @@ void OSReport_Warning(const char* fmt, ...) {
 }
 
 /* 80006C4C-80006D84       .text OSPanic */
+#if !TARGET_PC  // src/dusk/OSReport.cpp sends this to the log
 void OSPanic(const char* file, s32 line, const char* fmt, ...) {
     va_list args;
     u32 i;
@@ -238,3 +245,4 @@ void OSPanic(const char* file, s32 line, const char* fmt, ...) {
     *tmp = tmp2;
     PPCHalt();
 }
+#endif
