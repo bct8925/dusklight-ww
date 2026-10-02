@@ -6,13 +6,15 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/types.h"
+#include "helpers/endian.h"
+#include "helpers/offset_ptr.h"
 
 class J3DShapeMtx;
 
 class J3DCurrentMtxInfo {
 public:
-    /* 0x00 */ u32 mMtxIdxRegA;
-    /* 0x04 */ u32 mMtxIdxRegB;
+    /* 0x00 */ BE(u32) mMtxIdxRegA;
+    /* 0x04 */ BE(u32) mMtxIdxRegB;
 };
 
 static inline void JRNLoadCPCmd(u8 cmd, u32 param) {
@@ -76,7 +78,11 @@ public:
     }
 
     enum {
+#if TARGET_PC
+        kVcdVatDLSize = 0x180,  // aurora's sized array commands are larger (as in dusklight)
+#else
         kVcdVatDLSize = 0xC0,
+#endif
     };
 
     void initialize();

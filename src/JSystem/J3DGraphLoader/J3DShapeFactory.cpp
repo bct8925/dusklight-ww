@@ -17,13 +17,30 @@
 /* 802FE3A8-802FE458       .text __ct__15J3DShapeFactoryFRC13J3DShapeBlock */
 J3DShapeFactory::J3DShapeFactory(const J3DShapeBlock& block) {
     mpShapeInitData = JSUConvertOffsetToPtr<J3DShapeInitData>(&block, (uintptr_t)block.mpShapeInitData);
-    mpIndexTable = JSUConvertOffsetToPtr<u16>(&block, (uintptr_t)block.mpIndexTable);
+    mpIndexTable = JSUConvertOffsetToPtr<BE(u16)>(&block, (uintptr_t)block.mpIndexTable);
     mpVtxDescList = JSUConvertOffsetToPtr<GXVtxDescList>(&block, (uintptr_t)block.mpVtxDescList);
-    mpMtxTable = JSUConvertOffsetToPtr<u16>(&block, (uintptr_t)block.mpMtxTable);
+    mpMtxTable = JSUConvertOffsetToPtr<BE(u16)>(&block, (uintptr_t)block.mpMtxTable);
     mpDisplayListData = JSUConvertOffsetToPtr<u8>(&block, (uintptr_t)block.mpDisplayListData);
     mpMtxInitData = JSUConvertOffsetToPtr<J3DShapeMtxInitData>(&block, (uintptr_t)block.mpMtxInitData);
     mpDrawInitData = JSUConvertOffsetToPtr<J3DShapeDrawInitData>(&block, (uintptr_t)block.mpDrawInitData);
     mpVcdVatCmdBuffer = NULL;
+
+#if TARGET_PC
+    // GX reads the vertex descriptor lists as host data: swap them in place, once, up to the
+    // GX_VA_NULL terminator of the last list used (as in dusklight).
+    int maxStart = 0;
+    for (int i = 0; i < block.mShapeNum; i++) {
+        int start = mpShapeInitData[mpIndexTable[i]].mVtxDescListIndex / sizeof(GXVtxDescList);
+        maxStart = start > maxStart ? start : maxStart;
+    }
+    GXVtxDescList* last = mpVtxDescList + maxStart;
+    while (last->attr != BE(GXAttr)::swap(GX_VA_NULL)) {
+        last++;
+    }
+    for (GXVtxDescList* entry = mpVtxDescList; entry <= last; entry++) {
+        *entry = BE(GXVtxDescList)::swap(*entry);
+    }
+#endif
 }
 
 /* 802FE458-802FE614       .text create__15J3DShapeFactoryFiUlP14_GXVtxDescList */

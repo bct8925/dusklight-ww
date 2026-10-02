@@ -56,7 +56,11 @@ struct OffsetPtrT {
 
 #define OFFSET_PTR(T) OffsetPtrT<T>
 #define OFFSET_PTR_RAW OffsetPtr
+// A 32-bit offset in file data that the decomp declares as a pointer (relocated by the loader
+// with JSUConvertOffsetToPtr). As in dusklight.
+#define OFFSET_PTR_V0 BE(u32)
 #else
 #define OFFSET_PTR(T) T*
 #define OFFSET_PTR_RAW u32
+#define OFFSET_PTR_V0 void*
 #endif

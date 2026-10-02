@@ -32,6 +32,9 @@
 #include "dolphin/os/OS.h"
 #include "string.h"
 #include "stdio.h"
+#if TARGET_PC
+#include "dusk/trace.h"
+#endif
 
 mDoDvdThd_mountXArchive_c * l_anmCommand;
 mDoDvdThd_mountXArchive_c * l_fmapCommand;
@@ -481,6 +484,13 @@ static BOOL dScnLogo_Draw(dScnLogo_c* i_this) {
     };
 
     cLib_calcTimer(&i_this->mTimer);
+#if TARGET_PC
+    static int sTracedAction = -1;
+    if (i_this->mAction != sTracedAction) {
+        sTracedAction = i_this->mAction;
+        DUSK_TRACE("logo -> %s", dusk::TraceSymbol((const void*)l_execFunc[i_this->mAction]));
+    }
+#endif
     return l_execFunc[i_this->mAction](i_this);
 }
 

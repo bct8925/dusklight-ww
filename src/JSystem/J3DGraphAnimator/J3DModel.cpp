@@ -509,8 +509,8 @@ void J3DModel::calcWeightEnvelopeMtx() {
     int mixNum;
     int i;
     int max;
-    u16* indices;
-    f32* weights;
+    BE(u16)* indices;  // envelope tables are big-endian model data
+    BE(f32)* weights;
     u8* pScale;
 
     #if DEBUG || !__MWERKS__
@@ -574,7 +574,13 @@ void J3DModel::calcWeightEnvelopeMtx() {
         do {
             idx = *++indices;
             worldMtx = &mpNodeMtx[idx];
+#if TARGET_PC
+            Mtx invMtxHost;
+            mModelData->getJointTree().getInvJointMtx((u16)idx).to_host(invMtxHost);
+            invMtx = &invMtxHost;
+#else
             invMtx = &mModelData->getJointTree().getInvJointMtx((u16)idx);
+#endif
 
             #if DEBUG || !__MWERKS__
             MTXConcat(*worldMtx, *invMtx, mtx);

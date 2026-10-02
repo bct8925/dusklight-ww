@@ -268,6 +268,101 @@ void J3DModelLoader::readInformation(const J3DModelInfoBlock* i_block, u32 i_fla
     mpModelData->setHierarchy(JSUConvertOffsetToPtr<J3DModelHierarchy>(i_block, i_block->mpHierarchy));
 }
 
+#if TARGET_PC
+// Vertex arrays are big-endian in the file; swap each to host order once, by component size, and
+// record per-attribute stride and count for GDSetArraySized. Adapted from dusklight.
+static void FixArrayEndian(void* start, void* end, u32 compSize) {
+    switch (compSize) {
+    case 1:
+        break;
+    case 2:
+        be_swap((u16*)start, (u32)(((u8*)end - (u8*)start) / 2));
+        break;
+    case 4:
+        be_swap((u32*)start, (u32)(((u8*)end - (u8*)start) / 4));
+        break;
+    default:
+        OSPanic(__FILE__, __LINE__, "Unknown vertex component size %u", compSize);
+    }
+}
+
+// Order of the array offsets in J3DVertexBlock, starting at mpVtxPosArray.
+static const GXAttr sVertexBlockAttrOrder[13] = {
+    GX_VA_POS,  GX_VA_NRM,  GX_VA_NBT,  GX_VA_CLR0, GX_VA_CLR1, GX_VA_TEX0, GX_VA_TEX1,
+    GX_VA_TEX2, GX_VA_TEX3, GX_VA_TEX4, GX_VA_TEX5, GX_VA_TEX6, GX_VA_TEX7,
+};
+
+static const GXVtxAttrFmtList* findFmt(const GXVtxAttrFmtList* list, GXAttr attr) {
+    for (; list->attr != GX_VA_NULL; list++) {
+        if (list->attr == attr) {
+            return list;
+        }
+    }
+    return NULL;
+}
+
+// (components per vertex, bytes per component)
+static void strideForData(GXAttr attr, GXCompType type, GXCompCnt cnt, u32& compCnt, u32& compSize) {
+    if (attr == GX_VA_CLR0 || attr == GX_VA_CLR1) {
+        switch (type) {
+        case GX_RGB565: case GX_RGBA4: compCnt = 1; compSize = 2; return;
+        case GX_RGB8: case GX_RGBA6: compCnt = 3; compSize = 1; return;
+        default: compCnt = 4; compSize = 1; return;  // GX_RGBX8, GX_RGBA8
+        }
+    }
+    compSize = type == GX_F32 ? 4 : (type == GX_U16 || type == GX_S16) ? 2 : 1;
+    if (attr == GX_VA_POS) {
+        compCnt = cnt == GX_POS_XY ? 2 : 3;
+    } else if (attr == GX_VA_NRM || attr == GX_VA_NBT) {
+        compCnt = cnt == GX_NRM_XYZ ? 3 : 9;
+    } else {
+        compCnt = cnt == GX_TEX_S ? 1 : 2;
+    }
+}
+
+void J3DModelLoader::readVertexData(const J3DVertexBlock& block, J3DVertexData& data) {
+    const BE(u32)* offsets = &block.mpVtxPosArray;
+    for (int i = 0; i < 13; i++) {
+        if (offsets[i] == 0) {
+            continue;
+        }
+        GXAttr attr = sVertexBlockAttrOrder[i];
+        // NBT arrays use the normal format.
+        const GXVtxAttrFmtList* fmt = findFmt(data.mVtxAttrFmtList, attr == GX_VA_NBT ? GX_VA_NRM : attr);
+        if (fmt == NULL) {
+            OSPanic(__FILE__, __LINE__, "No vertex format for attribute %d", attr);
+        }
+
+        void* start = JSUConvertOffsetToPtr<void>(&block, (u32)offsets[i]);
+        void* end = JSUConvertOffsetToPtr<void>(&block, (u32)block.mSize);
+        for (int j = i + 1; j < 13; j++) {
+            if (offsets[j] != 0) {
+                end = JSUConvertOffsetToPtr<void>(&block, (u32)offsets[j]);
+                break;
+            }
+        }
+
+        u32 compCnt, compSize;
+        strideForData(attr, fmt->type, fmt->cnt, compCnt, compSize);
+        FixArrayEndian(start, end, compSize);
+        if (attr == GX_VA_NBT) {
+            continue;
+        }
+        u32 stride = compCnt * compSize;
+        u32 num = (u32)((u8*)end - (u8*)start) / stride;
+        data.mVtxArrStride[attr - GX_VA_POS] = stride;
+        data.mVtxArrNum[attr - GX_VA_POS] = num;
+        if (attr == GX_VA_NRM) {
+            data.mNrmNum = num;
+        } else if (attr == GX_VA_CLR0) {
+            data.mColNum = num;
+        } else if (attr == GX_VA_TEX0) {
+            data.mTexCoordNum = num;
+        }
+    }
+}
+#endif
+
 /* 802FC3E4-802FC410       .text getFmtType__FP17_GXVtxAttrFmtList7_GXAttr */
 static GXCompType getFmtType(GXVtxAttrFmtList* i_fmtList, GXAttr i_attr) {
     for (; i_fmtList->attr != GX_VA_NULL; i_fmtList++) {
@@ -294,6 +389,16 @@ void J3DModelLoader::readVertex(const J3DVertexBlock* i_block) {
         vertex_data.mVtxTexCoordArray[i] =
             JSUConvertOffsetToPtr<void>(i_block, i_block->mpVtxTexCoordArray[i]);
     }
+
+#if TARGET_PC
+    // The attribute format list is big-endian; swap it to host order once.
+    for (GXVtxAttrFmtList* attrFmt = vertex_data.mVtxAttrFmtList;; attrFmt++) {
+        *attrFmt = BE(GXVtxAttrFmtList)::swap(*attrFmt);
+        if (attrFmt->attr == GX_VA_NULL) {
+            break;
+        }
+    }
+#endif
 
     GXCompType nrm_type = getFmtType(vertex_data.mVtxAttrFmtList, GX_VA_NRM);
     u32 nrm_size = nrm_type == GX_F32 ? 12 : 6;
@@ -335,6 +440,9 @@ void J3DModelLoader::readVertex(const J3DVertexBlock* i_block) {
     } else {
         vertex_data.mTexCoordNum = (i_block->mSize - (uintptr_t)i_block->mpVtxTexCoordArray[0]) / 8 + 1;
     }
+#if TARGET_PC
+    readVertexData(*i_block, vertex_data);
+#endif
 }
 
 /* 802FC630-802FC6C0       .text readEnvelop__14J3DModelLoaderFPC15J3DEnvelopBlock */
@@ -343,11 +451,11 @@ void J3DModelLoader::readEnvelop(const J3DEnvelopBlock* i_block) {
     mpModelData->getJointTree().mWEvlpMixMtxNum =
         JSUConvertOffsetToPtr<u8>(i_block, i_block->mpWEvlpMixMtxNum);
     mpModelData->getJointTree().mWEvlpMixMtxIndex =
-        JSUConvertOffsetToPtr<u16>(i_block, i_block->mpWEvlpMixMtxIndex);
+        JSUConvertOffsetToPtr<BE(u16)>(i_block, i_block->mpWEvlpMixMtxIndex);
     mpModelData->getJointTree().mWEvlpMixWeight =
-        JSUConvertOffsetToPtr<f32>(i_block, i_block->mpWEvlpMixWeight);
+        JSUConvertOffsetToPtr<BE(f32)>(i_block, i_block->mpWEvlpMixWeight);
     mpModelData->getJointTree().mInvJointMtx =
-        JSUConvertOffsetToPtr<Mtx>(i_block, i_block->mpInvJointMtx);
+        JSUConvertOffsetToPtr<BE(Mtx)>(i_block, i_block->mpInvJointMtx);
 }
 
 /* 802FC6C0-802FC750       .text readDraw__14J3DModelLoaderFPC12J3DDrawBlock */
@@ -355,7 +463,7 @@ void J3DModelLoader::readDraw(const J3DDrawBlock* i_block) {
     J3DJointTree& joint_tree = mpModelData->getJointTree();
     joint_tree.mDrawMtxData.mEntryNum = i_block->mMtxNum;
     joint_tree.mDrawMtxData.mDrawMtxFlag = JSUConvertOffsetToPtr<u8>(i_block, i_block->mpDrawMtxFlag);
-    joint_tree.mDrawMtxData.mDrawMtxIndex = JSUConvertOffsetToPtr<u16>(i_block, i_block->mpDrawMtxIndex);
+    joint_tree.mDrawMtxData.mDrawMtxIndex = JSUConvertOffsetToPtr<BE(u16)>(i_block, i_block->mpDrawMtxIndex);
     u16 i;
     for (i = 0; i < joint_tree.mDrawMtxData.mEntryNum; i++) {
         if (joint_tree.mDrawMtxData.mDrawMtxFlag[i] == 1) {

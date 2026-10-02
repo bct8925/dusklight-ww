@@ -8,6 +8,9 @@
 #include "f_op/f_op_scene_req.h"
 #include "f_pc/f_pc_searcher.h"
 #include "JSystem/JUtility/JUTAssert.h"
+#if TARGET_PC
+#include "dusk/trace.h"
+#endif
 
 scene_class* fopScnM_SearchByID(fpc_ProcID id) {
     return (scene_class*)fopScnIt_Judge((fop_ScnItFunc)fpcSch_JudgeByID, &id);
@@ -17,6 +20,10 @@ static uint l_scnRqID = -1;
 
 BOOL fopScnM_ChangeReq(scene_class* i_scene, s16 procName, s16 fadeProcName, u16 fadePeekTime) {
     uint sceneRequestID = fopScnRq_Request(2, i_scene, procName, 0, fadeProcName, fadePeekTime);
+#if TARGET_PC
+    DUSK_TRACE("scene change -> %s (fade %s): %s", dusk::TraceProcName(procName),
+               dusk::TraceProcName(fadeProcName), sceneRequestID == (uint)-1 ? "refused" : "requested");
+#endif
 
     if (sceneRequestID == -1) {
         return FALSE;

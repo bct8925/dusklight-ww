@@ -6,6 +6,11 @@ prints the faulting function and source line from the PDB, plus a heuristic back
 the stack that are return addresses into the program's own modules. Windows only.
 
     python tools/crashtrace.py build/windows-msvc-relwithdebinfo/dusklight.exe [args...]
+
+With --sample N (before the program path), it also stops after N seconds, prints where the main
+thread is (for hangs), and ends the program:
+
+    python tools/crashtrace.py --sample 15 build/windows-msvc-relwithdebinfo/dusklight.exe [args...]
 """
 
 import ctypes
@@ -13,6 +18,7 @@ import ctypes.wintypes as wt
 import os
 import subprocess
 import sys
+import time
 
 k32 = ctypes.WinDLL("kernel32", use_last_error=True)
 dbghelp = ctypes.WinDLL("dbghelp", use_last_error=True)
@@ -128,12 +134,19 @@ def report(proc, tid, rec, modules):
         kind = {0: "reading", 1: "writing", 8: "executing"}.get(rec.ExceptionInformation[0], "?")
         print(f"    {kind} address 0x{rec.ExceptionInformation[1]:x}")
     print(f"    in {describe(proc, rec.ExceptionAddress or 0) or '?'}")
+    print_stack(proc, tid, modules)
+
+
+def print_stack(proc, tid, modules, show_pc=False):
     thread = k32.OpenThread(0x1FFFFF, False, tid)
     ctx = (ctypes.c_byte * (1232 + 16))()
     base = (ctypes.addressof(ctx) + 15) & ~15
     ctypes.c_uint32.from_address(base + CTX_FLAGS).value = CONTEXT_FULL_AMD64
     if not k32.GetThreadContext(thread, base):
         return
+    if show_pc:
+        rip = ctypes.c_uint64.from_address(base + CTX_RIP).value
+        print(f"    at {describe(proc, rip) or hex(rip)}")
     rsp = ctypes.c_uint64.from_address(base + CTX_RSP).value
     stack = read(proc, rsp, 0x4000)
     print("    probable callers (return addresses on the stack):")
@@ -151,10 +164,15 @@ def report(proc, tid, rec, modules):
 
 
 def main() -> int:
-    if len(sys.argv) < 2:
+    args = sys.argv[1:]
+    sample_after = None
+    if len(args) >= 2 and args[0] == "--sample":
+        sample_after = float(args[1])
+        args = args[2:]
+    if not args:
         print(__doc__)
         return 2
-    cmdline = subprocess.list2cmdline([os.path.abspath(sys.argv[1])] + sys.argv[2:])
+    cmdline = subprocess.list2cmdline([os.path.abspath(args[0])] + args[1:])
     si, pi = STARTUPINFO(cb=ctypes.sizeof(STARTUPINFO)), PROCESS_INFORMATION()
     if not k32.CreateProcessW(None, ctypes.create_unicode_buffer(cmdline), None, None, False,
                               DEBUG_ONLY_THIS_PROCESS, None, None, ctypes.byref(si), ctypes.byref(pi)):
@@ -164,9 +182,16 @@ def main() -> int:
     dbghelp.SymInitialize(proc, None, False)
     modules = []  # (start, end) of the program's own modules (exe and non-system DLLs)
     ev = DEBUG_EVENT()
+    deadline = time.monotonic() + sample_after if sample_after is not None else None
     while True:
-        if not k32.WaitForDebugEvent(ctypes.byref(ev), 0xFFFFFFFF):
-            raise OSError(ctypes.get_last_error(), "WaitForDebugEvent failed")
+        if not k32.WaitForDebugEvent(ctypes.byref(ev), 200):
+            if deadline is not None and time.monotonic() >= deadline:
+                k32.SuspendThread(pi.hThread)
+                print(f"\n*** main thread after {sample_after:g} s:")
+                print_stack(proc, pi.dwThreadId, modules, show_pc=True)
+                k32.TerminateProcess(proc, 1)
+                deadline = None
+            continue
         status = DBG_CONTINUE
         code = ev.dwDebugEventCode
         if code in (CREATE_PROCESS_DEBUG_EVENT, LOAD_DLL_DEBUG_EVENT):

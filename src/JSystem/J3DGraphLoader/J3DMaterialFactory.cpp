@@ -14,14 +14,14 @@
 J3DMaterialFactory::J3DMaterialFactory(const J3DMaterialBlock& block) {
     mMaterialNum = block.mMaterialNum;
     mpMaterialInitData = JSUConvertOffsetToPtr<J3DMaterialInitData>(&block, block.mpMaterialInitData);
-    mpMaterialID = JSUConvertOffsetToPtr<u16>(&block, block.mpMaterialID);
+    mpMaterialID = JSUConvertOffsetToPtr<BE(u16)>(&block, block.mpMaterialID);
 
     if (block.mpIndInitData != NULL && ((uintptr_t)block.mpIndInitData - (uintptr_t)block.mpNameTable) > 4)
         mpIndInitData = JSUConvertOffsetToPtr<J3DIndInitData>(&block, block.mpIndInitData);
     else
         mpIndInitData = NULL;
 
-    mpCullMode = JSUConvertOffsetToPtr<GXCullMode>(&block, block.mpCullMode);
+    mpCullMode = JSUConvertOffsetToPtr<BE(GXCullMode)>(&block, block.mpCullMode);
     mpMatColor = JSUConvertOffsetToPtr<GXColor>(&block, block.mpMatColor);
     mpColorChanNum = JSUConvertOffsetToPtr<u8>(&block, block.mpColorChanNum);
     mpColorChanInfo = JSUConvertOffsetToPtr<J3DColorChanInfo>(&block, block.mpColorChanInfo);
@@ -32,9 +32,9 @@ J3DMaterialFactory::J3DMaterialFactory(const J3DMaterialBlock& block) {
     mpTexCoord2Info = JSUConvertOffsetToPtr<J3DTexCoord2Info>(&block, block.mpTexCoord2Info);
     mpTexMtxInfo = JSUConvertOffsetToPtr<J3DTexMtxInfo>(&block, block.mpTexMtxInfo);
     field_0x44 = JSUConvertOffsetToPtr<J3DTexMtxInfo>(&block, block.field_0x44);
-    mpTexNo = JSUConvertOffsetToPtr<u16>(&block, block.mpTexNo);
+    mpTexNo = JSUConvertOffsetToPtr<BE(u16)>(&block, block.mpTexNo);
     mpTevOrderInfo = JSUConvertOffsetToPtr<J3DTevOrderInfo>(&block, block.mpTevOrderInfo);
-    mpTevColor = JSUConvertOffsetToPtr<GXColorS10>(&block, block.mpTevColor);
+    mpTevColor = JSUConvertOffsetToPtr<BE(GXColorS10)>(&block, block.mpTevColor);
     mpTevKColor = JSUConvertOffsetToPtr<GXColor>(&block, block.mpTevKColor);
     mpTevStageNum = JSUConvertOffsetToPtr<u8>(&block, block.mpTevStageNum);
     mpTevStageInfo = JSUConvertOffsetToPtr<J3DTevStageInfo>(&block, block.mpTevStageInfo);
@@ -529,7 +529,14 @@ J3DGXColorS10 J3DMaterialFactory::newTevColor(int idx, int stage) const {
     J3DGXColorS10 ret(_ret);
     u16 no = mpMaterialInitData[mpMaterialID[idx]].mTevColorIdx[stage];
     if (no != 0xFFFF)
+#if TARGET_PC
+    {
+        GXColorS10 color = mpTevColor[no];  // big-endian in the material block
+        return color;
+    }
+#else
         return mpTevColor[no];
+#endif
     else
         return ret;
 }
@@ -674,8 +681,15 @@ u8 J3DMaterialFactory::newDither(int idx) const {
 J3DNBTScale J3DMaterialFactory::newNBTScale(int idx) const {
     J3DNBTScale ret;
     u16 no = mpMaterialInitData[mpMaterialID[idx]].mNBTScaleIdx;
-    if (no != 0xFFFF)
+    if (no != 0xFFFF) {
+#if TARGET_PC
+        // The scale is big-endian in the material block; J3DNBTScaleInfo is host-endian.
+        J3DNBTScaleInfo info = mpNBTScaleInfo[no];
+        info.mScale = BE(Vec)::swap(info.mScale);
+        return J3DNBTScale(info);
+#else
         return J3DNBTScale(mpNBTScaleInfo[no]);
-    else
+#endif
+    } else
         return ret;
 }

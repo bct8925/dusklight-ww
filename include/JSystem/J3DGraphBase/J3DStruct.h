@@ -6,6 +6,8 @@
 #include "dolphin/mtx/mtx44.h"
 #include "dolphin/mtx/vec.h"
 #include "global.h"
+#include "helpers/endian.h"
+#include "helpers/offset_ptr.h"
 
 class J3DLightInfo {
 public:

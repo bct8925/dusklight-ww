@@ -156,12 +156,23 @@ void J3DShape::makeVtxArrayCmd() {
         }
     }
 
+#if TARGET_PC
+    // aurora needs each array's size; the loader swapped the arrays to host order (as in dusklight).
+    for (s32 i = 0; i < 0x0C; i++) {
+        GXAttr attr = (GXAttr)(i + GX_VA_POS);
+        if (array[i] != 0)
+            GDSetArraySized(attr, array[i], mVertexData->getVtxArrByteSize(attr), mVertexData->getVtxArrStride(attr), true);
+        else
+            GDSetArraySized(attr, NULL, 0, mVertexData->getVtxArrStride(attr), true);
+    }
+#else
     for (s32 i = 0; i < 0x0C; i++) {
         if (array[i] != 0)
             GDSetArray((GXAttr)(i + GX_VA_POS), array[i], stride[i]);
         else
             GDSetArrayRaw((GXAttr)(i + GX_VA_POS), NULL, stride[i]);
     }
+#endif
 }
 
 /* 802DD6B8-802DD72C       .text makeVcdVatCmd__8J3DShapeFv */

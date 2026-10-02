@@ -44,6 +44,13 @@ public:
     u8 getVtxNrmFrac() const { return mVtxNrmFrac; }
     void setVtxNrmFrac(u8 frac) { mVtxNrmFrac = frac; }
 
+#if TARGET_PC
+    // Vertex arrays are swapped to host order at load; aurora needs their sizes (GDSetArraySized).
+    u32 getVtxArrNum(GXAttr attr) const { return mVtxArrNum[attr - GX_VA_POS]; }
+    u32 getVtxArrStride(GXAttr attr) const { return mVtxArrStride[attr - GX_VA_POS]; }
+    u32 getVtxArrByteSize(GXAttr attr) const { return getVtxArrNum(attr) * getVtxArrStride(attr); }
+#endif
+
 private:
     friend class J3DModelLoader;
 
@@ -62,6 +69,10 @@ private:
     /* 0x50 */ u8 mVtxNrmFrac;
     /* 0x54 */ GXCompType mVtxNrmType;
     /* 0x58 */ u32 mPacketNum;
+#if TARGET_PC
+    u32 mVtxArrStride[12]{};  // GX_VA_POS..GX_VA_TEX7
+    u32 mVtxArrNum[12]{};
+#endif
 };
 
 class J3DVertexBuffer {

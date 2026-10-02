@@ -6,7 +6,11 @@ T* JSUConvertOffsetToPtr(const void* ptr, u32 offset) {
     if (offset == NULL) {
         return NULL;
     } else {
+#if TARGET_PC
+        return (T*)((intptr_t)ptr + offset);  // (s32) truncates 64-bit pointers
+#else
         return (T*)((s32)ptr + offset);
+#endif
     }
 }
 
@@ -15,7 +19,11 @@ T* JSUConvertOffsetToPtr(const void* ptr, const void* offset) {
     if (offset == NULL) {
         return NULL;
     } else {
+#if TARGET_PC
+        return (T*)((intptr_t)ptr + (intptr_t)offset);
+#else
         return (T*)((s32)ptr + (s32)offset);
+#endif
     }
 }
 

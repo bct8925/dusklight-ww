@@ -4,6 +4,11 @@
 #include "dolphin/gx/GXEnum.h"
 #include "dolphin/gx/GXStruct.h"
 #include "JSystem/J3DGraphBase/J3DMatBlock.h"
+#include "helpers/endian.h"
+#include "helpers/offset_ptr.h"
+#if TARGET_PC
+#include "helpers/endian_gx.hpp"
+#endif
 
 class J3DMaterial;
 struct J3DMaterialBlock_v21;
@@ -36,11 +41,11 @@ struct J3DMaterialInitData_v21 {
     /* 0x005 */ u8 mZCompLocIdx;
     /* 0x006 */ u8 mZModeIdx;
     /* 0x007 */ u8 mDitherIdx;
-    /* 0x008 */ u16 mMatColorIdx[2];
-    /* 0x00C */ u16 mColorChanIdx[4];
-    /* 0x014 */ u16 mTexCoordIdx[8];
+    /* 0x008 */ BE(u16) mMatColorIdx[2];
+    /* 0x00C */ BE(u16) mColorChanIdx[4];
+    /* 0x014 */ BE(u16) mTexCoordIdx[8];
     /* 0x024 */ u8 field_0x024[16];
-    /* 0x034 */ u16 mTexMtxIdx[8];
+    /* 0x034 */ BE(u16) mTexMtxIdx[8];
     /* 0x044 */ u8 field_0x044[44];
     /* 0xXXX */ u16 mTexNoIdx[8];
     /* 0xXXX */ u16 mTevKColorIdx[4];
@@ -92,7 +97,7 @@ public:
 
     /* 0x00 */ u16 mMaterialNum;
     /* 0x04 */ J3DMaterialInitData_v21* mpMaterialInitData;
-    /* 0x08 */ u16* mpMaterialID;
+    /* 0x08 */ BE(u16)*mpMaterialID;
     /* 0x0C */ GXColor* mpMatColor;
     /* 0x10 */ u8* mpColorChanNum;
     /* 0x14 */ J3DColorChanInfo* mpColorChanInfo;
@@ -101,10 +106,10 @@ public:
     /* 0x20 */ J3DTexCoord2Info* mpTexCoord2Info;
     /* 0x24 */ J3DTexMtxInfo* mpTexMtxInfo;
     /* 0x28 */ J3DTexMtxInfo* field_0x28;
-    /* 0x2C */ u16* mpTexNo;
-    /* 0x30 */ GXCullMode* mpCullMode;
+    /* 0x2C */ BE(u16)*mpTexNo;
+    /* 0x30 */ BE(GXCullMode)*mpCullMode;
     /* 0x34 */ J3DTevOrderInfo* mpTevOrderInfo;
-    /* 0x38 */ GXColorS10* mpTevColor;
+    /* 0x38 */ BE(GXColorS10)*mpTevColor;
     /* 0x3C */ GXColor* mpTevKColor;
     /* 0x40 */ u8* mpTevStageNum;
     /* 0x44 */ J3DTevStageInfo* mpTevStageInfo;
