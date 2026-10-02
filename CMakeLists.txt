@@ -91,7 +91,14 @@ option(DUSK_BUILD_WARNINGS "Enable compiler warnings (off by default)")
 option(DUSK_SELECTED_OPT "If on, selected parts of the project will be compiled with optimizations on Debug, intending to make the game run at 30 FPS. Note for MSVC: you will need to remove '/RTC1' from your debug flags in CMake.")
 option(DUSK_PACKAGE_INSTALL "Install Dusklight with a Linux-native file structure" OFF)
 option(DUSK_GFX_DEBUG_GROUPS "Report debug groups to the native graphics API" ${DUSK_GFX_DEBUG_GROUPS_DEFAULT})
-option(DUSK_ENABLE_CODE_MODS "Enable code mods" ON)
+option(DUSK_GAME_WW "Build The Wind Waker instead of Twilight Princess (TP-only features are left out)" ON)
+# Code mods hook Twilight Princess functions by name, so they are off for Wind Waker.
+if (DUSK_GAME_WW)
+    set(_dusk_code_mods_default OFF)
+else ()
+    set(_dusk_code_mods_default ON)
+endif ()
+option(DUSK_ENABLE_CODE_MODS "Enable code mods" ${_dusk_code_mods_default})
 option(DUSK_ENABLE_OPUS "Enable loading Opus audio files for mods" OFF)
 
 
@@ -270,7 +277,11 @@ set(DUSK_FILE_DESCRIPTION "Dusklight")
 set(DUSK_PRODUCT_NAME "Dusklight")
 set(DUSK_COPYRIGHT "Copyright (C) Twilit Realm contributors")
 
-source_group("dolzel" FILES ${DOLZEL_FILES} ${Z2AUDIOLIB_FILES} ${REL_FILES})
+if (NOT DUSK_GAME_WW)
+    list(APPEND DUSK_FILES ${DUSK_TP_FEATURE_FILES})
+endif ()
+
+source_group("dolzel" FILES ${DOLZEL_FILES} ${REL_FILES})
 source_group("dusklight" FILES ${DUSK_FILES})
 
 include(cmake/GameABIConfig.cmake)
@@ -313,12 +324,6 @@ endif ()
 # Of course, if building a release build, this distinction is irrelevant
 set(GAME_DEBUG_FILES
         ${SSYSTEM_FILES}
-        src/dusk/audio/DuskAudioSystem.cpp
-        src/dusk/audio/JASCriticalSection.cpp
-        src/dusk/audio/DuskDsp.cpp
-        src/dusk/audio/Adpcm.cpp
-        src/dusk/audio/DspStub.cpp
-        src/dusk/imgui/ImGuiAudio.cpp
 )
 set_source_files_properties(
         ${GAME_DEBUG_FILES}
@@ -328,8 +333,8 @@ set_source_files_properties(
 
 # game_base is for all other game code files
 set(GAME_BASE_FILES
+        ${DUSK_GAME_GLUE_FILES}
         ${DOLZEL_FILES}
-        ${Z2AUDIOLIB_FILES}
         ${REL_FILES}
         ${DUSK_FILES}
         ${DOLPHIN_FILES}
@@ -353,11 +358,15 @@ if (CMAKE_CXX_LINK_GROUP_USING_RESCAN_SUPPORTED OR CMAKE_LINK_GROUP_USING_RESCAN
     set(JSYSTEM_LINK_LIBRARIES "$<LINK_GROUP:RESCAN,${JSYSTEM_LIBRARIES}>")
 endif ()
 
-set(_dusklight_all_files src/dusk/main.cpp ${GAME_BASE_FILES} ${GAME_DEBUG_FILES})
+set(_dusklight_all_files ${GAME_BASE_FILES} ${GAME_DEBUG_FILES})
+# dusk_internal is the port layer alone; the glue files call into game code, so they build with
+# the game in the executable.
 set(DUSK_INTERNAL_FILES ${_dusklight_all_files})
 list(FILTER DUSK_INTERNAL_FILES INCLUDE REGEX "^src/dusk/")
+list(REMOVE_ITEM DUSK_INTERNAL_FILES ${DUSK_GAME_GLUE_FILES})
 set(GAME_FILES ${_dusklight_all_files})
 list(FILTER GAME_FILES EXCLUDE REGEX "^src/dusk/")
+list(APPEND GAME_FILES ${DUSK_GAME_GLUE_FILES})
 
 add_library(dusk_internal OBJECT ${DUSK_INTERNAL_FILES})
 if (ENABLE_ASAN)
@@ -366,7 +375,9 @@ endif ()
 target_compile_definitions(dusk_internal PRIVATE ${GAME_COMPILE_DEFS})
 target_include_directories(dusk_internal PRIVATE ${miniz_SOURCE_DIR})
 target_link_libraries(dusk_internal PRIVATE aurora::main ${GAME_LIBS} ${JSYSTEM_LIBRARIES})
-target_precompile_headers(dusk_internal PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_pch.hpp>")
+# The port layer gets its own PCH (global.h + SDK) instead of the game PCH, so it can build
+# before (and independently of) the game tree.
+target_precompile_headers(dusk_internal PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:${CMAKE_SOURCE_DIR}/include/dusk_shell_pch.hpp>")
 
 if(ANDROID)
     add_library(dusklight SHARED ${GAME_FILES} ${miniz_SOURCE_DIR}/miniz.c)

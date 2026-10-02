@@ -1,4 +1,5 @@
 #include "dusk/game_clock.h"
+#include "dusk/settings.h"
 
 #include <aurora/time.hpp>
 

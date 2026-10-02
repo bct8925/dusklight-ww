@@ -3,8 +3,9 @@ include_guard(GLOBAL)
 
 get_filename_component(_game_root "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
 
+# VERSION=2 is VERSION_USA (GZLE01) in TWW's global.h; 0 would select the demo build.
 # PARTIAL_DEBUG makes debug and release share one struct/vtable ABI so a mod binary loads into either
-set(_game_compile_defs TARGET_PC=1 WIDESCREEN_SUPPORT=1 AVOID_UB=1 VERSION=0 MTX_USE_PS=1 PARTIAL_DEBUG=1)
+set(_game_compile_defs TARGET_PC=1 WIDESCREEN_SUPPORT=1 AVOID_UB=1 VERSION=2 MTX_USE_PS=1 PARTIAL_DEBUG=1)
 if (ANDROID)
     list(APPEND _game_compile_defs TARGET_ANDROID=1)
 endif ()
@@ -12,10 +13,10 @@ endif ()
 # Public game headers
 set(_game_abi_include_dirs
         ${_game_root}/include
-        ${_game_root}/assets/GZ2E01
-        ${_game_root}/libs/JSystem/include
+        ${_game_root}/assets/GZLE01
         ${_game_root}/extern/aurora/include/dolphin
         ${_game_root}/extern/aurora/include
+        ${_game_root}/sdk_compat
         ${_game_root}/sdk/include
 )
 
@@ -35,6 +36,13 @@ target_include_directories(dusklight_mod_api INTERFACE ${_game_root}/sdk/include
 add_library(dusklight_game_headers INTERFACE)
 target_include_directories(dusklight_game_headers INTERFACE ${_game_include_dirs})
 target_compile_definitions(dusklight_game_headers INTERFACE ${_game_compile_defs})
+# Some decomp headers include dolphin/types.h directly and still expect the decomp SDK's extra
+# types (uint, Mtx33, SVec...), which aurora's SDK lacks; force-include them everywhere.
+if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+    target_compile_options(dusklight_game_headers INTERFACE "/FIpc_sdk_extras.h")
+else ()
+    target_compile_options(dusklight_game_headers INTERFACE "SHELL:-include pc_sdk_extras.h")
+endif ()
 
 # Public game ABI for mods
 add_library(dusklight_game_abi_headers INTERFACE)

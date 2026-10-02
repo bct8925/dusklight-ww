@@ -2,6 +2,8 @@
 
 #include <array>
 
+#include <dolphin/os/OSRtc.h>
+
 #include "dusk/config_var.hpp"
 #include "dusk/ui/controls.hpp"
 
