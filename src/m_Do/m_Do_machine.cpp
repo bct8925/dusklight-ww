@@ -547,6 +547,14 @@ bool mDoMch_Create() {
 #endif
     commandHeapSize = 0x1000; // 4 KiB
     arenaSize -= archiveHeapSize + gameHeapSize + commandHeapSize;
+#if TARGET_PC
+    // As in dusklight: 64-bit pointers make the game's data bigger, and there is memory to spare
+    // (AuroraConfig::mem1Size). The system heap gets a fixed size; the rest stays with the root heap.
+    arenaSize = 32 * 1024 * 1024;
+    commandHeapSize *= 2;
+    archiveHeapSize *= 2;
+    gameHeapSize *= 20;
+#endif
 
     JFWSystem::setSysHeapSize(arenaSize);
 #if VERSION <= VERSION_JPN

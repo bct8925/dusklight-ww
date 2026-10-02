@@ -9,6 +9,7 @@
 #include "dusk/dusk.h"
 #include "dusk/logging.h"
 #include "dusk/main.h"
+#include "dusk/os.h"
 #include "dusk/settings.h"
 #include "dusk/version.hpp"
 
@@ -153,6 +154,8 @@ int game_main(int argc, char* argv[]) {
 
     if (args.count("develop") && args["develop"].as<bool>()) {
         mDoMain::developmentMode = 1;
+        // mDoMch_Create disables OSReport unless the console reports a development unit.
+        dusk::OSReportReallyForceEnable = true;
     }
 
     dusk::version::init();

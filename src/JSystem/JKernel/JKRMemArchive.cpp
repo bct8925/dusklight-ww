@@ -49,7 +49,11 @@ void JKRMemArchive::fixedInit(s32 param_1) {
     mMountMode = 1;
     mMountCount = 1;
     field_0x58 = 2;
+#if TARGET_PC
+    mHeap = JKRHeap::getCurrentHeap();
+#else
     mHeap = JKRHeap::sCurrentHeap;
+#endif
     mEntryNum = param_1;
     if (sCurrentVolume) return;
     sCurrentVolume = this;

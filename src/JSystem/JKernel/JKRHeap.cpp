@@ -17,7 +17,17 @@
 
 bool JKRHeap::sDefaultFillFlag = true;
 JKRHeap* JKRHeap::sSystemHeap;
+#if TARGET_PC
+// JSystem tracks the current heap per thread with an OS thread switch callback, which real OS
+// threads don't run, so on PC it is a true thread local (as in dusklight). Threads start with none.
+static thread_local JKRHeap* sCurrentHeap;
+
+JKRHeap* JKRHeap::getCurrentHeap() {
+    return sCurrentHeap;
+}
+#else
 JKRHeap* JKRHeap::sCurrentHeap;
+#endif
 JKRHeap* JKRHeap::sRootHeap;
 JKRErrorHandler JKRHeap::mErrorHandler;
 

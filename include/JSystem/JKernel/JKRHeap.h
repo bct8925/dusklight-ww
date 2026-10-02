@@ -144,7 +144,11 @@ public:
     static JKRHeap* getRootHeap() { return sRootHeap; }
 
     static JKRHeap* getSystemHeap() { return sSystemHeap; }
+#if TARGET_PC
+    static JKRHeap* getCurrentHeap();  // per thread on PC (JKRHeap.cpp)
+#else
     static JKRHeap* getCurrentHeap() { return sCurrentHeap; }
+#endif
 
     static void setState_u32ID_(TState* state, u32 id) { state->mId = id; }
     static void setState_uUsedSize_(TState* state, u32 usedSize) { state->mUsedSize = usedSize; }
@@ -162,7 +166,11 @@ public:
     static JKRHeap* sRootHeap;
 
     static JKRHeap* sSystemHeap;
+#if TARGET_PC
+    // sCurrentHeap is a thread_local in JKRHeap.cpp on PC.
+#else
     static JKRHeap* sCurrentHeap;
+#endif
     static bool sDefaultFillFlag;
 
     static JKRErrorHandler mErrorHandler;

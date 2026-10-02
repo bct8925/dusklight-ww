@@ -12,6 +12,10 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "JSystem/JUtility/JUTCacheFont.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#if TARGET_PC
+#include "JSystem/JFramework/JFWSystem.h"
+#include "JSystem/JKernel/JKRThread.h"
+#endif
 #include "SSystem/SComponent/c_m3d.h"
 #include "d/d_com_inf_game.h"
 #include "d/d_s_play.h"
@@ -1061,7 +1065,11 @@ JKRSolidHeap* mDoExt_createSolidHeapToCurrent(u32 i_size, JKRHeap* i_parent, u32
         return NULL;
     }
 #if VERSION > VERSION_DEMO
+#if TARGET_PC
+    JUT_ASSERT(VERSION_SELECT(0, 2530, 2545, 2545), OSGetCurrentThread() == JFWSystem::mainThread->getThreadRecord());
+#else
     JUT_ASSERT(VERSION_SELECT(0, 2530, 2545, 2545), OSGetCurrentThread() == &mainThread);
+#endif
 #endif
     JUT_ASSERT(VERSION_SELECT(2441, 2531, 2546, 2546), mDoExt_SaveCurrentHeap == NULL);
     mDoExt_SaveCurrentHeap = JKRGetCurrentHeap();
@@ -1108,7 +1116,11 @@ JKRHeap* mDoExt_getCurrentHeap() {
 /* 80011DDC-80011E98       .text mDoExt_restoreCurrentHeap__Fv */
 void mDoExt_restoreCurrentHeap() {
 #if VERSION > VERSION_DEMO
+#if TARGET_PC
+    JUT_ASSERT(VERSION_SELECT(0, 2739, 2754, 2754), OSGetCurrentThread() == JFWSystem::mainThread->getThreadRecord());
+#else
     JUT_ASSERT(VERSION_SELECT(0, 2739, 2754, 2754), OSGetCurrentThread() == &mainThread);
+#endif
 #endif
     JUT_ASSERT(VERSION_SELECT(2647, 2740, 2755, 2755), mDoExt_SaveCurrentHeap != NULL);
     mDoExt_SaveCurrentHeap->becomeCurrentHeap();

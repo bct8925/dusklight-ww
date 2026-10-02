@@ -21,7 +21,11 @@
 
 /* 80247500-8024754C       .text ASSERT_SOLDHEAP__Fv */
 void ASSERT_SOLDHEAP() {
+#if TARGET_PC
+    if (JKRHeap::getCurrentHeap()->getHeapType() != 'SLID')
+#else
     if (JKRHeap::sCurrentHeap->getHeapType() != 'SLID')
+#endif
         OSReport_Error("＊＊＊＊＊＊＊Ａバグです＊＊＊＊＊＊＊\n＊＊＊＊＊＊＊Ａバグです＊＊＊＊＊＊＊\n＊＊＊＊＊＊＊Ａバグです＊＊＊＊＊＊＊\ncBgWはカレントヒープがソリッドヒープ以外だと破綻します。\n必ず、カレントヒープをソリッドヒープにしてください。\nここでnewされた領域は二度と開放されることはありません。\n慢性的にメモリーリークを繰り返し、いずれ確実にＡバグを引き起こすことでしょう。\n必ずp修正してください。この下の水色のメッセージにアクターの名前が書いてあるはずです。\n");
 }
 

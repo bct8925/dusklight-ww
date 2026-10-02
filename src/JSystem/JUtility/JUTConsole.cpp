@@ -357,7 +357,11 @@ static void dummy2() {
 JUTConsoleManager* JUTConsoleManager::createManager(JKRHeap* pHeap) {
     JUT_ASSERT(922, sManager == NULL);
     if (pHeap == NULL) {
+#if TARGET_PC
+        pHeap = JKRHeap::getCurrentHeap();
+#else
         pHeap = JKRHeap::sCurrentHeap;
+#endif
     }
 
     JUTConsoleManager* manager = JKR_NEW_ARGS(pHeap, 0) JUTConsoleManager();
