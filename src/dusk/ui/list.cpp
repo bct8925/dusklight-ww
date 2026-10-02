@@ -2,7 +2,6 @@
 
 #include "ui.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 
 #include <algorithm>
@@ -340,7 +339,7 @@ void List::handle_keydown(Rml::Event& event) {
         i >= 0 && i < static_cast<int>(mRows.size()); i += direction)
     {
         if (focus_row(i, true)) {
-            mDoAud_seStartMenu(kSoundItemFocus);
+            play_menu_sound(kSoundItemFocus);
             event.StopPropagation();
             return;
         }

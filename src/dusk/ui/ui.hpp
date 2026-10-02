@@ -12,7 +12,7 @@
 
 #include "nav_types.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
+#include "dusk/game_hooks.h"
 
 namespace dusk::ui {
 class Document;
@@ -38,37 +38,22 @@ struct Toast {
     Rml::String modId;
 };
 
-// Button clicked/pressed
-constexpr u32 kSoundClick = Z2SE_SY_CURSOR_OK;
-// "Play" button clicked/pressed
-constexpr u32 kSoundPlay = Z2SE_SY_ITEM_COMBINE_ON;
-// Input binding changed
-constexpr u32 kSoundBindingChanged = Z2SE_SY_ITEM_SET_X;
-
-// Menu button pressed (open/close menu bar or hide/show the active window)
-constexpr u32 kSoundMenuOpen = Z2SE_SY_MENU_SUB_IN;
-constexpr u32 kSoundMenuClose = Z2SE_SY_MENU_SUB_OUT;
-
-// Window opened/closed
-constexpr u32 kSoundWindowOpen = Z2SE_SY_MENU_NEXT;
-constexpr u32 kSoundWindowClose = Z2SE_SY_MENU_BACK;
-
-// Window tab changed
-constexpr u32 kSoundTabChanged = Z2SE_SY_MENU_CURSOR_COMMON;
-
-// Item within menu focused
-constexpr u32 kSoundItemFocus = Z2SE_SY_CURSOR_ITEM;
-// Item changed (e.g. number input left/right)
-constexpr u32 kSoundItemChange = Z2SE_SY_NAME_CURSOR;
-// Item enabled ("On")
-constexpr u32 kSoundItemEnable = Z2SE_SUBJ_VIEW_IN;
-// Item disabled ("Off")
-constexpr u32 kSoundItemDisable = Z2SE_SUBJ_VIEW_OUT;
-
-// Achievement unlocked
-constexpr u32 kSoundAchievementUnlock = Z2SE_NAVI_FLY;
-// Warning prompt
-constexpr u32 kSoundWarning = Z2SE_SY_COW_GET_IN;
+// UI sound effects and playback come from the game (dusk/game_hooks.h).
+using game::play_menu_sound;
+using game::kSoundClick;
+using game::kSoundPlay;
+using game::kSoundBindingChanged;
+using game::kSoundMenuOpen;
+using game::kSoundMenuClose;
+using game::kSoundWindowOpen;
+using game::kSoundWindowClose;
+using game::kSoundTabChanged;
+using game::kSoundItemFocus;
+using game::kSoundItemChange;
+using game::kSoundItemEnable;
+using game::kSoundItemDisable;
+using game::kSoundAchievementUnlock;
+using game::kSoundWarning;
 
 struct Insets {
     float top = 0.0f;

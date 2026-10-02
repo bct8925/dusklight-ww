@@ -66,7 +66,7 @@ CrashReportWindow::CrashReportWindow() : WindowSmall("modal") {
             if (cmd == NavCommand::Confirm) {
                 apply();
                 hide(true);
-                mDoAud_seStartMenu(kSoundClick);
+                play_menu_sound(kSoundClick);
                 return true;
             }
             return false;
@@ -103,7 +103,7 @@ bool CrashReportWindow::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             const int next = i + direction;
             if (next >= 0 && next < static_cast<int>(mButtons.size())) {
                 if (mButtons[next]->focus()) {
-                    mDoAud_seStartMenu(kSoundItemFocus);
+                    play_menu_sound(kSoundItemFocus);
                     return true;
                 }
             }

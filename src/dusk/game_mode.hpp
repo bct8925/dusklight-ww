@@ -1,5 +1,6 @@
 #pragma once
 
+#include "dusk/game_mode_ids.hpp"
 #include "mods/svc/game_mode.h"
 
 #include "d/d_file_select.h"
@@ -12,8 +13,6 @@
 namespace dusk::gamemode {
 using GameModeId = std::string;
 
-constexpr const char* kVanillaGameModeId = "vanilla";
-constexpr const char* kDefaultGameModeSaveName = "gczelda2";
 
 // Holds a game mode definition and its lifecycle callbacks.
 class GameMode {

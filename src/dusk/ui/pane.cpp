@@ -1,6 +1,5 @@
 #include "pane.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 #include "ui.hpp"
 
@@ -58,7 +57,7 @@ Pane::Pane(Rml::Element* parent, Type type) : FluentComponent(createRoot(parent)
         int i = focusedChild + direction;
         while (i >= 0 && i < mChildren.size()) {
             if (mChildren[i]->focus_from(cmd)) {
-                mDoAud_seStartMenu(kSoundItemFocus);
+                play_menu_sound(kSoundItemFocus);
                 event.StopPropagation();
                 break;
             }

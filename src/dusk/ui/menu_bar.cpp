@@ -52,7 +52,7 @@ MenuBar::MenuBar()
     mTabBar = std::make_unique<TabBar>(mRoot, TabBar::Props{
                                                   .onClose =
                                                       [this] {
-                                                          mDoAud_seStartMenu(kSoundMenuClose);
+                                                          play_menu_sound(kSoundMenuClose);
                                                           hide(false);
                                                       },
                                                   .autoSelect = false,
@@ -102,7 +102,7 @@ void MenuBar::build_tabs() {
                         .label = "Cancel",
                         .onPressed =
                             [this, dismiss](Modal& modal) {
-                                mDoAud_seStartMenu(kSoundWindowClose);
+                                play_menu_sound(kSoundWindowClose);
                                 dismiss(modal);
                             },
                     },
@@ -110,7 +110,7 @@ void MenuBar::build_tabs() {
                         .label = "Reset",
                         .onPressed =
                             [this, dismiss](Modal& modal) {
-                                mDoAud_seStartMenu(kSoundClick);
+                                play_menu_sound(kSoundClick);
                                 if (fpcM_SearchByName(fpcNm_LOGO_SCENE_e)) {
                                     dismiss(modal);
                                     return;
@@ -142,7 +142,7 @@ void MenuBar::build_tabs() {
                         .label = "Cancel",
                         .onPressed =
                             [dismiss](Modal& modal) {
-                                mDoAud_seStartMenu(kSoundWindowClose);
+                                play_menu_sound(kSoundWindowClose);
                                 dismiss(modal);
                             },
                     },
@@ -150,7 +150,7 @@ void MenuBar::build_tabs() {
                         .label = "Quit",
                         .onPressed =
                             [dismiss](Modal& modal) {
-                                mDoAud_seStartMenu(kSoundClick);
+                                play_menu_sound(kSoundClick);
                                 dismiss(modal);
                                 IsRunning = false;
                             },
@@ -164,7 +164,7 @@ void MenuBar::build_tabs() {
     if (speedrun::isActive()) {
         mTabBar->add_tab("Reset Run", [this] {
             mTabBar->set_active_tab(-1);
-            mDoAud_seStartMenu(kSoundClick);
+            play_menu_sound(kSoundClick);
             speedrun::g_speedrunInfo.reset();
             speedrun::reset();
             JUTGamePad::C3ButtonReset::sResetSwitchPushing = true;
@@ -245,7 +245,7 @@ bool MenuBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         return true;
     }
     if (cmd == NavCommand::Cancel && visible()) {
-        mDoAud_seStartMenu(kSoundMenuClose);
+        play_menu_sound(kSoundMenuClose);
         hide(false);
         return true;
     }

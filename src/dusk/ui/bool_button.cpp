@@ -1,6 +1,5 @@
 #include "bool_button.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 
 namespace dusk::ui {
@@ -43,7 +42,7 @@ bool BoolButton::handle_nav_command(NavCommand cmd) {
     if (cmd == NavCommand::Confirm || cmd == NavCommand::Left || cmd == NavCommand::Right) {
         const bool newValue = !mGetValue();
         mSetValue(newValue);
-        mDoAud_seStartMenu(newValue ? kSoundItemEnable : kSoundItemDisable);
+        play_menu_sound(newValue ? kSoundItemEnable : kSoundItemDisable);
         return true;
     }
     return false;

@@ -1,6 +1,5 @@
 #include "number_button.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 
 #include <charconv>
@@ -59,7 +58,7 @@ bool NumberButton::handle_nav_command(NavCommand cmd) {
             mGetValue() + (cmd == NavCommand::Right ? mStep : -mStep), mMin, mMax);
         if (newValue != mGetValue()) {
             mSetValue(newValue);
-            mDoAud_seStartMenu(kSoundItemChange);
+            play_menu_sound(kSoundItemChange);
         }
         return true;
     }

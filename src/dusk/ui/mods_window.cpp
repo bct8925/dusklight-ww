@@ -252,7 +252,7 @@ public:
             }
             const int next = index + (cmd == NavCommand::Right ? 1 : -1);
             if (next >= 0 && next < static_cast<int>(mButtons.size()) && mButtons[next]->focus()) {
-                mDoAud_seStartMenu(kSoundItemFocus);
+                play_menu_sound(kSoundItemFocus);
                 event.StopPropagation();
             }
         });

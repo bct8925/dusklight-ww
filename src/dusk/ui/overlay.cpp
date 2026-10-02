@@ -95,7 +95,7 @@ Rml::Element* create_toast(Rml::Element* parent, const Toast& toast) {
         if (toast.type == "achievement") {
             auto* icon = append(heading, "icon");
             icon->SetClass("trophy", true);
-            mDoAud_seStartMenu(kSoundAchievementUnlock);
+            play_menu_sound(kSoundAchievementUnlock);
         } else if (toast.type == "controller") {
             auto* icon = append(heading, "icon");
             icon->SetClass("controller", true);

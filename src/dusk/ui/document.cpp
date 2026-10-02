@@ -217,7 +217,7 @@ bool Document::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         if (game_obscured_below(*this)) {
             return true;
         }
-        mDoAud_seStartMenu(visible() ? kSoundMenuClose : kSoundMenuOpen);
+        play_menu_sound(visible() ? kSoundMenuClose : kSoundMenuOpen);
         toggle();
         return true;
     }

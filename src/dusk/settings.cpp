@@ -1,7 +1,7 @@
 #include "dusk/settings.h"
 
 #include "dusk/config.hpp"
-#include "dusk/game_mode.hpp"
+#include "dusk/game_mode_ids.hpp"
 #include "dusk/texture_replacements.hpp"
 #include "dusk/ui/ui.hpp"
 

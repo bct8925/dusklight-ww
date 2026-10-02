@@ -160,7 +160,7 @@ Component* build_mod_control(
                                     [shared, i] { return shared->getInt && shared->getInt() == i; },
                             })
                         .on_pressed([shared, i] {
-                            mDoAud_seStartMenu(kSoundItemChange);
+                            play_menu_sound(kSoundItemChange);
                             if (shared->setInt) {
                                 shared->setInt(i);
                             }

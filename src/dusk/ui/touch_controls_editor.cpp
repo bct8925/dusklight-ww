@@ -2,7 +2,6 @@
 
 #include "modal.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "dusk/config.hpp"
 #include "dusk/settings.h"
 #include "m_Do/m_Do_audio.h"
@@ -587,7 +586,7 @@ void TouchControlsEditor::save_layout() {
     mWorkingLayout.version = ControlLayout::Version;
     getSettings().game.touchControlsLayout.setValue(mWorkingLayout);
     config::save();
-    mDoAud_seStartMenu(kSoundItemChange);
+    play_menu_sound(kSoundItemChange);
     pop();
 }
 
@@ -604,7 +603,7 @@ void TouchControlsEditor::request_reset() {
                     .onPressed =
                         [this, dismiss](Modal& modal) {
                             reset_working_layout();
-                            mDoAud_seStartMenu(kSoundItemChange);
+                            play_menu_sound(kSoundItemChange);
                             dismiss(modal);
                         },
                 },
@@ -625,7 +624,7 @@ void TouchControlsEditor::reset_working_layout() noexcept {
 }
 
 void TouchControlsEditor::cancel_edit() {
-    mDoAud_seStartMenu(kSoundWindowClose);
+    play_menu_sound(kSoundWindowClose);
     pop();
 }
 

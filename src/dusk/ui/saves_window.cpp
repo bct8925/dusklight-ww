@@ -134,7 +134,7 @@ save_manager::ValueResult<Context> context_for_save(const std::string& saveName)
 }
 
 void dismiss_modal(Modal& modal) {
-    mDoAud_seStartMenu(kSoundWindowClose);
+    play_menu_sound(kSoundWindowClose);
     modal.pop();
 }
 
@@ -922,7 +922,7 @@ void SavesWindow::build_content(Rml::Element* content) {
             entry, detailPane, [this, saveName = option.saveName](Pane& pane) {
                 if (mSaveName != saveName) {
                     mSaveName = saveName;
-                    mDoAud_seStartMenu(kSoundItemChange);
+                    play_menu_sound(kSoundItemChange);
                 }
                 build_save_detail(pane, mSaveName);
             });

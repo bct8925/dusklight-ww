@@ -379,7 +379,7 @@ void ControllerConfigWindow::build_port_tab(Rml::Element* content, int port) {
             pane.add_text("Treat analog trigger movement as digital L and R button input.");
         });
     leftPane.register_control(leftPane.add_button("Restore Default Controls").on_pressed([this, port] {
-            mDoAud_seStartMenu(kSoundClick);
+            play_menu_sound(kSoundClick);
             PADRestoreDefaultMapping(port);
         }),
             rightPane, [](Pane& pane) {
@@ -401,7 +401,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                     [port] { return PADGetIndexForPort(port) < 0 && !keyboard_active(port); },
             })
             .on_pressed([this, port] {
-                mDoAud_seStartMenu(kSoundClick);
+                play_menu_sound(kSoundClick);
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), FALSE);
@@ -415,7 +415,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             .isSelected = [port] { return keyboard_active(port); },
                         })
             .on_pressed([this, port] {
-                mDoAud_seStartMenu(kSoundClick);
+                play_menu_sound(kSoundClick);
                 cancel_pending_binding();
                 PADClearPort(port);
                 PADSetKeyboardActive(static_cast<u32>(port), TRUE);
@@ -437,7 +437,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                             [port, i] { return PADGetIndexForPort(port) == static_cast<s32>(i); },
                     })
                 .on_pressed([this, port, i] {
-                    mDoAud_seStartMenu(kSoundClick);
+                    play_menu_sound(kSoundClick);
                     cancel_pending_binding();
                     PADSetKeyboardActive(static_cast<u32>(port), FALSE);
                     PADSetPortForIndex(i, port);
@@ -473,7 +473,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, button] {
-                        mDoAud_seStartMenu(kSoundClick);
+                        play_menu_sound(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -524,7 +524,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                            },
                                    })
                 .on_pressed([this, port, &mapping] {
-                    mDoAud_seStartMenu(kSoundClick);
+                    play_menu_sound(kSoundClick);
                     cancel_pending_binding();
                     mPendingPort = port;
                     mPendingBindingArmed = false;
@@ -551,7 +551,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                            },
                                    })
                 .on_pressed([this, port, &mapping] {
-                    mDoAud_seStartMenu(kSoundClick);
+                    play_menu_sound(kSoundClick);
                     cancel_pending_binding();
                     mPendingPort = port;
                     mPendingBindingArmed = false;
@@ -586,7 +586,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, button] {
-                        mDoAud_seStartMenu(kSoundClick);
+                        play_menu_sound(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -618,7 +618,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, axis] {
-                        mDoAud_seStartMenu(kSoundClick);
+                        play_menu_sound(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -665,7 +665,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                                },
                                        })
                     .on_pressed([this, port, &mapping] {
-                        mDoAud_seStartMenu(kSoundClick);
+                        play_menu_sound(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -694,7 +694,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                                    },
                                            })
                         .on_pressed([this, port, &mapping] {
-                            mDoAud_seStartMenu(kSoundClick);
+                            play_menu_sound(kSoundClick);
                             cancel_pending_binding();
                             mPendingPort = port;
                             mPendingBindingArmed = false;
@@ -763,7 +763,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, axis] {
-                        mDoAud_seStartMenu(kSoundClick);
+                        play_menu_sound(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -809,7 +809,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                            },
                                    })
                 .on_pressed([this, port, &mapping] {
-                    mDoAud_seStartMenu(kSoundClick);
+                    play_menu_sound(kSoundClick);
                     cancel_pending_binding();
                     mPendingPort = port;
                     mPendingBindingArmed = false;
@@ -890,7 +890,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
             if (!PADSupportsRumbleIntensity(static_cast<u32>(port))) {
                 return;
             }
-            mDoAud_seStartMenu(kSoundItemChange);
+            play_menu_sound(kSoundItemChange);
             if (mRumbleTestActive && mRumbleTestPort == port) {
                 PADControlMotor(port, PAD_MOTOR_STOP_HARD);
                 mRumbleTestActive = false;
@@ -969,7 +969,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                 },
                         })
                     .on_pressed([this, port, actionBind] {
-                        mDoAud_seStartMenu(kSoundClick);
+                        play_menu_sound(kSoundClick);
                         cancel_pending_binding();
                         mPendingPort = port;
                         mPendingBindingArmed = false;
@@ -1013,7 +1013,7 @@ void ControllerConfigWindow::render_page(Pane& pane, int port, Page page) {
                                },
                        })
                 .on_pressed([this, port, actionBind] {
-                    mDoAud_seStartMenu(kSoundClick);
+                    play_menu_sound(kSoundClick);
                     cancel_pending_binding();
                     mPendingPort = port;
                     mPendingBindingArmed = false;
@@ -1136,7 +1136,7 @@ void ControllerConfigWindow::poll_pending_binding() {
 }
 
 void ControllerConfigWindow::finish_pending_binding(int completedPort) {
-    mDoAud_seStartMenu(kSoundBindingChanged);
+    play_menu_sound(kSoundBindingChanged);
     mPendingButtonMapping = nullptr;
     mPendingAxisMapping = nullptr;
     mPendingActionBinding = nullptr;

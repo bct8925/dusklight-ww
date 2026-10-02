@@ -555,7 +555,7 @@ void ColorInput::add_swatch_button(NavGroup& navigation, const Rml::String& valu
     }
     button.root()->SetAttribute("title", title);
     button.on_pressed([this, value] {
-        mDoAud_seStartMenu(kSoundItemChange);
+        play_menu_sound(kSoundItemChange);
         commit_value(value);
     });
 }
@@ -623,7 +623,7 @@ void ColorInput::nudge_sv(NavCommand direction) {
     }
     mSat = sat;
     mVal = val;
-    mDoAud_seStartMenu(kSoundItemChange);
+    play_menu_sound(kSoundItemChange);
     commit_color();
 }
 
@@ -636,7 +636,7 @@ void ColorInput::nudge_hue(NavCommand direction) {
         return;
     }
     mHue = hue;
-    mDoAud_seStartMenu(kSoundItemChange);
+    play_menu_sound(kSoundItemChange);
     commit_color();
 }
 
@@ -649,7 +649,7 @@ void ColorInput::nudge_alpha(NavCommand direction) {
         return;
     }
     mAlpha = alpha;
-    mDoAud_seStartMenu(kSoundItemChange);
+    play_menu_sound(kSoundItemChange);
     commit_color();
 }
 

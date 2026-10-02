@@ -39,7 +39,7 @@ Row::Row(Rml::Element* parent, Props props) : FluentComponent{append(parent, "ui
             }
             for (i += step; i >= 0 && i < static_cast<int>(mChildren.size()); i += step) {
                 if (mChildren[i]->focus_from(cmd)) {
-                    mDoAud_seStartMenu(kSoundItemFocus);
+                    play_menu_sound(kSoundItemFocus);
                     event.StopPropagation();
                     return;
                 }

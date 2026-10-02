@@ -79,7 +79,7 @@ void DropdownButton::toggle_menu() {
             .onPressed =
                 [getValue = mProps.getValue, setValue = mProps.setValue, index] {
                     if (!getValue || getValue() != index) {
-                        mDoAud_seStartMenu(kSoundItemChange);
+                        play_menu_sound(kSoundItemChange);
                         setValue(index);
                     }
                 },

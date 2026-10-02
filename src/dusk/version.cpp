@@ -24,65 +24,39 @@ void init() {
         DuskLog.fatal("Wrong company ID in disc: {}", company);
     }
 
-    if (game == "GZ2E"sv) {
+    if (game == "GZLE"sv && diskId.gameVersion == 0) {
         gameVersion = GameVersion::GcnUsa;
-    } else if (game == "GZ2P"sv) {
+    } else if (game == "GZLE"sv && diskId.gameVersion == 48) {
+        gameVersion = GameVersion::GcnKor;
+    } else if (game == "GZLP"sv) {
         gameVersion = GameVersion::GcnPal;
-    } else if (game == "GZ2J"sv) {
+    } else if (game == "GZLJ"sv) {
         gameVersion = GameVersion::GcnJpn;
-    } else if (game == "RZDE"sv && diskId.gameVersion == 0) {
-        gameVersion = GameVersion::WiiUsaRev0;
-    } else if (game == "RZDE"sv && diskId.gameVersion == 2) {
-        gameVersion = GameVersion::WiiUsa;
-    } else if (game == "RZDP"sv) {
-        gameVersion = GameVersion::WiiPal;
-    } else if (game == "RZDJ"sv) {
-        gameVersion = GameVersion::WiiJpn;
     } else {
-        // TODO: Handle remaining valid versions.
-        DuskLog.fatal("Unknown/unsupported game version in disc: {}", game);
+        DuskLog.fatal("Not a Wind Waker disc, or an unknown revision: {}{} rev {}", game, company,
+                      diskId.gameVersion);
     }
 
-    DuskLog.info("Loaded game disc is {}{}", game, company);
-}
+    // The game code is built for the USA release only (VERSION=2). Other releases differ in code
+    // as well as data, so they are refused until they are supported.
+    if (gameVersion != GameVersion::GcnUsa) {
+        DuskLog.fatal("Only the USA release of The Wind Waker (GZLE01, revision 0) is supported "
+                      "so far; this disc is {}{} rev {}", game, company, diskId.gameVersion);
+    }
 
-bool isGcn() {
-    return getGameVersion() == GameVersion::GcnUsa
-        || getGameVersion() == GameVersion::GcnPal
-        || getGameVersion() == GameVersion::GcnJpn;
-}
-
-bool isWii() {
-    return getGameVersion() == GameVersion::WiiUsaRev0
-        || getGameVersion() == GameVersion::WiiUsa
-        || getGameVersion() == GameVersion::WiiPal
-        || getGameVersion() == GameVersion::WiiJpn
-        || getGameVersion() == GameVersion::WiiKor;
-}
-
-bool isLessThanWiiJpn() {
-    return getGameVersion() < GameVersion::WiiJpn;
-}
-
-bool isJpnOrLessThanWiiJpn() {
-    return isRegionJpn() || isLessThanWiiJpn();
-}
-
-bool isPalOrAtLeastWiiR2() {
-    return isRegionPal() || (isWii() && getGameVersion() != GameVersion::WiiUsaRev0);
+    DuskLog.info("Loaded game disc is {}{} rev {}", game, company, diskId.gameVersion);
 }
 
 bool isRegionJpn() {
-    return getGameVersion() == GameVersion::WiiJpn || getGameVersion() == GameVersion::GcnJpn;
+    return getGameVersion() == GameVersion::GcnJpn;
 }
 
 bool isRegionPal() {
-    return getGameVersion() == GameVersion::WiiPal || getGameVersion() == GameVersion::GcnPal;
+    return getGameVersion() == GameVersion::GcnPal;
 }
 
 bool isRegionUsa() {
-    return getGameVersion() == GameVersion::WiiUsa || getGameVersion() == GameVersion::WiiUsaRev0
-        || getGameVersion() == GameVersion::GcnUsa;
+    return getGameVersion() == GameVersion::GcnUsa || getGameVersion() == GameVersion::GcnKor;
 }
 
 GameVersion getGameVersion() {

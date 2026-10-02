@@ -58,7 +58,7 @@ public:
         btn.on_nav_command([this, key = std::string(a.key)](Rml::Event&, NavCommand cmd) {
             if (cmd == NavCommand::Confirm) {
                 if (mConfirming) {
-                    mDoAud_seStartMenu(kSoundClick);
+                    play_menu_sound(kSoundClick);
                     AchievementSystem::get().clearOne(key.c_str());
                     resetConfirm();
                 } else {
@@ -154,7 +154,7 @@ AchievementsWindow::AchievementsWindow() {
             clearAllBtn.on_nav_command([clearAllPtr, confirmingAll](Rml::Event&, NavCommand cmd) {
                 if (cmd == NavCommand::Confirm) {
                     if (*confirmingAll) {
-                        mDoAud_seStartMenu(kSoundClick);
+                        play_menu_sound(kSoundClick);
                         AchievementSystem::get().clearAll();
                         *confirmingAll = false;
                         clearAllPtr->set_text("Clear All Achievements");

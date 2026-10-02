@@ -567,7 +567,7 @@ private:
         const int nextIndex = ((currentIndex + direction) % count + count) % count;
         const auto nextId = modes[nextIndex]->getId();
         if (gamemode::getGameModeManager().setCurrentGameMode(nextId)) {
-            mDoAud_seStartMenu(kSoundItemChange);
+            play_menu_sound(kSoundItemChange);
         }
         refresh(direction);
     }
@@ -912,7 +912,7 @@ void Prelaunch::build_menu_buttons() {
                 return;
             }
 
-            mDoAud_seStartMenu(kSoundPlay);
+            play_menu_sound(kSoundPlay);
             show_menu_notification();
 
             if (getSettings().audio.menuSounds) {
@@ -1192,7 +1192,7 @@ bool Prelaunch::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     int i = ((focusedButton + direction) % n + n) % n;
     while (i >= 0 && i < mMenuButtons.size()) {
         if (mMenuButtons[i]->focus()) {
-            mDoAud_seStartMenu(kSoundItemFocus);
+            play_menu_sound(kSoundItemFocus);
             event.StopPropagation();
             return true;
         }

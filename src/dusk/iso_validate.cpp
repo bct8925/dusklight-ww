@@ -27,40 +27,12 @@ const char* verification_state_name(dusk::DiscVerificationState state) noexcept 
 namespace dusk::iso {
 namespace {
 
-constexpr auto AcceptedDiscs = std::to_array<borealis::disc::AcceptedDisc>({
-    {
-        .gameId = "GZ2E01",
-        .expectedHash = borealis::disc::parse_xxh3_128("14e886f08e548a000afde98a3195e788"),
-    },
-    {
-        .gameId = "GZ2J01",
-        .expectedHash = borealis::disc::parse_xxh3_128("5967dc7a6a553652f4d2050aeef6f368"),
-    },
-    {
-        .gameId = "GZ2P01",
-        .expectedHash = borealis::disc::parse_xxh3_128("9ef597588b0035ca9e91b333fa9a8a7e"),
-    },
-    {
-        .gameId = "RZDE01",
-        .revision = 0,
-        .expectedHash = borealis::disc::parse_xxh3_128("b3d91fbea59e5c66934d04c01566728e"),
-    },
-    {
-        .gameId = "RZDE01",
-        .revision = 2,
-        .expectedHash = borealis::disc::parse_xxh3_128("c3ec420921a1b36d6ae43f576491d25c"),
-    },
-    {
-        .gameId = "RZDJ01",
-        .expectedHash = borealis::disc::parse_xxh3_128("d3866821c7fc6999e6e8bbef8b6875aa"),
-    },
-    {
-        .gameId = "RZDP01",
-        .expectedHash = borealis::disc::parse_xxh3_128("6095a924a57e5fb4294ac96fb85a09a1"),
-    },
-});
+// Discs are accepted by the XXH3-128 hash of the full logical image. No Wind Waker hash is listed
+// yet: it has to come from a complete dump (1,459,978,240 bytes), not a trimmed one. Until then
+// Wind Waker discs are recognized but not verified.
+constexpr std::array<borealis::disc::AcceptedDisc, 0> AcceptedDiscs{};
 
-constexpr auto RecognizedGameIds = std::to_array<std::string_view>({"RZDK01"});
+constexpr auto RecognizedGameIds = std::to_array<std::string_view>({"GZLE01", "GZLP01", "GZLJ01"});
 
 constexpr borealis::disc::Catalog DiscCatalog{
     .acceptedDiscs = AcceptedDiscs,

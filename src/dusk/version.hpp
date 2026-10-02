@@ -1,25 +1,15 @@
 #pragma once
 
 /**
- * Functionality for switching game behavior based on the loaded game version (e.g. PAL/JPN, GC/Wii)
+ * Functionality for switching game behavior based on the loaded game version (e.g. USA/PAL/JPN)
  */
 namespace dusk::version {
     enum class GameVersion : u8 {
-        WiiUsaRev0,
-        WiiPal,
-        WiiJpn,
-        GcnUsa,
-        GcnPal,
-        GcnJpn,
-        WiiUsa,
-        WiiKor,
+        GcnUsa,  // GZLE01 revision 0
+        GcnKor,  // GZLE01 revision 48
+        GcnPal,  // GZLP01
+        GcnJpn,  // GZLJ01
     };
-
-    bool isGcn();
-    bool isWii();
-    bool isLessThanWiiJpn();
-    bool isJpnOrLessThanWiiJpn();
-    bool isPalOrAtLeastWiiR2();
 
     bool isRegionPal();
     bool isRegionJpn();
@@ -62,11 +52,6 @@ namespace dusk::version {
         }
 
         return defaultValue;
-    }
-
-    template<typename T>
-    T platformSelect(const T& gcn, const T& wii) {
-        return isGcn() ? gcn : wii;
     }
 
     template<typename T>

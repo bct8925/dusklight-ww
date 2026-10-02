@@ -129,7 +129,7 @@ void Window::show() {
     Document::show();
     mRoot->SetAttribute("open", "");
     if (mInitialOpen) {
-        mDoAud_seStartMenu(kSoundWindowOpen);
+        play_menu_sound(kSoundWindowOpen);
         mInitialOpen = false;
     }
 }
@@ -182,7 +182,7 @@ bool Window::set_active_tab(int index) {
 
 void Window::request_close() {
     if (!consume_close_request()) {
-        mDoAud_seStartMenu(kSoundWindowClose);
+        play_menu_sound(kSoundWindowClose);
         pop();
     }
 }
@@ -255,7 +255,7 @@ bool Window::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     }
     if (cmd == NavCommand::Confirm || cmd == NavCommand::Down) {
         if (!mContentComponents.empty() && mContentComponents.front()->focus()) {
-            mDoAud_seStartMenu(kSoundItemFocus);
+            play_menu_sound(kSoundItemFocus);
             return true;
         }
     }
@@ -275,7 +275,7 @@ bool Window::handle_content_nav(Rml::Event& event, NavCommand cmd) noexcept {
             return false;
         }
         if (focus()) {
-            mDoAud_seStartMenu(kSoundItemFocus);
+            play_menu_sound(kSoundItemFocus);
             return true;
         }
         return false;

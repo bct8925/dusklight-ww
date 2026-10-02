@@ -1,6 +1,5 @@
 #include "nav_group.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 
 #include <algorithm>
@@ -23,7 +22,7 @@ NavGroup::NavGroup(Rml::Element* root, Props props) : Component{root}, mProps{pr
         const auto direction = map_nav_event(event);
         const auto result = navigate(event.GetTargetElement(), direction);
         if (result == MoveResult::Moved) {
-            mDoAud_seStartMenu(kSoundItemFocus);
+            play_menu_sound(kSoundItemFocus);
         }
         if (result != MoveResult::Unhandled) {
             event.StopPropagation();

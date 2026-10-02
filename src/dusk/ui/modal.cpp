@@ -38,7 +38,7 @@ Modal::Modal(Props props) : WindowSmall("modal"), mProps(std::move(props)) {
         add_action(std::move(action));
     }
 
-    mDoAud_seStartMenu(kSoundWindowOpen);
+    play_menu_sound(kSoundWindowOpen);
 }
 
 void Modal::update() {
@@ -134,7 +134,7 @@ void Modal::dismiss() {
 
 bool Modal::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (cmd == NavCommand::Cancel || cmd == NavCommand::Menu) {
-        mDoAud_seStartMenu(kSoundWindowClose);
+        play_menu_sound(kSoundWindowClose);
         dismiss();
         return true;
     }
@@ -143,7 +143,7 @@ bool Modal::handle_nav_command(Rml::Event& event, NavCommand cmd) {
     if (mContentPane != nullptr && mContentPane->contains(target) && cmd == NavCommand::Down) {
         for (const auto& button : mButtons) {
             if (button->focus()) {
-                mDoAud_seStartMenu(kSoundItemFocus);
+                play_menu_sound(kSoundItemFocus);
                 return true;
             }
         }
@@ -153,7 +153,7 @@ bool Modal::handle_nav_command(Rml::Event& event, NavCommand cmd) {
             mButtons, [target](const auto& button) { return button->contains(target); }) &&
         mContentPane->focus_last())
     {
-        mDoAud_seStartMenu(kSoundItemFocus);
+        play_menu_sound(kSoundItemFocus);
         return true;
     }
 
@@ -174,7 +174,7 @@ bool Modal::handle_nav_command(Rml::Event& event, NavCommand cmd) {
                 next += direction)
             {
                 if (mButtons[next]->focus()) {
-                    mDoAud_seStartMenu(kSoundItemFocus);
+                    play_menu_sound(kSoundItemFocus);
                     return true;
                 }
             }

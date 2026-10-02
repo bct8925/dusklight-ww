@@ -1,6 +1,5 @@
 #include "tab_bar.hpp"
 
-#include "Z2AudioLib/Z2SeMgr.h"
 #include "m_Do/m_Do_audio.h"
 
 namespace dusk::ui {
@@ -119,7 +118,7 @@ Button& TabBar::add_tab(const Rml::String& title, TabCallback callback) {
     button->on_nav_command([this, index](Rml::Event&, NavCommand cmd) {
         if (cmd == NavCommand::Confirm) {
             if (mProps.autoSelect) {
-                mDoAud_seStartMenu(kSoundTabChanged);
+                play_menu_sound(kSoundTabChanged);
             }
             set_active_tab(index);
             return true;
@@ -263,7 +262,7 @@ bool TabBar::handle_nav_command(Rml::Event& event, NavCommand cmd) {
         while (i >= 0 && i < mTabs.size()) {
             const bool changed = mProps.autoSelect ? set_active_tab(i) : focus_tab(i);
             if (changed) {
-                mDoAud_seStartMenu(kSoundTabChanged);
+                play_menu_sound(kSoundTabChanged);
                 return true;
             }
             i += direction;
