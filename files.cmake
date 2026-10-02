@@ -48,6 +48,7 @@ set(DUSK_FILES
         src/dusk/data.hpp
         src/dusk/extras.c
         src/dusk/game_clock.cpp
+        src/dusk/gf_compat.cpp
         src/dusk/hash.hpp
         src/dusk/io.cpp
         src/dusk/iso_validate.cpp

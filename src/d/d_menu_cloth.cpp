@@ -771,8 +771,16 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
         GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
         GXSetCullMode(GX_CULL_FRONT);
         GXSetCurrentMtx(GX_PNMTX0);
-        GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
-        GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+    #if TARGET_PC
+    GXSETARRAY(GX_VA_POS, getPos(), sizeof(mPosArr[0]), sizeof(cXyz), true);
+#else
+    GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+#endif
+    #if TARGET_PC
+    GXSETARRAY(GX_VA_NRM, getNrm(), sizeof(mNrmArr[0]), sizeof(cXyz), true);
+#else
+    GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+#endif
         ShadowTevSetting();
         plot(0.0f, 0.0f, 10.0f, 10.0f);
     } break;
@@ -788,19 +796,39 @@ void dMCloth_c::draw(float, GXColor clothColor, GXColor shadowColor, unsigned ch
     GXLoadNrmMtxImm(mDoMtx_stack_c::get(), GX_PNMTX0);
     GXSetCullMode(GX_CULL_FRONT);
     GXSetCurrentMtx(GX_PNMTX0);
+#if TARGET_PC
+    GXSETARRAY(GX_VA_POS, getPos(), sizeof(mPosArr[0]), sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+#endif
+#if TARGET_PC
+    GXSETARRAY(GX_VA_NRM, getNrm(), sizeof(mNrmArr[0]), sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_NRM, getNrm(), sizeof(cXyz));
+#endif
     TevSetting();
     plot(0.0f, 0.0f, 10.0f, 10.0f);
 
     GXSetCullMode(GX_CULL_BACK);
     ShadowTevSetting();
+#if TARGET_PC
+    GXSETARRAY(GX_VA_POS, mShadowPosArr, sizeof(mShadowPosArr), sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_POS, mShadowPosArr, sizeof(cXyz));
+#endif
     plot_shadow(0.0f, 0.0f, 1.0f, 1.0f);
 
     TevSetting();
+#if TARGET_PC
+    GXSETARRAY(GX_VA_POS, getPos(), sizeof(mPosArr[0]), sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_POS, getPos(), sizeof(cXyz));
+#endif
+#if TARGET_PC
+    GXSETARRAY(GX_VA_NRM, getBackNrm(), sizeof(mBackNrmArr), sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_NRM, getBackNrm(), sizeof(cXyz));
+#endif
     plot(0.0f, 0.0f, 10.0f, 10.0f);
 
     j3dSys.reinitGX();

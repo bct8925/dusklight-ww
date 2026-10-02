@@ -87,6 +87,7 @@ struct daMP_THPReadBuffer {
     /* 0x08 */ BOOL isValid;
 };
 
+#if !TARGET_PC  // Playback state on the decomp's THP structures; on PC the THP API comes from aurora.
 struct daMP_Player_c { // Fake name
     /* 0x000 */ DVDFileInfo fileInfo;
     /* 0x03C */ THPHeader header;
@@ -124,5 +125,6 @@ struct daMP_Player_c { // Fake name
     /* 0x000 */ THPTextureSet textureSet[THP_TEXTURE_SET_COUNT];
     /* 0x000 */ THPAudioBuffer audioBuffer[THP_AUDIO_BUFFER_COUNT];
 };
+#endif
 
 #endif /* D_A_MOVIE_PLAYER_H */

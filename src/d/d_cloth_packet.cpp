@@ -181,8 +181,16 @@ void dCloth_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 
+#if TARGET_PC
+    GXSETARRAY(GX_VA_POS, getPosP(), sizeof(cXyz) * mFlyGridSize * mHoistGridSize, sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_POS, getPosP(), sizeof(cXyz));
+#endif
+#if TARGET_PC
+    GXSETARRAY(GX_VA_NRM, getNrmP(), sizeof(cXyz) * mFlyGridSize * mHoistGridSize, sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_NRM, getNrmP(), sizeof(cXyz));
+#endif
 
     TexObjLoad();
     GXLoadTexObj(getToonTexObjP(), GX_TEXMAP1);
@@ -201,7 +209,11 @@ void dCloth_packet_c::draw() {
 
     // Draw back
     GXSetCullMode(GX_CULL_FRONT);
+#if TARGET_PC
+    GXSETARRAY(GX_VA_NRM, getBackNrmP(), sizeof(cXyz) * mFlyGridSize * mHoistGridSize, sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_NRM, getBackNrmP(), sizeof(cXyz));
+#endif
 
     plot();
 

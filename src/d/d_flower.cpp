@@ -328,9 +328,21 @@ void dFlower_packet_c::draw() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_CLR0, GX_CLR_RGBA, GX_RGBA8, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
+#if TARGET_PC
+    GXSETARRAY(GX_VA_POS, l_pos, sizeof(l_pos), sizeof(l_pos[0]), true);
+#else
     GXSetArray(GX_VA_POS, l_pos, sizeof(l_pos[0]));
+#endif
+#if TARGET_PC
+    GXSETARRAY(GX_VA_CLR0, l_color, sizeof(l_color), sizeof(l_color[0]), true);
+#else
     GXSetArray(GX_VA_CLR0, l_color, sizeof(l_color[0]));
+#endif
+#if TARGET_PC
+    GXSETARRAY(GX_VA_TEX0, l_texCoord, sizeof(l_texCoord), sizeof(l_texCoord[0]), true);
+#else
     GXSetArray(GX_VA_TEX0, l_texCoord, sizeof(l_texCoord[0]));
+#endif
     GXCallDisplayList(l_matDL, 0xA0);
 
     dFlower_room_c* pRoom = &mRoom[0];
@@ -357,9 +369,21 @@ void dFlower_packet_c::draw() {
         }
     }
 
+#if TARGET_PC
+    GXSETARRAY(GX_VA_POS, mPosArray, mPosArray == l_pos3 ? sizeof(l_pos3) : mPosArray == l_pos2 ? sizeof(l_pos2) : sizeof(l_pos), sizeof(*mPosArray), true);
+#else
     GXSetArray(GX_VA_POS, mPosArray, sizeof(*mPosArray));
+#endif
+#if TARGET_PC
+    GXSETARRAY(GX_VA_CLR0, mColorArray, mColorArray == l_color3 ? sizeof(l_color3) : mColorArray == l_color2 ? sizeof(l_color2) : sizeof(l_color), sizeof(*mColorArray), true);
+#else
     GXSetArray(GX_VA_CLR0, mColorArray, sizeof(*mColorArray));
+#endif
+#if TARGET_PC
+    GXSETARRAY(GX_VA_TEX0, mTexCoordArray, mTexCoordArray == l_texCoord3 ? sizeof(l_texCoord3) : mTexCoordArray == l_texCoord2 ? sizeof(l_texCoord2) : sizeof(l_texCoord), sizeof(*mTexCoordArray), true);
+#else
     GXSetArray(GX_VA_TEX0, mTexCoordArray, sizeof(*mTexCoordArray));
+#endif
     GXCallDisplayList(mDL1, mDL1Size);
 
     pRoom = &mRoom[0];

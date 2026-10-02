@@ -1972,7 +1972,11 @@ void mDoExt_3DlineMat0_c::setMaterial() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
 
+#if TARGET_PC
+    GXSETARRAY(GX_VA_NRM, l_normal, sizeof(l_normal), sizeof(*l_normal), true);
+#else
     GXSetArray(GX_VA_NRM, l_normal, sizeof(*l_normal));
+#endif
 
     if (mpTevStr) {
         dKy_GxFog_tevstr_set(mpTevStr);
@@ -1997,7 +2001,11 @@ void mDoExt_3DlineMat0_c::draw() {
     mDoExt_3Dline_c* line = mpLines;
     u16 numTriStrip = mNumSegments * 2;
     for (s32 i = 0; i < mNumLines; i++) {
+#if TARGET_PC
+        GXSETARRAY(GX_VA_POS, line->mPosArr[mCurArr], sizeof(cXyz) * numTriStrip, sizeof(cXyz), true);
+#else
         GXSetArray(GX_VA_POS, line->mPosArr[mCurArr], sizeof(cXyz));
+#endif
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, numTriStrip);
         for (u16 j = 0; j < numTriStrip; j += 2) {
             GXPosition1x16(j);
@@ -2240,7 +2248,11 @@ void mDoExt_3DlineMat1_c::setMaterial() {
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_NRM, GX_NRM_XYZ, GX_S8, 6);
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_TEX0, GX_TEX_ST, GX_F32, 0);
 
+#if TARGET_PC
+    GXSETARRAY(GX_VA_NRM, l_normal, sizeof(l_normal), sizeof(*l_normal), true);
+#else
     GXSetArray(GX_VA_NRM, l_normal, sizeof(*l_normal));
+#endif
 
     if (mpTevStr) {
         dKy_GxFog_tevstr_set(mpTevStr);
@@ -2269,8 +2281,16 @@ void mDoExt_3DlineMat1_c::draw() {
     mDoExt_3Dline_c* line = mpLines;
     u16 numTriStrip = mNumSegments * 2;
     for (s32 i = 0; i < mNumLines; i++) {
+#if TARGET_PC
+        GXSETARRAY(GX_VA_POS, line->mPosArr[mCurArr], sizeof(cXyz) * numTriStrip, sizeof(cXyz), true);
+#else
         GXSetArray(GX_VA_POS, line->mPosArr[mCurArr], sizeof(cXyz));
+#endif
+#if TARGET_PC
+        GXSETARRAY(GX_VA_TEX0, line->mTexArr[mCurArr], sizeof(cXy) * numTriStrip, sizeof(cXy), true);
+#else
         GXSetArray(GX_VA_TEX0, line->mTexArr[mCurArr], sizeof(cXy));
+#endif
         GXBegin(GX_TRIANGLESTRIP, GX_VTXFMT0, numTriStrip);
         for (u16 j = 0; j < numTriStrip;) {
             GXPosition1x16(j);
@@ -2555,7 +2575,11 @@ mDoExt_cube8pPacket::mDoExt_cube8pPacket(cXyz* i_points, const GXColor& i_color)
 }
 
 void drawCube(MtxP mtx, cXyz* pos, const GXColor& color) {
+#if TARGET_PC
+    GXSETARRAY(GX_VA_POS, pos, sizeof(cXyz) * 8, sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_POS, pos, sizeof(cXyz));
+#endif
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
@@ -2634,7 +2658,11 @@ mDoExt_quadPacket::mDoExt_quadPacket(cXyz* i_points, const GXColor& i_color, u8 
 }
 
 void mDoExt_quadPacket::draw() {
+#if TARGET_PC
+    GXSETARRAY(GX_VA_POS, mPoints, sizeof(mPoints), sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_POS, mPoints, sizeof(cXyz));
+#endif
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);
@@ -2686,7 +2714,11 @@ mDoExt_trianglePacket::mDoExt_trianglePacket(cXyz* i_points, const GXColor& i_co
 void mDoExt_trianglePacket::draw() {
     j3dSys.reinitGX();
 
+#if TARGET_PC
+    GXSETARRAY(GX_VA_POS, mPoints, sizeof(mPoints), sizeof(cXyz), true);
+#else
     GXSetArray(GX_VA_POS, mPoints, sizeof(cXyz));
+#endif
     GXSetVtxAttrFmt(GX_VTXFMT0, GX_VA_POS, GX_POS_XYZ, GX_F32, 0);
     GXClearVtxDesc();
     GXSetVtxDesc(GX_VA_POS, GX_INDEX8);

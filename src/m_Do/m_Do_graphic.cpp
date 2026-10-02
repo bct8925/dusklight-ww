@@ -358,7 +358,11 @@ void clearAlphaBuffer(view_class* view) {
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+#if TARGET_PC
+    GFSETARRAY(GX_VA_POS, l_pos, sizeof(l_pos), sizeof(*l_pos), true);
+#else
     GFSetArray(GX_VA_POS, l_pos, sizeof(*l_pos));
+#endif
     GFLoadPosMtxImm(cMtx_getIdentity(), 0);
     GXCallDisplayList(l_DL, 0x20);
     GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 1, 0, 1);
@@ -461,7 +465,11 @@ void drawAlphaBuffer(view_class* view, GXColor color) {
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+#if TARGET_PC
+    GFSETARRAY(GX_VA_POS, l_pos, sizeof(l_pos), sizeof(*l_pos), true);
+#else
     GFSetArray(GX_VA_POS, l_pos, sizeof(*l_pos));
+#endif
     GFLoadPosMtxImm(cMtx_getIdentity(), 0);
     GXCallDisplayList(l_DL, 0x20);
     GFSetBlendModeEtc(GX_BM_NONE, GX_BL_ZERO, GX_BL_ZERO, GX_LO_CLEAR, 1, 0, 1);
@@ -534,7 +542,11 @@ void drawSpot(view_class* view) {
 
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+#if TARGET_PC
+    GFSETARRAY(GX_VA_POS, l_pos, sizeof(l_pos), sizeof(*l_pos), true);
+#else
     GFSetArray(GX_VA_POS, l_pos, sizeof(*l_pos));
+#endif
     Mtx44 mtx;
     C_MTXOrtho(mtx, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 10.0f);
     GXSetProjection(mtx, GX_ORTHOGRAPHIC);

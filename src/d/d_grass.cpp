@@ -291,9 +291,21 @@ void dGrass_packet_c::draw() {
 
     GFSetVtxDescv(l_vtxDescList);
     GFSetVtxAttrFmtv(GX_VTXFMT0, l_vtxAttrFmtList);
+#if TARGET_PC
+    GFSETARRAY(GX_VA_POS, mpPosArr, mpPosArr == l_Vmori_pos ? sizeof(l_Vmori_pos) : sizeof(l_pos), sizeof(*mpPosArr), true);
+#else
     GFSetArray(GX_VA_POS, mpPosArr, sizeof(*mpPosArr));
+#endif
+#if TARGET_PC
+    GFSETARRAY(GX_VA_CLR0, mpColorArr, mpColorArr == l_Vmori_color ? sizeof(l_Vmori_color) : sizeof(l_color), sizeof(*mpColorArr), true);
+#else
     GFSetArray(GX_VA_CLR0, mpColorArr, sizeof(*mpColorArr));
+#endif
+#if TARGET_PC
+    GFSETARRAY(GX_VA_TEX0, mpTexCoordArr, mpTexCoordArr == l_Vmori_texCoord ? sizeof(l_Vmori_texCoord) : sizeof(l_texCoord), sizeof(*mpTexCoordArr), true);
+#else
     GFSetArray(GX_VA_TEX0, mpTexCoordArr, sizeof(*mpTexCoordArr));
+#endif
     GXCallDisplayList(mpMatDL, mMatDLSize);
 
     dGrass_room_c* room = &mGrassRoom[0];
