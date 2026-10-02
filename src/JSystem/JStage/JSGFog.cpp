@@ -49,7 +49,7 @@ GXColor JStage::TFog::JSGGetColor() const {
 #if TARGET_PC
     return GXColor{0xFF, 0xFF, 0xFF, 0xFF};
 #else
-    return (GXColor){0xFF, 0xFF, 0xFF, 0xFF};
+    return COMPOUND_LITERAL(GXColor){0xFF, 0xFF, 0xFF, 0xFF};
 #endif
 }
 

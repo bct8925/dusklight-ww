@@ -18,9 +18,15 @@ static JUTConsole* sConsole;
 /* 8001BADC-8001BB68       .text print_f__FPCce */
 void print_f(const char* fmt, ...) {
     std::__tag_va_List args;
+#if TARGET_PC
+    va_start(args.list, fmt);
+    sConsole->print_f_va(fmt, &args);
+    va_end(args.list);
+#else
     va_start(args, fmt);
     sConsole->print_f_va(fmt, &args);
     va_end(args);
+#endif
 }
 
 /* 8001BB68-8001BB90       .text print__FPCc */
@@ -101,6 +107,20 @@ void dispDateInfo() {
 
     OSCalendarTime time;
     OSTicksToCalendarTime(mDoMain::sPowerOnTime, &time);
+#if TARGET_PC
+    print_f("PowerOnTime: %04d/%2d/%2d %2d:%2d:%2d`%03d\"%03d\n", time.year, time.mon,
+            time.mday, time.hour, time.min, time.sec, time.msec,
+            time.usec);
+
+    OSTicksToCalendarTime(mDoMain::sHungUpTime, &time);
+    print_f("HungUpTime : %04d/%2d/%2d %2d:%2d:%2d`%03d\"%03d\n", time.year, time.mon,
+            time.mday, time.hour, time.min, time.sec, time.msec,
+            time.usec);
+
+    OSTicksToCalendarTime(mDoMain::sHungUpTime - mDoMain::sPowerOnTime, &time);
+    print_f("PlayTime   : %4d days, %2d:%2d:%2d`%03d\"%03d\n", time.yday, time.hour,
+            time.min, time.sec, time.msec, time.usec);
+#else
     print_f("PowerOnTime: %04d/%2d/%2d %2d:%2d:%2d`%03d\"%03d\n", time.year, time.month,
             time.day_of_month, time.hours, time.minutes, time.seconds, time.milliseconds,
             time.microseconds);
@@ -113,6 +133,7 @@ void dispDateInfo() {
     OSTicksToCalendarTime(mDoMain::sHungUpTime - mDoMain::sPowerOnTime, &time);
     print_f("PlayTime   : %4d days, %2d:%2d:%2d`%03d\"%03d\n", time.year_day, time.hours,
             time.minutes, time.seconds, time.milliseconds, time.microseconds);
+#endif
     print("---------------------------------------\n");
 }
 

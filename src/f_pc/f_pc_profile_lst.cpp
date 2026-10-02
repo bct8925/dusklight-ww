@@ -1,5 +1,9 @@
 #include "f_pc/f_pc_profile_lst.h"
+#if TARGET_PC
+// Linked into the executable; no REL module entry points.
+#else
 #include "REL/executor.h"
+#endif
 #include "global.h"
 
 process_profile_definition* g_fpcPfLst_ProfileList[] = {

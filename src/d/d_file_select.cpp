@@ -3137,6 +3137,19 @@ void dFile_select_c::setSaveData() {
                 strcpy(field_0x38f4[i], (char*)(&data[0x157]));
                 OSCalendarTime time;
                 OSTicksToCalendarTime(*(u64*)(data + 0x18), &time);
+#if TARGET_PC
+                sprintf(
+                    field_0x3900[i],
+#if VERSION <= VERSION_JPN
+                    "%d.%02d.%02d %02d:%02d:%02d",
+                    time.year, time.mon + 1, time.mday,
+#else
+                    "%02d/%02d/%d %02d:%02d:%02d",
+                    time.mon + 1, time.mday, time.year,
+#endif
+                    time.hour, time.min, time.sec
+                );
+#else
                 sprintf(
                     field_0x3900[i],
 #if VERSION <= VERSION_JPN
@@ -3148,6 +3161,7 @@ void dFile_select_c::setSaveData() {
 #endif
                     time.hours, time.minutes, time.seconds
                 );
+#endif
                 dataNew[i] = 0;
             }
 
@@ -3250,6 +3264,19 @@ void dFile_select_c::setSaveData() {
                 strcpy(field_0x38f4[i], (char*)(&data[0x157]));
                 OSCalendarTime time;
                 OSTicksToCalendarTime(*(u64*)(data + 0x18), &time);
+#if TARGET_PC
+                sprintf(
+                    field_0x3900[i],
+#if VERSION <= VERSION_JPN
+                    "%d.%02d.%02d %02d:%02d:%02d",
+                    time.year, time.mon + 1, time.mday,
+#else
+                    "%02d/%02d/%d %02d:%02d:%02d",
+                    time.mon + 1, time.mday, time.year,
+#endif
+                    time.hour, time.min, time.sec
+                );
+#else
                 sprintf(
                     field_0x3900[i],
 #if VERSION <= VERSION_JPN
@@ -3261,6 +3288,7 @@ void dFile_select_c::setSaveData() {
 #endif
                     time.hours, time.minutes, time.seconds
                 );
+#endif
                 dataNew[i] = 0;
             }
 

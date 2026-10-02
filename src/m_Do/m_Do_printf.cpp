@@ -31,6 +31,10 @@ extern "C" void* OSGetCallerPC(int param_0) {
 extern "C"
 #endif
 int OSGetActiveThreadID(OSThread* thread) {
+#if TARGET_PC
+    // reads the PowerPC OS's active-thread list
+    return -1;
+#else
     OSThread* r31;
     int id = -1;
     BOOL enable = OSDisableInterrupts();
@@ -41,10 +45,15 @@ int OSGetActiveThreadID(OSThread* thread) {
     }
     OSRestoreInterrupts(enable);
     return r31 ? id : -1;
+#endif
 }
 
 /* 800066B0-80006770       .text search_partial_address */
 extern "C" int search_partial_address(void* address, int* module_id, int* section_id, int* section_offset, int* name_offset) {
+#if TARGET_PC
+    // walks the PowerPC OS's REL module list
+    return -1;
+#else
     if (address == NULL)
         return 0xFFFFFFFF;
 
@@ -73,6 +82,7 @@ extern "C" int search_partial_address(void* address, int* module_id, int* sectio
     }
 
     return 0xFFFFFFFF;
+#endif
 }
 
 /* 80006770-800067D0       .text convert_partial_address */

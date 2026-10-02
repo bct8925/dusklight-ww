@@ -24,7 +24,11 @@ mDoMemCd_Ctrl_c::mDoMemCd_Ctrl_c() {
 
 /* 80018D70-80018E18       .text ThdInit__15mDoMemCd_Ctrl_cFv */
 void mDoMemCd_Ctrl_c::ThdInit() {
+#if TARGET_PC
+    CARDInit("GZLE", "01");
+#else
     CARDInit();
+#endif
     mPictDataPtr = NULL;
     mPictDataWritePtr = NULL;
     mCopyToPos = 0;

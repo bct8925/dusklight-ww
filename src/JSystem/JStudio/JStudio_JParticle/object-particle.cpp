@@ -148,7 +148,7 @@ void TAdaptor_particle::TVVOOn_BEGIN_FADE_IN_::operator()(f32 value, JStudio::TA
 #if TARGET_PC
     JGeometry::TVec3<f32> pos = Vec{0.0f, 0.0f, 0.0f};
 #else
-    JGeometry::TVec3<f32> pos = (Vec){0.0f, 0.0f, 0.0f};
+    JGeometry::TVec3<f32> pos = COMPOUND_LITERAL(Vec){0.0f, 0.0f, 0.0f};
 #endif
     adaptor_particle->mEmitter = adaptor_particle->mEmitterManager->createSimpleEmitterID(
         pos,

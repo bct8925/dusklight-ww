@@ -18,12 +18,13 @@ typedef unsigned int uint;
 #ifndef AT_ADDRESS
 #define AT_ADDRESS(addr)
 #endif
-#ifndef ATTRIBUTE_ALIGN
+// The decomp writes ATTRIBUTE_ALIGN after the declarator (GCC style). aurora defines it as
+// __declspec(align()) on MSVC, which must come first, so use the decomp's empty MSVC definition.
 #if defined(_MSC_VER)
+#undef ATTRIBUTE_ALIGN
 #define ATTRIBUTE_ALIGN(num)
-#else
+#elif !defined(ATTRIBUTE_ALIGN)
 #define ATTRIBUTE_ALIGN(num) __attribute__((aligned(num)))
-#endif
 #endif
 #ifndef DECL_WEAK
 #if defined(_MSC_VER)
@@ -53,6 +54,12 @@ typedef unsigned int uint;
 #ifndef DEG_TO_RAD
 #define DEG_TO_RAD(degrees) (degrees * (3.14159265358979323846f / 180.0f))
 #endif
+#ifndef M_SQRT2
+#define M_SQRT2 1.41421356237309504880f
+#endif
+#ifndef M_SQRT1_2
+#define M_SQRT1_2 0.70710678118654752440f
+#endif
 #ifndef RAD_TO_DEG
 #define RAD_TO_DEG(radians) (radians * (180.0f / 3.14159265358979323846f + 0.000005f))
 #endif
@@ -77,6 +84,32 @@ typedef const f32 (*CMtxP)[4];
 typedef DVDDir DVDDirectory;
 typedef DVDDirEntry DVDDirectoryEntry;
 #define DVDGetLength(fi) (fi)->length
+
+// dolphin/card.h: the decomp names the CARD result codes CARD_ERROR_*.
+#include <dolphin/card.h>
+#define CARD_ERROR_READY CARD_RESULT_READY
+#define CARD_ERROR_BROKEN CARD_RESULT_BROKEN
+#define CARD_ERROR_ENCODING CARD_RESULT_ENCODING
+#define CARD_ERROR_EXIST CARD_RESULT_EXIST
+#define CARD_ERROR_FATAL_ERROR CARD_RESULT_FATAL_ERROR
+#define CARD_ERROR_IOERROR CARD_RESULT_IOERROR
+#define CARD_ERROR_NOCARD CARD_RESULT_NOCARD
+#define CARD_ERROR_NOFILE CARD_RESULT_NOFILE
+#define CARD_ERROR_WRONGDEVICE CARD_RESULT_WRONGDEVICE
+
+// The decomp's GXSetDrawSync waits for the GPU to reach a token; aurora has no equivalent and
+// orders work itself.
+static inline void GXSetDrawSync(GXBool enable) {
+    (void)enable;
+}
+
+#ifdef __cplusplus
+// The decomp passes thread entry points as void*.
+inline BOOL OSCreateThread(OSThread* thread, void* func, void* param, void* stack, u32 stackSize,
+                           OSPriority priority, u16 attr) {
+    return OSCreateThread(thread, (void* (*)(void*))func, param, stack, stackSize, priority, attr);
+}
+#endif
 
 #ifdef __cplusplus
 #include <cstdarg>

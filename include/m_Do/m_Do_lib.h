@@ -3,9 +3,13 @@
 
 #include "JSystem/J3DU/J3DUClipper.h"
 
+#if TARGET_PC
+#include <dolphin/gx.h>
+#else
 typedef struct _GXTexObj GXTexObj;
 typedef struct _GXTlutObj GXTlutObj;
 typedef struct Vec Vec;
+#endif
 struct ResTIMG;
 
 struct mDoLib_clipper {

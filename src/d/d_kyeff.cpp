@@ -144,7 +144,11 @@ static cPhs_State dKyeff_Create(kankyo_class* i_ky) {
         g_env_light.mWind.mWindVec.set(1.0f, 0.0f, 0.0f);
         g_env_light.mWind.mWindPower = 0.7f;
 
+#if TARGET_PC
+        g_env_light.mCurTime = 15.0f * cal.hour;
+#else
         g_env_light.mCurTime = 15.0f * cal.hours;
+#endif
     } else if (dKy_checkEventNightStop()) {
         u32 stType = dStage_stagInfo_GetSTType(dComIfGp_getStage().getStagInfo());
         if (stType == dStageType_OUTDOORS_e || stType == dStageType_SEA_e) {

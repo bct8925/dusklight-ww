@@ -16,12 +16,16 @@ typedef u8 THPSample;
 typedef s16 THPCoeff;
 typedef f32 THPQuantTab[64];
 
+#if TARGET_PC
+// The movie player's own THP decoder; on PC the THP API comes from aurora.
+#else
 static u32 THPAudioDecode(s16* audioBuffer, u8* audioFrame, s32 flag);
 static s32 __THPAudioGetNewSample(THPAudioDecodeInfo* info);
 static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr);
 
 s32 __THPAudioGetNewSample(THPAudioDecodeInfo*);
 void __THPAudioInitialize(THPAudioDecodeInfo*, u8*);
+#endif
 
 static void __THPSetupBuffers(void);
 static u8 __THPReadFrameHeader(void);

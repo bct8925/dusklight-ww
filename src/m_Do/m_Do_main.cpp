@@ -564,9 +564,17 @@ int main(int argc, const char* argv[]) {
     if (mDoMain::developmentMode < 0) {
         DVDDiskID* disk_id = DVDGetCurrentDiskID();
 
+#if TARGET_PC
+        if (disk_id->gameVersion > 0x90) {
+#else
         if (disk_id->game_version > 0x90) {
+#endif
             mDoMain::developmentMode = 1;
+#if TARGET_PC
+        } else if (disk_id->gameVersion > 0x80) {
+#else
         } else if (disk_id->game_version > 0x80) {
+#endif
             u32 consoleType = OSGetConsoleType();
             mDoMain::developmentMode = (consoleType >> 0x1C) & 1;
         } else {

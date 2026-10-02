@@ -36,6 +36,24 @@ target_include_directories(dusklight_mod_api INTERFACE ${_game_root}/sdk/include
 add_library(dusklight_game_headers INTERFACE)
 target_include_directories(dusklight_game_headers INTERFACE ${_game_include_dirs})
 target_compile_definitions(dusklight_game_headers INTERFACE ${_game_compile_defs})
+# Data the decomp embeds in the DOL (display lists, textures, fonts) is #included from headers
+# its own build extracts from the disc into build/GZLE01/include/assets. Until that data is read
+# from the disc at runtime, point this at a local tww build. Never commit or distribute it: a
+# binary built this way contains Nintendo data.
+set(WW_LOCAL_ASSETS "${_game_root}/../tww/build/GZLE01/include" CACHE PATH
+        "Include dir of a local zeldaret/tww build (contains assets/*.h extracted from the disc)")
+if (EXISTS "${WW_LOCAL_ASSETS}/assets")
+    target_include_directories(dusklight_game_headers INTERFACE "${WW_LOCAL_ASSETS}")
+else ()
+    message(WARNING "WW_LOCAL_ASSETS (${WW_LOCAL_ASSETS}) has no assets/; files that embed DOL data will not compile")
+endif ()
+
+if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
+    # MWCC (and GCC/Clang, with a warning) allow passing string literals as char*; the decomp
+    # relies on it throughout.
+    target_compile_options(dusklight_game_headers INTERFACE "$<$<COMPILE_LANGUAGE:CXX>:/Zc:strictStrings->")
+endif ()
+
 # Decomp sources rely on global.h and on the decomp SDK's extra types (uint, Mtx33, SVec...) being
 # visible even when they include dolphin/types.h directly, as MWCC's prefix setup made them.
 # global.h pulls in sdk_compat/pc_sdk_extras.h, so force-include it everywhere.

@@ -197,6 +197,7 @@ using std::isnan;
 #define IF_NOT_DUSK(statement)
 #define DUSK_IF_ELSE(dusk, orig) dusk
 #else
+#define COMPOUND_LITERAL(x) (x)
 #define MULTI_CHAR(x) (x)
 #define IS_REF_NULL(r) (&(r) == NULL)
 #define IS_REF_NONNULL(r) (&(r) != NULL)

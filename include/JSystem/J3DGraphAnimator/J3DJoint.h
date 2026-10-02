@@ -55,7 +55,7 @@ public:
 #if TARGET_PC
         J3DSys::mParentS = Vec{1.0f, 1.0f, 1.0f};
 #else
-        J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+        J3DSys::mParentS = COMPOUND_LITERAL(Vec){1.0f, 1.0f, 1.0f};
 #endif
 #endif
         J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;
@@ -103,7 +103,7 @@ public:
 #if TARGET_PC
         J3DSys::mParentS = Vec{1.0f, 1.0f, 1.0f};
 #else
-        J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+        J3DSys::mParentS = COMPOUND_LITERAL(Vec){1.0f, 1.0f, 1.0f};
 #endif
 #endif
         J3DSys::mCurrentS = vec;
