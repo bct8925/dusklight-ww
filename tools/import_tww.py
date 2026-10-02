@@ -47,22 +47,17 @@ MANAGED_PATHS = [
     "include/weak_bss_936_to_1036.h",
     "include/weak_data.h",
     # Resource-archive index enums (file names only, no game data)
-    "assets",
+    "assets/D44J01",
+    "assets/GZLE01",
+    "assets/GZLJ01",
+    "assets/GZLP01",
 ]
+# Deliberately not imported: src/dolphin and include/dolphin (aurora provides
+# the Dolphin SDK), PowerPC_EABI_Support, TRK_MINNOW_DOLPHIN, OdemuExi2, REL,
+# amcstubs and odenotstub (PowerPC runtime, debugger and REL glue).
 
 # Copied into upstream/tww/ for reference (build lists, license).
 METADATA_FILES = ["configure.py", "LICENSE", "README.md"]
-
-# Deliberately not imported: aurora provides the Dolphin SDK, and the
-# PowerPC runtime, debugger and REL glue have no meaning on PC.
-EXCLUDED = [
-    "src/dolphin", "include/dolphin",
-    "src/PowerPC_EABI_Support",
-    "src/TRK_MINNOW_DOLPHIN", "include/TRK_MINNOW_DOLPHIN",
-    "src/OdemuExi2", "include/OdemuExi2",
-    "src/REL", "include/REL",
-    "src/amcstubs", "src/odenotstub",
-]
 
 
 def git(tww: Path, *args: str) -> bytes:
@@ -105,8 +100,9 @@ def main() -> int:
     except subprocess.CalledProcessError:
         origin = "unknown"
 
-    present = git(tww, "ls-tree", "--name-only", sha, "src/", "include/", ".").decode().split()
-    missing = [p for p in MANAGED_PATHS if p not in present]
+    missing = [p for p in MANAGED_PATHS
+               if subprocess.run(["git", "-C", str(tww), "cat-file", "-e", f"{sha}:{p}"],
+                                 capture_output=True).returncode != 0]
     if missing:
         print(f"error: {sha[:10]} lacks managed paths: {', '.join(missing)}", file=sys.stderr)
         return 1
