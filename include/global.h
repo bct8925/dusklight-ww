@@ -190,6 +190,14 @@ using std::isnan;
 
 #define CRASH(msg) OSPanic(__FILE__, __LINE__, "%s", msg)
 
+// Body for functions the decomp has not decompiled yet (see tools/pc_stub_empty.py): logs the
+// function to the stub log the first time it runs.
+#ifdef __cplusplus
+extern "C"
+#endif
+void dusk_empty_stub_hit(const char* function);
+#define PC_EMPTY_STUB() dusk_empty_stub_hit(__FUNCTION__)
+
 #define IF_DUSK(statement) statement
 #define IF_DUSK_BLOCK(cond) if (cond) {
 #define IF_DUSK_BLOCK_END }

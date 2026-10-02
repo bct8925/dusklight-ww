@@ -61,11 +61,19 @@ J3DAnmTexPattern* dDemo_actor_c::getP_BtpData(const char* name) {
 /* 80069550-800695E8       .text getP_BrkData__13dDemo_actor_cFPCc */
 void* dDemo_actor_c::getP_BrkData(const char*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 800695E8-8006969C       .text getP_BtkData__13dDemo_actor_cFPCc */
 J3DAnmTextureSRTKey* dDemo_actor_c::getP_BtkData(const char*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 8006969C-80069838       .text getPrm_Morf__13dDemo_actor_cFv */

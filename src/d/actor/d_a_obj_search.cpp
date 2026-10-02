@@ -41,6 +41,10 @@ static dCcD_SrcCps cps_src = {
 /* 800FDAFC-800FDB1C       .text createHeap_CB__FP10fopAc_ac_c */
 static BOOL createHeap_CB(fopAc_ac_c*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 800FDB1C-800FDB8C       .text _createHeap__Q212daObj_Search5Act_cFv */
@@ -61,6 +65,10 @@ void daObj_Search::Act_c::beamCreateHeap(int) {
 /* 800FDDBC-800FDE08       .text nodeControl_CB__FP7J3DNodei */
 static BOOL nodeControl_CB(J3DNode*, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 800FDE08-800FE10C       .text _nodeControl__Q212daObj_Search5Act_cFP7J3DNodeP8J3DModel */
@@ -183,6 +191,10 @@ void daObj_Search::Act_c::CreateInit() {
 /* 8010071C-80100B08       .text _create__Q212daObj_Search5Act_cFv */
 cPhs_State daObj_Search::Act_c::_create() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 80100F9C-801010C4       .text smoke_set__Q212daObj_Search5Act_cFfi */
@@ -193,6 +205,10 @@ void daObj_Search::Act_c::smoke_set(float, int) {
 /* 801010C4-801013AC       .text _execute__Q212daObj_Search5Act_cFv */
 bool daObj_Search::Act_c::_execute() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801013AC-80101464       .text check_bk_control__Q212daObj_Search5Act_cFv */
@@ -253,41 +269,73 @@ void daObj_Search::Act_c::is_path_info() {
 /* 80102398-801026F8       .text _draw__Q212daObj_Search5Act_cFv */
 bool daObj_Search::Act_c::_draw() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801026F8-8010283C       .text _delete__Q212daObj_Search5Act_cFv */
 bool daObj_Search::Act_c::_delete() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 8010283C-80102844       .text _isdelete__Q212daObj_Search5Act_cFv */
 BOOL daObj_Search::Act_c::_isdelete() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 80102844-80102864       .text Create__Q212daObj_Search4MthdFPv */
 cPhs_State daObj_Search::Mthd::Create(void*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 80102864-80102884       .text Delete__Q212daObj_Search4MthdFPv */
 BOOL daObj_Search::Mthd::Delete(void*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 80102884-801028A4       .text Execute__Q212daObj_Search4MthdFPv */
 BOOL daObj_Search::Mthd::Execute(void*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801028A4-801028C4       .text Draw__Q212daObj_Search4MthdFPv */
 BOOL daObj_Search::Mthd::Draw(void*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801028C4-801028E4       .text IsDelete__Q212daObj_Search4MthdFPv */
 BOOL daObj_Search::Mthd::IsDelete(void*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 actor_method_class daObj_Search::Mthd::Table = {

@@ -1701,11 +1701,19 @@ void dMenu_Fmap2_c::ChangeProcMode() {
 /* 801C36C8-801C376C       .text _open__13dMenu_Fmap2_cFv */
 bool dMenu_Fmap2_c::_open() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C376C-801C3858       .text _close__13dMenu_Fmap2_cFv */
 bool dMenu_Fmap2_c::_close() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C3858-801C38E0       .text _draw__13dMenu_Fmap2_cFv */
@@ -1975,6 +1983,10 @@ BOOL dMenu_Fmap2_c::paneAlphaMessage2(s16 param_1, u8 param_2, u8 param_3, int p
 /* 801C57C0-801C5AEC       .text paneTranceMessage__13dMenu_Fmap2_cFsUcffffUcUci */
 BOOL dMenu_Fmap2_c::paneTranceMessage(s16, u8, f32, f32, f32, f32, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C5AEC-801C5BF4       .text paneScaleXYChild__13dMenu_Fmap2_cFP18fopMsgM_pane_classf */
@@ -2021,66 +2033,118 @@ BOOL dMenu_Fmap2_c::paneTransSelCmapCle(s16 param_1, u8 param_2, f32 param_3, f3
 /* 801C5D6C-801C5EE4       .text paneTransSelCmapOpn__13dMenu_Fmap2_cFsUcffffUcUci */
 BOOL dMenu_Fmap2_c::paneTransSelCmapOpn(s16, u8, f32, f32, f32, f32, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C5EE4-801C609C       .text paneAlphaGostShipMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaGostShipMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C609C-801C61F0       .text paneAlphaTingleMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaTingleMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C61F0-801C6338       .text paneAlphaTreasureMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaTreasureMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C6338-801C64A0       .text paneAlphaSubdanMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaSubdanMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C64A0-801C663C       .text paneAlphaHeartMMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaHeartMMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C663C-801C6790       .text paneAlphaYaguraMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaYaguraMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C6790-801C68B0       .text paneAlphaDfaliyMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaDfaliyMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C68B0-801C6A34       .text paneAlphaHeartPMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaHeartPMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C6A34-801C6B54       .text paneAlphaTerryMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaTerryMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C6B54-801C6C74       .text paneAlphaSubMaMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaSubMaMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C6C74-801C6DC8       .text paneAlphaMoonMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaMoonMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C6DC8-801C6EFC       .text paneAlphaDoctaMap__13dMenu_Fmap2_cFsUcUci */
 BOOL dMenu_Fmap2_c::paneAlphaDoctaMap(s16, u8, u8, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801C6EFC-801C6F60       .text setPaneOnOff__13dMenu_Fmap2_cFP9J2DScreenUlb */

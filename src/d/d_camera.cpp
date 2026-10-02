@@ -3676,6 +3676,10 @@ int dCamera_c::getMsgCmdCut() {
 /* 8016D8D0-80170434       .text talktoCamera__9dCamera_cFl */
 bool dCamera_c::talktoCamera(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 namespace {
@@ -4179,6 +4183,10 @@ bool dCamera_c::subjectCamera(s32 param_1) {
 /* 801719C4-80172C20       .text towerCamera__9dCamera_cFl */
 bool dCamera_c::towerCamera(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 80172C20-8017346C       .text crawlCamera__9dCamera_cFl */
@@ -4339,36 +4347,64 @@ bool dCamera_c::crawlCamera(s32 param_1) {
 /* 8017346C-80173E40       .text hookshotCamera__9dCamera_cFl */
 bool dCamera_c::hookshotCamera(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 80173E40-80174E98       .text tornadoCamera__9dCamera_cFl */
 bool dCamera_c::tornadoCamera(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 80174E98-8017623C       .text rideCamera__9dCamera_cFl */
 bool dCamera_c::rideCamera(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 8017623C-80176F54       .text hungCamera__9dCamera_cFl */
 bool dCamera_c::hungCamera(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 80176F54-8017793C       .text vomitCamera__9dCamera_cFl */
 bool dCamera_c::vomitCamera(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 8017793C-801787B8       .text shieldCamera__9dCamera_cFl */
 bool dCamera_c::shieldCamera(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801787B8-801795C8       .text manualCamera__9dCamera_cFl */
 bool dCamera_c::manualCamera(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801795C8-801799C0       .text nonOwnerCamera__9dCamera_cFl */

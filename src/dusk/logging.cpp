@@ -2,7 +2,10 @@
 
 #include <tracy/Tracy.hpp>
 
+#include <mutex>
+#include <string>
 #include <string_view>
+#include <unordered_set>
 
 bool StubLogEnabled = true;
 
@@ -36,6 +39,15 @@ bool divert_stub_messages(const borealis::log::Message& message) {
     return true;
 }
 }  // namespace
+
+extern "C" void dusk_empty_stub_hit(const char* function) {
+    static std::mutex mutex;
+    static std::unordered_set<std::string> seen;
+    std::lock_guard lock(mutex);
+    if (seen.emplace(function).second) {
+        DuskLog.warn("{} is a stub (not decompiled yet)", function);
+    }
+}
 
 void dusk::InitializeLogging(
     const std::filesystem::path& cacheDir, const borealis::cli::StandardOptions& standard) {

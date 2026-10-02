@@ -135,26 +135,46 @@ void dDlst_TerminaterScrnDraw_c::draw() {
 /* 8020A53C-8020A55C       .text dMinigame_Terminater_Draw__FP22dMinigame_Terminater_c */
 static BOOL dMinigame_Terminater_Draw(dMinigame_Terminater_c*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 8020A55C-8020A57C       .text dMinigame_Terminater_Execute__FP22dMinigame_Terminater_c */
 static BOOL dMinigame_Terminater_Execute(dMinigame_Terminater_c*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 8020A57C-8020A584       .text dMinigame_Terminater_IsDelete__FP22dMinigame_Terminater_c */
 static BOOL dMinigame_Terminater_IsDelete(dMinigame_Terminater_c*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 8020A584-8020A5A4       .text dMinigame_Terminater_Delete__FP22dMinigame_Terminater_c */
 static BOOL dMinigame_Terminater_Delete(dMinigame_Terminater_c*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 8020A5A4-8020A5C4       .text dMinigame_Terminater_Create__FP9msg_class */
 static cPhs_State dMinigame_Terminater_Create(msg_class*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 static msg_method_class l_dMinigame_Terminater_Method = {

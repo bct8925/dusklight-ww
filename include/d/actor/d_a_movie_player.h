@@ -25,7 +25,6 @@ static void __THPAudioInitialize(THPAudioDecodeInfo* info, u8* ptr);
 
 s32 __THPAudioGetNewSample(THPAudioDecodeInfo*);
 void __THPAudioInitialize(THPAudioDecodeInfo*, u8*);
-#endif
 
 static void __THPSetupBuffers(void);
 static u8 __THPReadFrameHeader(void);
@@ -50,6 +49,7 @@ static void __THPHuffDecodeDCTCompV(THPFileInfo* info, THPCoeff* block);
 static void __THPInverseDCTY8(THPCoeff* in, u32 xPos);
 static void __THPGQRSetup();
 static s32 __THPHuffDecodeTab(THPFileInfo* info, THPHuffmanTab* h);
+#endif
 
 #if VERSION > VERSION_DEMO
 #ifdef __cplusplus

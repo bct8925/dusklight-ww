@@ -236,26 +236,46 @@ void dDlst_2DMSG3_c::outFontDraw() {
 /* 801EE104-801EE218       .text dMsg3_Draw__FP14sub_msg3_class */
 static BOOL dMsg3_Draw(sub_msg3_class*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801EE218-801EE740       .text dMsg3_Execute__FP14sub_msg3_class */
 static BOOL dMsg3_Execute(sub_msg3_class*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801EE740-801EE748       .text dMsg3_IsDelete__FP14sub_msg3_class */
 static BOOL dMsg3_IsDelete(sub_msg3_class*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801EE748-801EE904       .text dMsg3_Delete__FP14sub_msg3_class */
 static BOOL dMsg3_Delete(sub_msg3_class*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 801EE904-801EEEFC       .text dMsg3_Create__FP9msg_class */
 static cPhs_State dMsg3_Create(msg_class*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 static msg_method_class l_dMsg3_Method = {
     (process_method_func)dMsg3_Create,
@@ -283,22 +303,42 @@ msg_process_profile_definition g_profile_MSG3 = {
 #if VERSION == VERSION_PAL
 static BOOL dMessage_Paper_Draw(dMessage_Paper_c*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 static BOOL dMessage_Paper_Execute(dMessage_Paper_c*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 static BOOL dMessage_Paper_IsDelete(dMessage_Paper_c*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 static BOOL dMessage_Paper_Delete(dMessage_Paper_c*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 static cPhs_State dMessage_Paper_Create(msg_class*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 static msg_method_class l_dMessage_Paper_Method = {

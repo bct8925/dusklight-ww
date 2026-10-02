@@ -97,6 +97,9 @@ typedef DVDDirEntry DVDDirectoryEntry;
 #define CARD_ERROR_NOFILE CARD_RESULT_NOFILE
 #define CARD_ERROR_WRONGDEVICE CARD_RESULT_WRONGDEVICE
 
+// GX immediate-mode color, as the decomp names it.
+#define GXColor4x8 GXColor4u8
+
 // The decomp's GXSetDrawSync waits for the GPU to reach a token; aurora has no equivalent and
 // orders work itself.
 static inline void GXSetDrawSync(GXBool enable) {
