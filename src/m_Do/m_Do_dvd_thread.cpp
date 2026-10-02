@@ -13,6 +13,9 @@
 #include "JSystem/JUtility/JUTAssert.h"
 #include "SSystem/SComponent/c_list.h"
 #include "dolphin/dvd/dvd.h"
+#if TARGET_PC
+#include "dusk/trace.h"
+#endif
 
 OSThread mDoDvdThd::l_thread;
 mDoDvdThdStack mDoDvdThd::l_threadStack;
@@ -176,6 +179,9 @@ mDoDvdThd_mountArchive_c* mDoDvdThd_mountArchive_c::create(const char* path, u8 
     if (cmd != NULL) {
         s32 entryNumber = my_DVDConvertPathToEntrynum(path);
         cmd->mEntryNum = entryNumber;
+#if TARGET_PC
+        DUSK_TRACE("dvd %s: entry %d", path, entryNumber);
+#endif
         if (cmd->mEntryNum == -1) {
             cmd->mIsDone = true;
             JKR_DELETE(cmd);
@@ -219,6 +225,9 @@ BOOL mDoDvdThd_mountArchive_c::execute() {
         break;
     }
 
+#if TARGET_PC
+    DUSK_TRACE("dvd mount entry %d: %s", mEntryNum, mArchive != NULL ? "ok" : "FAILED");
+#endif
     mIsDone = true;
     return mArchive != NULL;
 }
@@ -245,6 +254,9 @@ mDoDvdThd_mountXArchive_c* mDoDvdThd_mountXArchive_c::create(const char* path, u
     if (cmd != NULL) {
         s32 entryNumber = my_DVDConvertPathToEntrynum(path);
         cmd->mEntryNum = entryNumber;
+#if TARGET_PC
+        DUSK_TRACE("dvd %s: entry %d", path, entryNumber);
+#endif
         if (cmd->mEntryNum == -1) {
             cmd->mIsDone = true;
             JKR_DELETE(cmd);
@@ -266,6 +278,9 @@ BOOL mDoDvdThd_mountXArchive_c::execute() {
     }
     mArchive = JKRArchive::mount(mEntryNum, mMountMode, mDoExt_getArchiveHeap(), mountDir);
     BOOL ret = getArchive() != NULL;
+#if TARGET_PC
+    DUSK_TRACE("dvd mountX entry %d: %s", mEntryNum, ret ? "ok" : "FAILED");
+#endif
     mIsDone = true;
     return ret;
 }
@@ -285,6 +300,9 @@ mDoDvdThd_toMainRam_c* mDoDvdThd_toMainRam_c::create(const char* path, u8 direct
     if (cmd != NULL) {
         s32 entryNumber = my_DVDConvertPathToEntrynum(path);
         cmd->mEntryNum = entryNumber;
+#if TARGET_PC
+        DUSK_TRACE("dvd %s: entry %d", path, entryNumber);
+#endif
         if (cmd->mEntryNum == -1) {
             cmd->mIsDone = true;
             JKR_DELETE(cmd);
@@ -318,6 +336,9 @@ BOOL mDoDvdThd_toMainRam_c::execute() {
         mDataSize = heap->getSize(mData);
     }
 
+#if TARGET_PC
+    DUSK_TRACE("dvd load entry %d: %s (%u bytes)", mEntryNum, mData != NULL ? "ok" : "FAILED", (u32)mDataSize);
+#endif
     mIsDone = true;
     return mData != NULL;
 }

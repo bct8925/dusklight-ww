@@ -11,6 +11,9 @@
 #include "f_pc/f_pc_method.h"
 #include "f_pc/f_pc_pause.h"
 #include "f_pc/f_pc_profile.h"
+#if TARGET_PC
+#include "dusk/trace.h"
+#endif
 #include "dolphin/types.h"
 
 /* 8003C88C-8003C89C       .text fpcBs_Is_JustOfType__Fii */
@@ -90,6 +93,13 @@ base_process_class* fpcBs_Create(s16 i_profName, fpc_ProcID i_procID, void* i_da
     u32 size;
 
     procProfDef = (process_profile_definition*)fpcPf_Get(i_profName);
+#if TARGET_PC
+    if (procProfDef == NULL) {
+        dusk::Trace("fpcBs_Create: %s (%d) is not built", dusk::TraceProcName(i_profName), i_profName);
+        return NULL;
+    }
+    DUSK_TRACE("create %s", dusk::TraceProcName(i_profName));
+#endif
     size = procProfDef->mSize + procProfDef->mSizeOther;
     procClass = (base_process_class*)cMl::memalignB(-4, size);
     if (procClass == NULL) {

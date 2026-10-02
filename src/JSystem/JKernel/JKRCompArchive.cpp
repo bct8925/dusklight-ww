@@ -40,8 +40,8 @@ JKRCompArchive::~JKRCompArchive() {
     if (mArcInfoBlock != NULL) {
         SDIFileEntry* file = mFiles;
         for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
-            if (!((file->type_flags_and_name_offset >> 0x18) & 0x10) && file->data != NULL) {
-                JKRFreeToHeap(mHeap, file->data);
+            if (!((file->type_flags_and_name_offset >> 0x18) & 0x10) && JKAR_DATA(file) != NULL) {
+                JKRFreeToHeap(mHeap, JKAR_DATA(file));
             }
 
             file++;
@@ -135,6 +135,9 @@ bool JKRCompArchive::open(s32 entryNum) {
                 mNodes = (SDIDirEntry*)((uintptr_t)mArcInfoBlock + mArcInfoBlock->node_offset);
                 mFiles = (SDIFileEntry *)((uintptr_t)mArcInfoBlock + mArcInfoBlock->file_entry_offset);
                 mStringTable = (char*)((uintptr_t)mArcInfoBlock + mArcInfoBlock->string_table_offset);
+#if TARGET_PC
+                initFileDataPointers();
+#endif
                 field_0x6c = arcHeader->header_length + arcHeader->file_data_offset;
             }
             break;
@@ -184,6 +187,9 @@ bool JKRCompArchive::open(s32 entryNum) {
             mNodes = (SDIDirEntry *)((uintptr_t)mArcInfoBlock + mArcInfoBlock->node_offset);
             mFiles = (SDIFileEntry *)((uintptr_t)mArcInfoBlock + mArcInfoBlock->file_entry_offset);
             mStringTable = (char *)((uintptr_t)mArcInfoBlock + mArcInfoBlock->string_table_offset);
+#if TARGET_PC
+            initFileDataPointers();
+#endif
             field_0x6c = arcHeader->header_length + arcHeader->file_data_offset;
             break;
         }
@@ -240,16 +246,16 @@ void* JKRCompArchive::fetchResource(SDIFileEntry* fileEntry, u32* pSize) {
         pSize = &ptrSize; // this makes barely any sense but ok
     }
 
-    if (fileEntry->data == NULL) {
+    if (JKAR_DATA(fileEntry) == NULL) {
         u32 flag = fileEntry->type_flags_and_name_offset >> 0x18;
         if(flag & 0x10) {
-            fileEntry->data = (void *)(field_0x64 + fileEntry->data_offset);
+            JKAR_DATA(fileEntry) = (void *)(field_0x64 + fileEntry->data_offset);
             *pSize = size;
         }
         else if (flag & 0x20) {
             u8 *data;
             *pSize = JKRAramArchive::fetchResource_subroutine(fileEntry->data_offset + mAramPart->getAddress() - mSizeOfMemPart, size, mHeap, compression, &data);
-            fileEntry->data = data;
+            JKAR_DATA(fileEntry) = data;
             if(compression == COMPRESSION_YAZ0) {
                 setExpandSize(fileEntry, *pSize);
             }
@@ -260,7 +266,7 @@ void* JKRCompArchive::fetchResource(SDIFileEntry* fileEntry, u32* pSize) {
             if (pSize != NULL) {
                 *pSize = resSize;
             }
-            fileEntry->data = data;
+            JKAR_DATA(fileEntry) = data;
             if (compression == COMPRESSION_YAZ0) {
                 setExpandSize(fileEntry, *pSize);
             }
@@ -271,7 +277,7 @@ void* JKRCompArchive::fetchResource(SDIFileEntry* fileEntry, u32* pSize) {
             *pSize = fileEntry->data_size;
         }
     }
-    return fileEntry->data;
+    return JKAR_DATA(fileEntry);
 }
 
 /* 802BC198-802BC370       .text fetchResource__14JKRCompArchiveFPvUlPQ210JKRArchive12SDIFileEntryPUl */
@@ -283,7 +289,7 @@ void* JKRCompArchive::fetchResource(void* data, u32 compressedSize, SDIFileEntry
     u32 fileFlag = fileEntry->type_flags_and_name_offset >> 0x18;
     int compression = JKRConvertAttrToCompressionType(fileFlag);
 
-    if(fileEntry->data != NULL) {
+    if(JKAR_DATA(fileEntry) != NULL) {
         if (compression == COMPRESSION_YAZ0) {
             u32 expandSize = getExpandSize(fileEntry);
             if (expandSize != 0) {
@@ -295,7 +301,7 @@ void* JKRCompArchive::fetchResource(void* data, u32 compressedSize, SDIFileEntry
             fileSize = compressedSize;
         }
 
-        JKRHeap::copyMemory(data, fileEntry->data, fileSize);
+        JKRHeap::copyMemory(data, JKAR_DATA(fileEntry), fileSize);
         size = fileSize;
         }
     else {
@@ -328,12 +334,12 @@ void JKRCompArchive::removeResourceAll() {
         for (int i = 0; i < mArcInfoBlock->num_file_entries; i++) {
             int tmp = fileEntry->type_flags_and_name_offset >> 0x18;
 
-            if (fileEntry->data != NULL) {
+            if (JKAR_DATA(fileEntry) != NULL) {
                 if (!(tmp & 0x10)) {
-                    JKRFreeToHeap(mHeap, fileEntry->data);
+                    JKRFreeToHeap(mHeap, JKAR_DATA(fileEntry));
                 }
 
-                fileEntry->data = NULL;
+                JKAR_DATA(fileEntry) = NULL;
             }
         }
     }
@@ -349,7 +355,7 @@ bool JKRCompArchive::removeResource(void* resource) {
         JKRFreeToHeap(mHeap, resource);
     }
 
-    fileEntry->data = NULL;
+    JKAR_DATA(fileEntry) = NULL;
     return true;
 }
 

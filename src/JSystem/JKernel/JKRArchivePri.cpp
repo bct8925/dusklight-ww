@@ -7,6 +7,9 @@
 
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JKernel/JKRHeap.h"
+#if TARGET_PC
+#include "JSystem/JUtility/JUTAssert.h"
+#endif
 #include "ctype.h"
 #include "string.h"
 #include "dolphin/types.h"
@@ -17,6 +20,9 @@ u32 JKRArchive::sCurrentDirID;
 JKRArchive::JKRArchive() {
     mIsMounted = false;
     mMountDirection = MOUNT_DIRECTION_HEAD;
+#if TARGET_PC
+    mFileData = nullptr;
+#endif
 }
 
 /* 802B8E48-802B8EE8       .text __ct__10JKRArchiveFlQ210JKRArchive10EMountMode */
@@ -25,6 +31,9 @@ JKRArchive::JKRArchive(s32 entryNumber, JKRArchive::EMountMode mountMode) {
     mMountMode = mountMode;
     mMountCount = 1;
     field_0x58 = 1;
+#if TARGET_PC
+    mFileData = nullptr;
+#endif
 
     mHeap = JKRHeap::findFromRoot(this);
     if (mHeap == NULL) {
@@ -39,7 +48,33 @@ JKRArchive::JKRArchive(s32 entryNumber, JKRArchive::EMountMode mountMode) {
 }
 
 /* 802B8EE8-802B8F48       .text __dt__10JKRArchiveFv */
+#if TARGET_PC
+JKRArchive::~JKRArchive() {
+    if (mFileData != nullptr) {
+        JKRHeap::getSystemHeap()->free(mFileData);
+        mFileData = nullptr;
+    }
+}
+
+void*& JKRArchive::getFileDataPointer(int idx) const {
+    JUT_ASSERT(0, mFileData != NULL && (u32)idx < mArcInfoBlock->num_file_entries);
+    return mFileData[idx];
+}
+
+void JKRArchive::initFileDataPointers() {
+    if (mFileData != nullptr) {
+        JKRHeap::getSystemHeap()->free(mFileData);
+    }
+    u32 count = mArcInfoBlock->num_file_entries;
+    mFileData = static_cast<void**>(JKRHeap::getSystemHeap()->alloc(count * sizeof(void*), alignof(void*)));
+    memset(mFileData, 0, count * sizeof(void*));
+    for (u32 i = 0; i < count; i++) {
+        mFiles[i].index = i;
+    }
+}
+#else
 JKRArchive::~JKRArchive() {}
+#endif
 
 /* 802B8F48-802B8F94       .text isSameName__10JKRArchiveCFRQ210JKRArchive8CArcNameUlUs */
 bool JKRArchive::isSameName(JKRArchive::CArcName& name, u32 nameOffset, u16 nameHash) const {
@@ -158,7 +193,7 @@ JKRArchive::SDIFileEntry* JKRArchive::findNameResource(const char* name) const {
 JKRArchive::SDIFileEntry* JKRArchive::findPtrResource(const void* resource) const {
     SDIFileEntry* fileEntry = mFiles;
     for (int i = 0; i < mArcInfoBlock->num_file_entries; fileEntry++, i++) {
-        if (fileEntry->data == resource) {
+        if (JKAR_DATA(fileEntry) == resource) {
             return fileEntry;
         }
     }

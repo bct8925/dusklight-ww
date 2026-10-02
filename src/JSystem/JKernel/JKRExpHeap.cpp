@@ -269,8 +269,13 @@ void* JKRExpHeap::allocFromTail(u32 size, int align) {
     u32 offset = 0;
     CMemBlock* foundBlock = NULL;
     CMemBlock* newBlock = NULL;
+#if TARGET_PC
+    u32 usedSize;
+    uintptr_t start;  // an address
+#else
     u32 usedSize;
     u32 start;
+#endif
 
     for (CMemBlock* block = mTailFreeList; block; block = block->mPrev) {
         start = ALIGN_PREV((uintptr_t)block->getContent() + block->size - size, align);

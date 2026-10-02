@@ -15,7 +15,7 @@
 #include "JSystem/JAudio/JASDvdThread.h"
 #include "JSystem/JStudio/JStudio_JAudio/control.h"
 
-bool JAInter::BankWave::checkAllWaveLoadStatus() { return true; }
+bool JAInter::BankWave::checkAllWaveLoadStatus() { return {}; }
 int JASystem::Dvd::sendCmdMsg(int (*)(void *),void *,unsigned int) { return {}; }
 JAIAnimeSound::JAIAnimeSound() {}
 JAIBasic::JAIBasic() {}
@@ -25,8 +25,8 @@ bool JAIBasic::allocStreamBuffer(void *,int) { return {}; }
 bool JAIBasic::deallocStreamBuffer() { return {}; }
 class JAISound * * JAIZelBasic::seStart(unsigned int,struct Vec *,unsigned int,signed char,float,float,float,float,unsigned char) { return {}; }
 float JAIZelInst::getMelodyPattern(int,int,int *) { return {}; }
-int JAIZelBasic::check1stDynamicWave() { return 1; }
-int JAIZelBasic::checkFirstWaves() { return 1; }
+int JAIZelBasic::check1stDynamicWave() { return {}; }
+int JAIZelBasic::checkFirstWaves() { return {}; }
 int JAIZelBasic::checkPlayingMainBgmFlag() { return {}; }
 int JAIZelBasic::checkPlayingSubBgmFlag() { return {}; }
 int JAIZelInst::judge(int,int) { return {}; }

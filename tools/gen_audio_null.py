@@ -20,12 +20,11 @@ SYMBOLS = ROOT / "src" / "dusk" / "ww_audio_null.symbols"
 OUT = ROOT / "src" / "dusk" / "ww_audio_null.cpp"
 AUDIO = re.compile(r"\b(JAI\w*|JAS\w*|JASystem|JAInter|JAZel\w*|JStudio_JAudio)::")
 
-# Bodies for functions whose result the game waits on or depends on.
+# Bodies that differ from "do nothing, return zero". The wave-load checks the scenes wait on
+# (checkFirstWaves, check1stDynamicWave, checkAllWaveLoadStatus) mean "still loading" when
+# non-zero, so the default already reports audio as ready.
 OVERRIDES = {
     "JAIZelBasic::JAIZelBasic": "zel_basic = this;",
-    "JAIZelBasic::checkFirstWaves": "return 1;",
-    "JAIZelBasic::check1stDynamicWave": "return 1;",
-    "JAInter::BankWave::checkAllWaveLoadStatus": "return true;",
 }
 
 HEADERS = [

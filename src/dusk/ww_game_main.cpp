@@ -11,6 +11,7 @@
 #include "dusk/main.h"
 #include "dusk/os.h"
 #include "dusk/settings.h"
+#include "dusk/trace.h"
 #include "dusk/version.hpp"
 
 #include "m_Do/m_Do_dvd_thread.h"
@@ -82,6 +83,8 @@ int game_main(int argc, char* argv[]) {
             ("backend", "Graphics backend (auto, d3d12, d3d11, metal, vulkan, null)",
              cxxopts::value<std::string>())
             ("develop", "Enable the game's development mode and OSReport output",
+             cxxopts::value<bool>()->default_value("false")->implicit_value("true"))
+            ("trace", "Log process creation, loading phases and disc commands",
              cxxopts::value<bool>()->default_value("false")->implicit_value("true"));
         options.parse_positional({"dvd"});
         options.positional_help("<dvd-image>");
@@ -158,6 +161,7 @@ int game_main(int argc, char* argv[]) {
         dusk::OSReportReallyForceEnable = true;
     }
 
+    dusk::TraceEnabled = args.count("trace") && args["trace"].as<bool>();
     dusk::version::init();
     OSInit();
     mDoDvdThd::SyncWidthSound = false;

@@ -46,12 +46,13 @@ def main() -> int:
 
     text = LIST.read_text(encoding="utf-8")
     body = re.search(r"g_fpcPfLst_ProfileList\[\] = \{\n(.*?)\n\};", text, re.S).group(1)
-    entries, externs, used, missing = [], [], 0, []
+    entries, names, externs, used, missing = [], [], [], 0, []
     for line in body.splitlines():
         stripped = line.strip()
         m = re.fullmatch(r"&(g_profile_\w+),", stripped)
         if m:
             name = m.group(1)
+            names.append(f'    "{name[len("g_profile_"):]}",')
             if name not in defs:
                 missing.append(name)
                 entries.append(f"    nullptr,  // {name}: not defined in the decomp yet")
@@ -65,8 +66,10 @@ def main() -> int:
                 entries.append(f"    nullptr,  // {name} ({Path(path).stem} not built)")
         elif stripped in ("NULL,", "nullptr,"):
             entries.append("    nullptr,")
+            names.append('    "",')
         elif stripped.startswith("#") or not stripped:
             entries.append(stripped)
+            names.append(stripped)
         else:
             print(f"error: unexpected profile list line: {line!r}", file=sys.stderr)
             return 1
@@ -89,6 +92,12 @@ def main() -> int:
         "process_profile_definition* g_fpcPfLst_ProfileList[] = {",
         *entries,
         "};",
+        "",
+        "// Profile names by process name, for --trace (src/dusk/trace.cpp).",
+        "extern const char* const g_fpcPfLst_ProfileNames[] = {",
+        *names,
+        "};",
+        "extern const int g_fpcPfLst_ProfileNum = sizeof(g_fpcPfLst_ProfileNames) / sizeof(g_fpcPfLst_ProfileNames[0]);",
         "",
     ]
     OUT.write_text("\n".join(out), encoding="utf-8", newline="\n")

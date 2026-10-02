@@ -5,6 +5,9 @@
 
 #include "SSystem/SComponent/c_phase.h"
 #include "dolphin/types.h"
+#if TARGET_PC
+#include "dusk/trace.h"
+#endif
 
 /* 802451B4-802451C0       .text cPhs_Reset__FP30request_of_phase_process_class */
 void cPhs_Reset(request_of_phase_process_class* pPhase) {
@@ -15,6 +18,11 @@ void cPhs_Reset(request_of_phase_process_class* pPhase) {
 void cPhs_Set(request_of_phase_process_class* pPhase, cPhs__Handler* pHandlerTable) {
     pPhase->mpHandlerTable = pHandlerTable;
     pPhase->id = 0;
+#if TARGET_PC
+    if (pHandlerTable != NULL && pHandlerTable[0] != NULL) {
+        DUSK_TRACE("phase -> %s", dusk::TraceSymbol((const void*)pHandlerTable[0]));
+    }
+#endif
 }
 
 /* 802451D0-802451F8       .text cPhs_UnCompleate__FP30request_of_phase_process_class */
@@ -40,6 +48,9 @@ cPhs_State cPhs_Next(request_of_phase_process_class* pPhase) {
         if (handler == NULL || handler == NULL) {
             return cPhs_Compleate(pPhase);
         } else {
+#if TARGET_PC
+            DUSK_TRACE("phase -> %s", dusk::TraceSymbol((const void*)handler));
+#endif
             return cPhs_LOADING_e;
         }
     }
@@ -66,6 +77,9 @@ cPhs_State cPhs_Do(request_of_phase_process_class* pPhase, void* pUserData) {
             cPhs_UnCompleate(pPhase);
             return cPhs_STOP_e;
         case cPhs_ERROR_e:
+#if TARGET_PC
+            DUSK_TRACE("phase %s failed", dusk::TraceSymbol((const void*)*handler));
+#endif
             cPhs_UnCompleate(pPhase);
             return cPhs_ERROR_e;
         case cPhs_INIT_e:
@@ -80,6 +94,11 @@ cPhs_State cPhs_Do(request_of_phase_process_class* pPhase, void* pUserData) {
 /* 8024533C-80245364       .text cPhs_Handler__FP30request_of_phase_process_classPPFPv_iPv */
 cPhs_State cPhs_Handler(request_of_phase_process_class* pPhase, cPhs__Handler* pHandlerTable,
                  void* pUserData) {
+#if TARGET_PC
+    if (pPhase->mpHandlerTable != pHandlerTable && pHandlerTable != NULL && pHandlerTable[pPhase->id] != NULL) {
+        DUSK_TRACE("phase -> %s", dusk::TraceSymbol((const void*)pHandlerTable[pPhase->id]));
+    }
+#endif
     pPhase->mpHandlerTable = pHandlerTable;
     return cPhs_Do(pPhase, pUserData);
 }
