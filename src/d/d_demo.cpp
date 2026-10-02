@@ -495,7 +495,7 @@ dDemo_actor_c* dDemo_object_c::appendActor(fopAc_ac_c* ac) {
     if (mNumActor >= ARRAY_SIZE(mpActors))
         return NULL;
 
-    demoActor = new dDemo_actor_c();
+    demoActor = JKR_NEW dDemo_actor_c();
     if (demoActor == NULL)
         return NULL;
 
@@ -517,7 +517,7 @@ dDemo_camera_c* dDemo_object_c::createCamera() {
     if (mpCamera != NULL)
         return mpCamera;
 
-    mpCamera = new dDemo_camera_c();
+    mpCamera = JKR_NEW dDemo_camera_c();
     return mpCamera;
 }
 
@@ -533,7 +533,7 @@ dDemo_ambient_c* dDemo_object_c::createAmbient() {
     if (mpAmbient != NULL)
         return mpAmbient;
 
-    mpAmbient = new dDemo_ambient_c();
+    mpAmbient = JKR_NEW dDemo_ambient_c();
     return mpAmbient;
 }
 
@@ -542,7 +542,7 @@ dDemo_light_c* dDemo_object_c::appendLight() {
     if (mNumLight >= ARRAY_SIZE(mpLight))
         return NULL;
 
-    dDemo_light_c* demoLight = new dDemo_light_c();
+    dDemo_light_c* demoLight = JKR_NEW dDemo_light_c();
     if (demoLight == NULL)
         return NULL;
 
@@ -555,30 +555,30 @@ dDemo_fog_c* dDemo_object_c::createFog() {
     if (mpFog != NULL)
         return mpFog;
 
-    mpFog = new dDemo_fog_c();
+    mpFog = JKR_NEW dDemo_fog_c();
     return mpFog;
 }
 
 /* 8006A544-8006A678       .text remove__14dDemo_object_cFv */
 void dDemo_object_c::remove() {
     while (mNumActor)
-        delete mpActors[--mNumActor];
+        JKR_DELETE(mpActors[--mNumActor]);
 
     if (mpCamera != NULL) {
-        delete mpCamera;
+        JKR_DELETE(mpCamera);
         mpCamera = NULL;
     }
 
     if (mpAmbient != NULL) {
-        delete mpAmbient;
+        JKR_DELETE(mpAmbient);
         mpAmbient = NULL;
     }
 
     while (mNumLight)
-        delete mpLight[--mNumLight];
+        JKR_DELETE(mpLight[--mNumLight]);
 
     if (mpFog != NULL) {
-        delete mpFog;
+        JKR_DELETE(mpFog);
         mpFog = NULL;
     }
 }
@@ -619,21 +619,21 @@ dDemo_manager_c::dDemo_manager_c() {
     mCurFile = NULL;
     mFrame = 0;
     
-    mMesgControl = new dMesg_tControl();
+    mMesgControl = JKR_NEW dMesg_tControl();
     JUT_ASSERT(0x5b7, mMesgControl != NULL);
-    mSystem = new dDemo_system_c();
+    mSystem = JKR_NEW dDemo_system_c();
     JUT_ASSERT(0x5ba, mSystem != NULL);
-    mControl = new JStudio::TControl();
+    mControl = JKR_NEW JStudio::TControl();
     JUT_ASSERT(0x5bc, mControl != NULL);
-    mStage = new JStudio_JStage::TCreateObject(mSystem);
+    mStage = JKR_NEW JStudio_JStage::TCreateObject(mSystem);
     JUT_ASSERT(0x5be, mStage != NULL);
-    mAudio = new JStudio_JAudio::TCreateObject(mDoAud_zelAudio_c::getInterface());
+    mAudio = JKR_NEW JStudio_JAudio::TCreateObject(mDoAud_zelAudio_c::getInterface());
     JUT_ASSERT(0x5c0, mAudio != NULL);
-    mParticle = new JStudio_JParticle::TCreateObject(dPa_control_c::getEmitterManager(), mSystem);
+    mParticle = JKR_NEW JStudio_JParticle::TCreateObject(dPa_control_c::getEmitterManager(), mSystem);
     JUT_ASSERT(0x5c3, mParticle != NULL);
-    mMessage = new JStudio_JMessage::TCreateObject(mMesgControl);
+    mMessage = JKR_NEW JStudio_JMessage::TCreateObject(mMesgControl);
     JUT_ASSERT(0x5c6, mMessage != NULL);
-    mFactory = new JStudio::TFactory();
+    mFactory = JKR_NEW JStudio::TFactory();
     JUT_ASSERT(0x5c9, mFactory != NULL);
     
     // This gets compiled to a double literal, but the lack of precision indicates it was written as a float literal.
@@ -650,14 +650,14 @@ dDemo_manager_c::dDemo_manager_c() {
 /* 8006ADA0-8006AEFC       .text __dt__15dDemo_manager_cFv */
 dDemo_manager_c::~dDemo_manager_c() {
     remove();
-    delete mFactory;
-    delete mMessage;
-    delete mParticle;
-    delete mAudio;
-    delete mStage;
-    delete mControl;
-    delete mSystem;
-    delete mMesgControl;
+    JKR_DELETE(mFactory);
+    JKR_DELETE(mMessage);
+    JKR_DELETE(mParticle);
+    JKR_DELETE(mAudio);
+    JKR_DELETE(mStage);
+    JKR_DELETE(mControl);
+    JKR_DELETE(mSystem);
+    JKR_DELETE(mMesgControl);
 }
 
 /* 8006AF5C-8006AFBC       .text __dt__14dDemo_system_cFv */

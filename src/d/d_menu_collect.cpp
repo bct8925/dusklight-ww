@@ -3559,26 +3559,26 @@ bool dMenu_Collect_c::collectItemGetCheck(unsigned char param_1) {
 
 /* 801A4A28-801A4F18       .text _create__15dMenu_Collect_cFv */
 void dMenu_Collect_c::_create() {
-    scrn = new MyScreen();
+    scrn = JKR_NEW MyScreen();
     JUT_ASSERT(VERSION_SELECT(0xe4a, 0xe4a, 0xe4a, 0xe4a), scrn != NULL); 
     scrn->set("menu_collect_01.blo", mpArc);
 
-    stick = new STControl(5, 2, 3, 2);
+    stick = JKR_NEW STControl(5, 2, 3, 2);
     JUT_ASSERT(VERSION_SELECT(0xe4e, 0xe4e, 0xe4e, 0xe4e), stick != NULL);
 
-    cstick = new CSTControl(5, 2, 3, 2);
+    cstick = JKR_NEW CSTControl(5, 2, 3, 2);
     JUT_ASSERT(VERSION_SELECT(0xe51, 0xe51, 0xe51, 0xe51), cstick != NULL);
 
     stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x800);
 
-    outFont = new dDlst_2DOutFont_c();
+    outFont = JKR_NEW dDlst_2DOutFont_c();
     JUT_ASSERT(VERSION_SELECT(0xe55, 0xe55, 0xe55, 0xe55), outFont != NULL);
 
 #if VERSION > VERSION_JPN
     outFont->m74 = 1;
 #endif
 
-    dMo_c = new dMenu_Option_c();
+    dMo_c = JKR_NEW dMenu_Option_c();
     JUT_ASSERT(VERSION_SELECT(0xe59, 0xe59, 0xe59, 0xe59), dMo_c != NULL);
 
     dMo_c->setArchive(mpOptArc);
@@ -3586,7 +3586,7 @@ void dMenu_Collect_c::_create() {
     dMo_c->setTextArea(note[0], note[1], dummy[0], dummy[1]);
     dMo_c->_create();
 
-    dMs_c = new dMenu_save_c();
+    dMs_c = JKR_NEW dMenu_save_c();
     JUT_ASSERT(VERSION_SELECT(0xe63, 0xe63, 0xe63, 0xe63), dMs_c != NULL);
 
     dMs_c->setUseType(1);
@@ -3618,22 +3618,22 @@ void dMenu_Collect_c::_create() {
 
 /* 801A4F18-801A5498       .text _create3__15dMenu_Collect_cFv */
 void dMenu_Collect_c::_create3() {
-    scrn = new MyScreen();
+    scrn = JKR_NEW MyScreen();
     JUT_ASSERT(VERSION_SELECT(3638, 3651, 3727, 3727), scrn != NULL);
     scrn->set("menu_collect_01.blo", mpArc);
 
-    stick = new STControl(5, 2, 3, 2);
+    stick = JKR_NEW STControl(5, 2, 3, 2);
     JUT_ASSERT(VERSION_SELECT(3642, 3655, 3731, 3731), stick != NULL);
 
-    cstick = new CSTControl(5, 2, 3, 2);
+    cstick = JKR_NEW CSTControl(5, 2, 3, 2);
     JUT_ASSERT(VERSION_SELECT(3645, 3658, 3734, 3734), cstick != NULL);
 
     stick->setWaitParm(5, 2, 3, 2, 0.9f, 0.5f, 0, 0x800);
 
-    outFont = new dDlst_2DOutFont_c();
+    outFont = JKR_NEW dDlst_2DOutFont_c();
     JUT_ASSERT(VERSION_SELECT(0xE9A, 0xE9A, 0xE9A, 0xE9A), outFont != NULL);
 
-    dMo_c = new dMenu_Option_c();
+    dMo_c = JKR_NEW dMenu_Option_c();
     JUT_ASSERT(VERSION_SELECT(0xE9D, 0xE9D, 0xE9D, 0xE9D), dMo_c != NULL);
 
     dMo_c->setArchive(mpOptArc);
@@ -3641,7 +3641,7 @@ void dMenu_Collect_c::_create3() {
     dMo_c->setTextArea(note[0], note[1], dummy[0], dummy[1]);
     dMo_c->_create();
 
-    dMs_c = new dMenu_save_c();
+    dMs_c = JKR_NEW dMenu_save_c();
     JUT_ASSERT(VERSION_SELECT(0xEA6, 0xEA6, 0xEA6, 0xEA6), dMs_c != NULL);
 
     dMs_c->setUseType(1);
@@ -3689,19 +3689,19 @@ void dMenu_Collect_c::_create3() {
 
 /* 801A5498-801A55D0       .text _delete__15dMenu_Collect_cFv */
 void dMenu_Collect_c::_delete() {
-    delete scrn;
-    delete stick;
-    delete cstick;
+    JKR_DELETE(scrn);
+    JKR_DELETE(stick);
+    JKR_DELETE(cstick);
 
     if (outFont != NULL) {
-        delete outFont;
+        JKR_DELETE(outFont);
     }
 
     dMo_c->_delete();
-    delete dMo_c;
+    JKR_DELETE(dMo_c);
 
     dMs_c->_delete();
-    delete dMs_c;
+    JKR_DELETE(dMs_c);
 
     for (int i = 0; i < 3; i++) {
         if (m247C[i] != NULL) {

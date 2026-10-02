@@ -24,7 +24,7 @@ bool JMANewSinTable(u8 numBits) {
         jmaSinTableSize *= 2;
     }
 
-    jmaSinTable = new f32[jmaSinTableSize + (jmaSinTableSize / 4)];
+    jmaSinTable = JKR_NEW_ARRAY(f32, jmaSinTableSize + (jmaSinTableSize / 4));
     if (!jmaSinTable) {
         return false;
     }

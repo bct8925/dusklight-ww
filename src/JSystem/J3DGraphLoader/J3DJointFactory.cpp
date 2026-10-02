@@ -17,7 +17,7 @@ J3DJointFactory::J3DJointFactory(const J3DJointBlock& jointBlock) {
 
 /* 802FE1FC-802FE390       .text create__15J3DJointFactoryFi */
 J3DJoint* J3DJointFactory::create(int jntNo) {
-    J3DJoint* joint = new J3DJoint();
+    J3DJoint* joint = JKR_NEW J3DJoint();
     joint->mJntNo = jntNo;
     joint->mKind = getKind(jntNo);
     joint->mScaleCompensate = getScaleCompensate(jntNo);

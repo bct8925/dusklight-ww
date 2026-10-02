@@ -38,7 +38,7 @@ void JKRFileLoader::unmount() {
         count--;
         mMountCount = count;
         if (count == 0) {
-            delete this;
+            JKR_DELETE(this);
         }
     }
 }

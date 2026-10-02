@@ -328,6 +328,12 @@ int dVibration_c::StopQuake(int flags) {
 
 /* 8009CFEC-8009D044       .text Kill__12dVibration_cFv */
 void dVibration_c::Kill() {
+#if TARGET_PC
+    // Also runs from g_dComIfG_gameInfo's destructor at exit, possibly before the pads exist.
+    if (g_mDoCPd_gamePad[0] == NULL) {
+        return;
+    }
+#endif
     g_mDoCPd_gamePad[0]->stopMotorWaveHard();
     g_mDoCPd_gamePad[0]->stopMotorHard();
     setDefault();

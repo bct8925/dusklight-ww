@@ -13,10 +13,10 @@
 /* 802C13FC-802C1470       .text __dt__10JUTTextureFv */
 JUTTexture::~JUTTexture() {
     if (getCaptureFlag()) {
-        delete[] field_0x3c;
+        JKR_DELETE_ARRAY(field_0x3c);
     }
     if (getEmbPaletteDelFlag()) {
-        delete mEmbPalette;
+        JKR_DELETE(mEmbPalette);
     }
 }
 
@@ -33,7 +33,7 @@ void JUTTexture::storeTIMG(const ResTIMG* pTimg, u8 param_1) {
         }
 
         if (getEmbPaletteDelFlag()) {
-            delete mEmbPalette;
+            JKR_DELETE(mEmbPalette);
         }
         mEmbPalette = NULL;
         mPalette = NULL;
@@ -55,7 +55,7 @@ void JUTTexture::storeTIMG(const ResTIMG* pTimg, u8 param_1) {
                 tlut = (GXTlut)param_1;
             }
 
-            mEmbPalette = new JUTPalette(
+            mEmbPalette = JKR_NEW JUTPalette(
                 tlut, (GXTlutFmt)mTexInfo->colorFormat, (JUTTransparency)mTexInfo->alphaEnabled,
                 mTexInfo->numColors, (void*)(&mTexInfo->format + mTexInfo->paletteOffset));
 

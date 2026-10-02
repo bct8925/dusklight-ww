@@ -18,7 +18,7 @@ static bool sDrawWaiting;
 /* 802C7C34-802C7C8C       .text createManager__8JUTVideoFPC16_GXRenderModeObj */
 JUTVideo* JUTVideo::createManager(const GXRenderModeObj* param_0) {
     if (sManager == NULL) {
-        sManager = new JUTVideo(param_0);
+        sManager = JKR_NEW JUTVideo(param_0);
     }
     return sManager;
 }
@@ -26,7 +26,7 @@ JUTVideo* JUTVideo::createManager(const GXRenderModeObj* param_0) {
 /* 802C7C8C-802C7CD4       .text destroyManager__8JUTVideoFv */
 void JUTVideo::destroyManager() {
     if (sManager != NULL) {
-        delete sManager;
+        JKR_DELETE(sManager);
         sManager = NULL;
     }
 }

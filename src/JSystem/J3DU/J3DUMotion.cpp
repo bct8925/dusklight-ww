@@ -16,5 +16,5 @@ static void dummy(J3DMtxCalcBasic* calc1, J3DMtxCalcSoftimage* calc2) {
     Mtx mtx;
     calc1->init(vec, mtx);
     calc2->init(vec, mtx);
-    delete calc2;
+    JKR_DELETE(calc2);
 }

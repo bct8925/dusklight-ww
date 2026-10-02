@@ -14,7 +14,7 @@ namespace {
 // TODO: supposed to use JStudio::TObject::createFromAdaptor instead of this somehow
 static inline JStudio::TObject* doCreateObject(const JStudio::stb::data::TParse_TBlock_object& data, TAdaptor_actor* adaptor)
 {
-    JStudio::TObject* object = new JStudio::TObject_actor(data, adaptor);
+    JStudio::TObject* object = JKR_NEW JStudio::TObject_actor(data, adaptor);
     if (object == NULL) {
         // TODO: This should probably delete the adaptor in NONMATCHING builds, if the object couldn't get created.
         return NULL;
@@ -28,7 +28,7 @@ static inline JStudio::TObject* doCreateObject(const JStudio::stb::data::TParse_
 
 static inline JStudio::TObject* doCreateObject(const JStudio::stb::data::TParse_TBlock_object& data, TAdaptor_camera* adaptor)
 {
-    JStudio::TObject* object = new JStudio::TObject_camera(data, adaptor);
+    JStudio::TObject* object = JKR_NEW JStudio::TObject_camera(data, adaptor);
     if (object == NULL) {
         // TODO: This should probably delete the adaptor in NONMATCHING builds, if the object couldn't get created.
         return NULL;
@@ -42,7 +42,7 @@ static inline JStudio::TObject* doCreateObject(const JStudio::stb::data::TParse_
 
 static inline JStudio::TObject* doCreateObject(const JStudio::stb::data::TParse_TBlock_object& data, TAdaptor_ambientLight* adaptor)
 {
-    JStudio::TObject* object = new JStudio::TObject_ambientLight(data, adaptor);
+    JStudio::TObject* object = JKR_NEW JStudio::TObject_ambientLight(data, adaptor);
     if (object == NULL) {
         // TODO: This should probably delete the adaptor in NONMATCHING builds, if the object couldn't get created.
         return NULL;
@@ -56,7 +56,7 @@ static inline JStudio::TObject* doCreateObject(const JStudio::stb::data::TParse_
 
 static inline JStudio::TObject* doCreateObject(const JStudio::stb::data::TParse_TBlock_object& data, TAdaptor_light* adaptor)
 {
-    JStudio::TObject* object = new JStudio::TObject_light(data, adaptor);
+    JStudio::TObject* object = JKR_NEW JStudio::TObject_light(data, adaptor);
     if (object == NULL) {
         // TODO: This should probably delete the adaptor in NONMATCHING builds, if the object couldn't get created.
         return NULL;
@@ -70,7 +70,7 @@ static inline JStudio::TObject* doCreateObject(const JStudio::stb::data::TParse_
 
 static inline JStudio::TObject* doCreateObject(const JStudio::stb::data::TParse_TBlock_object& data, TAdaptor_fog* adaptor)
 {
-    JStudio::TObject* object = new JStudio::TObject_fog(data, adaptor);
+    JStudio::TObject* object = JKR_NEW JStudio::TObject_fog(data, adaptor);
     if (object == NULL) {
         // TODO: This should probably delete the adaptor in NONMATCHING builds, if the object couldn't get created.
         return NULL;
@@ -161,7 +161,7 @@ JStudio::TObject* createObject_JSG_(const JStudio::stb::data::TParse_TBlock_obje
                                     const JStage::TSystem* system)
 {
     Object* obj = (Object*)stageObject;
-    Adaptor* adaptor = new Adaptor(system, obj);
+    Adaptor* adaptor = JKR_NEW Adaptor(system, obj);
     if (!adaptor) {
         return NULL;
     }

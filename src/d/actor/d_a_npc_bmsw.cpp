@@ -1176,7 +1176,7 @@ BOOL daNpc_Bmsw_c::CreateHeap() {
     J3DModelData* modelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BDL_BM_e);
     JUT_ASSERT(DEMO_SELECT(1495, 1499), modelData != NULL);
 
-    mpMorf = new mDoExt_McaMorf(
+    mpMorf = JKR_NEW mDoExt_McaMorf(
         modelData,
         NULL,
         NULL,
@@ -1210,7 +1210,7 @@ BOOL daNpc_Bmsw_c::CreateHeap() {
     }
 
     J3DModelData* armModelData = (J3DModelData*) dComIfG_getObjectIDRes("Bmsw", dRes_ID_BMSW_BDL_BMARM_e);
-    mpMorfHand = new mDoExt_McaMorf(
+    mpMorfHand = JKR_NEW mDoExt_McaMorf(
         armModelData,
         NULL,
         NULL,

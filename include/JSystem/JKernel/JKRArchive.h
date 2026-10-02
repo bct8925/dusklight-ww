@@ -161,8 +161,13 @@ public:
     u8 getMountMode() const { return mMountMode; }
     bool isFileEntry(u32 param_0) { return getFileAttribute(param_0) & 1; }
 
+#if TARGET_PC
+public:
+    virtual ~JKRArchive();
+#else
 protected:
     virtual ~JKRArchive();
+#endif
 
 public:
     /* 0x00 */  // vtable

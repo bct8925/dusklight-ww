@@ -2,6 +2,7 @@
 #define _JSYSTEM_JGADGET_ALLOCATOR_H
 
 #include "dolphin/types.h"
+#include "JSystem/JKernel/JKRHeap.h"
 
 namespace JGadget {
 template <typename T>
@@ -11,7 +12,7 @@ struct TAllocator {
     }
 
     T* AllocateRaw(u32 size) {
-        return (T*)operator new(size);
+        return (T*)operator new(size JKR_HEAP_TOKEN);
     }
 
     void deallocate(T* mem, u32 size) {
@@ -19,7 +20,7 @@ struct TAllocator {
     }
 
     void DeallocateRaw(void* mem) {
-        delete (T*)mem;
+        JKR_DELETE((T*)mem);
     }
 
     void destroy(T* p) {

@@ -753,20 +753,20 @@ void JAInter::LinkSound::init(JAISound* param_1, u32 param_2) {
     Buffer[0x00].field_0x30 = NULL;
     Buffer[0x00].field_0x34 = Buffer + 1;
     Buffer[0x00].mState = SOUNDSTATE_Inactive;
-    Buffer[0x00].mPositionInfo = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAISound::PositionInfo_t[JAIGlobalParameter::getParamAudioCameraMax()];
+    Buffer[0x00].mPositionInfo = JKR_NEW_ARRAY_ARGS(JAISound::PositionInfo_t, JAIGlobalParameter::getParamAudioCameraMax(), JAIBasic::getCurrentJAIHeap(), 0x20);
     JUT_ASSERT_MSG(2084, Buffer[0x00].mPositionInfo, "LinkSound::initLinkSound Cannot Alloc Heap!!\n");
     int i;
     for (i = 1; i < param_2 - 1; i++) {
         Buffer[i].field_0x30 = Buffer + (i - 1);
         Buffer[i].field_0x34 = Buffer + (i + 1);
         Buffer[i].mState = SOUNDSTATE_Inactive;
-        Buffer[i].mPositionInfo = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAISound::PositionInfo_t[JAIGlobalParameter::getParamAudioCameraMax()];
+        Buffer[i].mPositionInfo = JKR_NEW_ARRAY_ARGS(JAISound::PositionInfo_t, JAIGlobalParameter::getParamAudioCameraMax(), JAIBasic::getCurrentJAIHeap(), 0x20);
         JUT_ASSERT_MSG(2092, Buffer[i].mPositionInfo, "LinkSound::initLinkSound Cannot Alloc Heap!!\n");
     }
     Buffer[i].field_0x30 = Buffer + (i - 1);
     Buffer[i].field_0x34 = NULL;
     Buffer[i].mState = SOUNDSTATE_Inactive;
-    Buffer[i].mPositionInfo = new (JAIBasic::getCurrentJAIHeap(), 0x20) JAISound::PositionInfo_t[JAIGlobalParameter::getParamAudioCameraMax()];
+    Buffer[i].mPositionInfo = JKR_NEW_ARRAY_ARGS(JAISound::PositionInfo_t, JAIGlobalParameter::getParamAudioCameraMax(), JAIBasic::getCurrentJAIHeap(), 0x20);
     JUT_ASSERT_MSG(2099, Buffer[i].mPositionInfo, "LinkSound::initLinkSound Cannot Alloc Heap!!\n");
 }
 

@@ -352,8 +352,8 @@ public:
     bool add(J3DModel*);
     void init();
     ~dDlst_shadowReal_c() {
-        delete mpTexData;
-        delete mpDrawBuffer;
+        JKR_DELETE(mpTexData);
+        JKR_DELETE(mpDrawBuffer);
     }
     dDlst_shadowReal_c() { mState = 0; }
 

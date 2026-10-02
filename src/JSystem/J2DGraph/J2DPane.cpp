@@ -128,7 +128,7 @@ J2DPane::~J2DPane() {
     JSUTreeIterator<J2DPane> iterator;
     for (iterator = mPaneTree.getFirstChild(); iterator != mPaneTree.getEndChild();) {
         J2DPane* child = (iterator++).getObject();
-        delete child;
+        JKR_DELETE(child);
     }
 }
 

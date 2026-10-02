@@ -10,6 +10,10 @@
 #include "dolphin/os/OS.h"
 #include "dolphin/types.h"
 #include "global.h"
+#if TARGET_PC
+#include <cassert>
+#include <cstdlib>
+#endif
 
 bool JKRHeap::sDefaultFillFlag = true;
 JKRHeap* JKRHeap::sSystemHeap;
@@ -402,6 +406,102 @@ bool JKRHeap::isSubHeap(JKRHeap* heap) const {
     return false;
 }
 
+#if TARGET_PC
+#if TARGET_PC
+[[nodiscard]]
+static void* fallback_alloc(size_t size, size_t align, bool log=true) {
+    if (log) {
+        // TWW's heaps have no names; identify the heap by address.
+        OSReport(
+            "[NEW] JKRHeap (%p) FULL! Fallback to malloc for size %u\n",
+            (void*)JKRHeap::getCurrentHeap(), (unsigned)size);
+    }
+
+    if (align == 0) {
+        align = alignof(max_align_t);
+    }
+
+    assert((align & (align - 1)) == 0 && "Alignment must be a power of two");
+
+#if _WIN32
+    // aligned_alloc() is not available on Windows.
+    // NOTE: We always use _aligned_malloc(), even for allocs <= max_align_t,
+    // because otherwise we can't tell in operator delete() whether a pointer needs to be freed with
+    // _aligned_free() or regular free().
+    return _aligned_malloc(size, align);
+#else
+    // aligned_alloc() requires size be a multiple of align. So ensure it is.
+    size = ALIGN_NEXT(size, align);
+    return aligned_alloc(align, size);
+#endif
+
+}
+#endif
+
+// JKR_NEW: from the current heap, or malloc before any heap exists or when the heap is full.
+void* operator new(size_t size, JKRHeapToken) noexcept {
+    if (JKRHeap::getCurrentHeap() == NULL) {
+        return fallback_alloc(size, 0, false);
+    }
+    void* mem = JKRHeap::alloc(size, alignof(max_align_t), NULL);
+    if (mem == nullptr) {
+        return fallback_alloc(size, 0, true);
+    }
+    return mem;
+}
+
+void* operator new(size_t size, JKRHeapToken, int alignment) noexcept {
+    void* mem = JKRHeap::alloc(size, alignment, nullptr);
+    if (mem == nullptr) {
+        return fallback_alloc(size, abs(alignment), true);
+    }
+    return mem;
+}
+
+void* operator new(size_t size, JKRHeapToken, JKRHeap* heap, int alignment) noexcept {
+    void* mem = JKRHeap::alloc(size, alignment, heap);
+    if (mem == nullptr) {
+        return fallback_alloc(size, abs(alignment), true);
+    }
+    return mem;
+}
+
+// Arrays go through JKR_NEW_ARRAY (jkrNewArray), which calls the non-array overloads.
+void* operator new[](size_t, JKRHeapToken) noexcept {
+    OSPanic(__FILE__, __LINE__, "Allocation should go through JKR_NEW_ARRAY instead");
+    return nullptr;
+}
+
+void* operator new[](size_t, JKRHeapToken, int) noexcept {
+    OSPanic(__FILE__, __LINE__, "Allocation should go through JKR_NEW_ARRAY instead");
+    return nullptr;
+}
+
+void* operator new[](size_t, JKRHeapToken, JKRHeap*, int) noexcept {
+    OSPanic(__FILE__, __LINE__, "Allocation should go through JKR_NEW_ARRAY instead");
+    return nullptr;
+}
+
+// Frees to the owning JKR heap, or with _aligned_free/free for fallback_alloc memory.
+void operator delete(void* ptr, JKRHeapToken) noexcept {
+    if (ptr == NULL)
+        return;
+    JKRHeap* heap = JKRHeap::findFromRoot(ptr);
+    if (heap == NULL) {
+#if !_WIN32
+        free(ptr);
+#else
+        _aligned_free(ptr);
+#endif
+        return;
+    }
+    JKRHeap::free(ptr, heap);
+}
+
+void operator delete[](void* ptr, JKRHeapToken token) noexcept {
+    operator delete(ptr, token);
+}
+#else
 /* 802B0C38-802B0C60       .text __nw__FUl */
 void* operator new(size_t size) {
     return JKRHeap::alloc(size, 4, NULL);
@@ -441,6 +541,7 @@ void operator delete(void* ptr) {
 void operator delete[](void* ptr) {
     JKRHeap::free(ptr, NULL);
 }
+#endif
 
 static void dummy3() {
 #if VERSION > VERSION_JPN

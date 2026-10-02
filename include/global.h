@@ -220,4 +220,9 @@ void dusk_empty_stub_hit(const char* function);
 #define DUSK_CONST IF_DUSK(const)
 #define DUSK_CONSTEXPR IF_DUSK(constexpr)
 
+#if TARGET_PC && defined(__cplusplus)
+// Game code uses JKR_NEW/JKR_DELETE for its allocations (see JKRNew.h).
+#include "JSystem/JKernel/JKRNew.h"
+#endif
+
 #endif

@@ -252,7 +252,7 @@ bool daObjVds::Act_c::create_heap() {
     JUT_ASSERT(852, M_bck_data0 != 0);
 
     if (mdl_data0 != NULL && M_bck_data0 != NULL) {
-        M_anm0 = new mDoExt_McaMorf(
+        M_anm0 = JKR_NEW mDoExt_McaMorf(
             mdl_data0,
             NULL, NULL,
             M_bck_data0,
@@ -270,7 +270,7 @@ bool daObjVds::Act_c::create_heap() {
     JUT_ASSERT(873, M_bck_data1 != 0);
 
     if (mdl_data1 != NULL && M_bck_data1 != NULL) {
-        M_anm1 = new mDoExt_McaMorf(
+        M_anm1 = JKR_NEW mDoExt_McaMorf(
             mdl_data1,
             NULL, NULL,
             M_bck_data1,
@@ -295,7 +295,7 @@ bool daObjVds::Act_c::create_heap() {
     cBgD_t* bgw_data = (cBgD_t*)dComIfG_getObjectRes(M_arcname, dRes_INDEX_VDS_DZB_VDSWT_e);
     JUT_ASSERT(926, bgw_data != 0);
     if (bgw_data != NULL) {
-        mpBgW = new dBgW();
+        mpBgW = JKR_NEW dBgW();
         if (mpBgW != NULL) {
             mpBgW->Set(bgw_data, dBgW::MOVE_BG_e, &mMtx);
         }

@@ -79,7 +79,7 @@ JFWDisplay::~JFWDisplay() {
 JFWDisplay* JFWDisplay::createManager(JKRHeap* p_heap, JUTXfb::EXfbNumber xfb_num, bool enableAlpha) {
     JUT_CONFIRM(VERSION_SELECT(242, 244, 243, 243), sManager == NULL);
     if(sManager == 0) {
-        sManager = new JFWDisplay(0, p_heap, xfb_num, enableAlpha);
+        sManager = JKR_NEW JFWDisplay(0, p_heap, xfb_num, enableAlpha);
     }
 
     return sManager;

@@ -939,7 +939,7 @@ BOOL daNpc_Md_c::createHeap() {
     J3DModelData* modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "md.bdl");
     JUT_ASSERT(DEMO_SELECT(1960, 1995), modelData != NULL);
 
-    mpMorf = new mDoExt_McaMorf2(
+    mpMorf = JKR_NEW mDoExt_McaMorf2(
         modelData,
         NULL,
         NULL,
@@ -991,7 +991,7 @@ BOOL daNpc_Md_c::createHeap() {
     modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdarm.bdl");
     JUT_ASSERT(DEMO_SELECT(2016, 2051), modelData != NULL);
 
-    mpArmMorf = new mDoExt_McaMorf2(
+    mpArmMorf = JKR_NEW mDoExt_McaMorf2(
         modelData,
         NULL,
         NULL,
@@ -1026,7 +1026,7 @@ BOOL daNpc_Md_c::createHeap() {
         modelData = (J3DModelData*)dComIfG_getObjectRes(mModelArcName, "mdwing.bdl");
         JUT_ASSERT(DEMO_SELECT(2046, 2083), modelData != NULL);
 
-        mpWingMorf = new mDoExt_McaMorf(
+        mpWingMorf = JKR_NEW mDoExt_McaMorf(
             modelData,
             NULL,
             NULL,

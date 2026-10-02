@@ -32,7 +32,7 @@ private:
 };
 
 inline JUTGraphFifo* JUTCreateFifo(u32 bufSize) {
-    return new JUTGraphFifo(bufSize);
+    return JKR_NEW JUTGraphFifo(bufSize);
 }
 
 #endif /* JUTGRAPHFIFO_H */

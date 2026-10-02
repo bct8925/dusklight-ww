@@ -51,17 +51,17 @@ dCloth_packet_c::dCloth_packet_c(
     setMtx(cMtx_getIdentity());
 
     if (posArr == NULL) {
-        mpPosArr[0] = new cXyz[mFlyGridSize * mHoistGridSize];
-        mpPosArr[1] = new cXyz[mFlyGridSize * mHoistGridSize];
+        mpPosArr[0] = JKR_NEW_ARRAY(cXyz, mFlyGridSize * mHoistGridSize);
+        mpPosArr[1] = JKR_NEW_ARRAY(cXyz, mFlyGridSize * mHoistGridSize);
     } else {
         mpPosArr[0] = posArr[0];
         mpPosArr[1] = posArr[1];
     }
-    mpNrmArr[0] = new cXyz[mFlyGridSize * mHoistGridSize];
-    mpNrmArr[1] = new cXyz[mFlyGridSize * mHoistGridSize];
-    mpNrmArrBack[0] = new cXyz[mFlyGridSize * mHoistGridSize];
-    mpNrmArrBack[1] = new cXyz[mFlyGridSize * mHoistGridSize];
-    mpSpeedArr = new cXyz[mFlyGridSize * mHoistGridSize];
+    mpNrmArr[0] = JKR_NEW_ARRAY(cXyz, mFlyGridSize * mHoistGridSize);
+    mpNrmArr[1] = JKR_NEW_ARRAY(cXyz, mFlyGridSize * mHoistGridSize);
+    mpNrmArrBack[0] = JKR_NEW_ARRAY(cXyz, mFlyGridSize * mHoistGridSize);
+    mpNrmArrBack[1] = JKR_NEW_ARRAY(cXyz, mFlyGridSize * mHoistGridSize);
+    mpSpeedArr = JKR_NEW_ARRAY(cXyz, mFlyGridSize * mHoistGridSize);
 }
 
 dCloth_packet_c::~dCloth_packet_c() {
@@ -478,7 +478,7 @@ void dCloth_packet_c::plot() {
 dCloth_packet_c* dCloth_packet_create(
     ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
 ) {
-    dCloth_packet_c* pCloth = new dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
+    dCloth_packet_c* pCloth = JKR_NEW dCloth_packet_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         pCloth = NULL;
     } else if (pCloth && i_flagimage) {
@@ -543,7 +543,7 @@ void dCloth_packetXlu_c::cloth_draw() {
 dCloth_packetXlu_c* dCloth_packetXlu_create(
     ResTIMG* i_flagimage, ResTIMG* i_toonimage, int flyGridSize, int hoistGridSize, float flyLength, float hoistLength, dKy_tevstr_c* tevstr, cXyz** posArr
 ) {
-    dCloth_packetXlu_c* pCloth = new dCloth_packetXlu_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
+    dCloth_packetXlu_c* pCloth = JKR_NEW dCloth_packetXlu_c(i_toonimage, flyGridSize, hoistGridSize, flyLength, hoistLength, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         pCloth = NULL;
     } else if (pCloth && i_flagimage) {
@@ -663,7 +663,7 @@ void dClothVobj03_c::TexObjLoad() {
 
 /* 800652A8-800653F4       .text dClothVobj03_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj03_c* dClothVobj03_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
-    dClothVobj03_c* pCloth = new dClothVobj03_c(i_toonimage, tevstr, posArr);
+    dClothVobj03_c* pCloth = JKR_NEW dClothVobj03_c(i_toonimage, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         pCloth = NULL;
     } else if (pCloth && i_flagimage) {
@@ -764,7 +764,7 @@ void dClothVobj04_c::TexObjLoad() {
 
 /* 8006584C-80065998       .text dClothVobj04_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj04_c* dClothVobj04_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
-    dClothVobj04_c* pCloth = new dClothVobj04_c(i_toonimage, tevstr, posArr);
+    dClothVobj04_c* pCloth = JKR_NEW dClothVobj04_c(i_toonimage, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         pCloth = NULL;
     } else if (pCloth && i_flagimage) {
@@ -870,7 +870,7 @@ int dClothVobj05_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
 
 /* 80065DF8-80065F50       .text dClothVobj05_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj05_c* dClothVobj05_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
-    dClothVobj05_c* pCloth = new dClothVobj05_c(i_toonimage, tevstr, posArr);
+    dClothVobj05_c* pCloth = JKR_NEW dClothVobj05_c(i_toonimage, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         pCloth = NULL;
     } else if (pCloth && i_flagimage) {
@@ -977,7 +977,7 @@ int dClothVobj07_0_VtxFactorCB(dCloth_packet_c* self, int x, int y) {
 
 /* 800663B4-8006650C       .text dClothVobj07_0_create__FP7ResTIMGP7ResTIMGP12dKy_tevstr_cPP4cXyz */
 dClothVobj07_0_c* dClothVobj07_0_create(ResTIMG* i_flagimage, ResTIMG* i_toonimage, dKy_tevstr_c* tevstr, cXyz** posArr) {
-    dClothVobj07_0_c* pCloth = new dClothVobj07_0_c(i_toonimage, tevstr, posArr);
+    dClothVobj07_0_c* pCloth = JKR_NEW dClothVobj07_0_c(i_toonimage, tevstr, posArr);
     if (pCloth && !pCloth->chkCreateBuff()) {
         pCloth = NULL;
     } else if (pCloth && i_flagimage) {
