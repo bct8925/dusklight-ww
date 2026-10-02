@@ -76,7 +76,6 @@ set(DUSK_GAME_GLUE_FILES
         src/dusk/main.cpp
         src/dusk/dvd_asset.cpp
         src/dusk/dvd_asset.hpp
-        src/dusk/game_mode.cpp
         src/dusk/globals.cpp
         src/dusk/stubs.cpp
 )
@@ -85,6 +84,8 @@ set(DUSK_GAME_GLUE_FILES
 # hook into game code (mods, imgui tools, frame interpolation). Not built while DUSK_GAME_WW is
 # on; move files back into DUSK_FILES as each one is ported to Wind Waker.
 set(DUSK_TP_FEATURE_FILES
+        src/dusk/stubs_tp.cpp
+        src/dusk/game_mode.cpp
         src/d/actor/d_a_alink_dusk.cpp
         src/dusk/achievements.cpp
         src/dusk/autosave.cpp

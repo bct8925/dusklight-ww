@@ -109,7 +109,7 @@ bool LoadDolAsset(void* dst, std::initializer_list<OffsetVersion> virtualAddress
 
 bool LoadRelAsset(void* dst, const char* dvdPath, std::initializer_list<OffsetVersion> offset, s32 size) {
     auto resOffset = GetOffsetForVersion(offset);
-    void* p = JKRDvdRipper::loadToMainRAM(dvdPath, (u8*)dst, EXPAND_SWITCH_UNKNOWN1, (u32)size, nullptr, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, resOffset, nullptr, nullptr);
+    void* p = JKRDvdRipper::loadToMainRAM(dvdPath, (u8*)dst, EXPAND_SWITCH_UNKNOWN1, (u32)size, nullptr, JKRDvdRipper::ALLOC_DIRECTION_FORWARD, resOffset, nullptr);
     if (!p) DuskLog.fatal("dvd_asset: failed to load {} (offset={:#x} size={:#x})", dvdPath, resOffset, size);
     return p != nullptr;
 }

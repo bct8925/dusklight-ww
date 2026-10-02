@@ -101,10 +101,11 @@ typedef DVDDirEntry DVDDirectoryEntry;
 #define GXColor4x8 GXColor4u8
 
 // The decomp's GXSetDrawSync waits for the GPU to reach a token; aurora has no equivalent and
-// orders work itself.
-static inline void GXSetDrawSync(GXBool enable) {
-    (void)enable;
-}
+// orders work itself. Stubbed in src/dusk/stubs.cpp.
+#ifdef __cplusplus
+extern "C"
+#endif
+void GXSetDrawSync(u16 token);
 
 #ifdef __cplusplus
 // The decomp passes thread entry points as void*.
