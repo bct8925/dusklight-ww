@@ -279,6 +279,8 @@ set(DUSK_COPYRIGHT "Copyright (C) Twilit Realm contributors")
 
 if (NOT DUSK_GAME_WW)
     list(APPEND DUSK_FILES ${DUSK_TP_FEATURE_FILES})
+else ()
+    list(APPEND DUSK_FILES ${DUSK_NO_UI_FILES})
 endif ()
 
 source_group("dolzel" FILES ${DOLZEL_FILES} ${REL_FILES})

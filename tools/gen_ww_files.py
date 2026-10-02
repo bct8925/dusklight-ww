@@ -35,10 +35,12 @@ def load_libs() -> list[dict]:
             return f"<{key}>"  # cflags_* and status constants; only their presence matters
 
     def obj(status, path, **kwargs):
-        return {"path": kwargs.get("source", path)}
+        # DEBUG_ONLY objects are not part of the retail build.
+        return None if status == "<DEBUG_ONLY>" else {"path": kwargs.get("source", path)}
 
     def lib(kind):
-        return lambda name, objects, *args, **kwargs: {"lib": name, "kind": kind, "objects": objects}
+        return lambda name, objects, *args, **kwargs: {"lib": name, "kind": kind,
+                                                       "objects": [o for o in objects if o]}
 
     def actor_rel(status, name, extra_cflags=()):
         return {"lib": name, "kind": "actor", "objects": [obj(status, f"d/actor/{name}.cpp")]}
@@ -47,7 +49,10 @@ def load_libs() -> list[dict]:
                   ActorRel=actor_rel, MatchingFor=lambda *v: None, EquivalentFor=lambda *v: None,
                   config=types.SimpleNamespace())
     exec(compile(ast.Module([node], []), str(CONFIGURE), "exec"), {}, names)
-    return names["config"].libs
+    libs = names["config"].libs
+    for l in libs:  # plain dict entries in configure.py
+        l["objects"] = [o for o in l["objects"] if o]
+    return libs
 
 
 def cmake_list(name: str, paths: list[str]) -> str:

@@ -24,8 +24,14 @@ public:
 u16 cc_pl_cut_bit_get();
 u32 at_se_get(cCcD_Obj*);
 u32 at_se_getC(cCcD_Obj*);
+#if TARGET_PC
+// u32 is unsigned int on PC, so unsigned long would no longer match the definitions.
+void def_se_set(fopAc_ac_c*, cCcD_Obj*, u32);
+void def_se_set_p(fopAc_ac_c*, cXyz*, cCcD_Obj*, u32);
+#else
 void def_se_set(fopAc_ac_c*, cCcD_Obj*, unsigned long);
 void def_se_set_p(fopAc_ac_c*, cXyz*, cCcD_Obj*, unsigned long);
+#endif
 fopAc_ac_c* at_power_check(CcAtInfo*);
 fopAc_ac_c* cc_at_check(fopAc_ac_c*, CcAtInfo*);
 

@@ -467,6 +467,41 @@ void GXSetMisc(GXMiscToken token, u32 val) {
     STUB_LOG();
 }
 
+// Declared by aurora's SDK headers but not implemented there.
+u32 OSGetConsoleSimulatedMemSize(void) {
+    return 24 * 1024 * 1024;
+}
+void GXPokeAlphaRead(GXAlphaReadMode mode) {
+    STUB_LOG();
+}
+void GXPeekARGB(u16 x, u16 y, u32* color) {
+    STUB_LOG();
+    *color = 0;
+}
+
+#pragma mark GBA
+// The Game Boy Advance link (Tingle Tuner): no GBA is ever connected.
+#include <dolphin/gba.h>
+void GBAInit(void) {}
+s32 GBAGetStatus(s32 chan, u8* status) {
+    return GBA_NOT_READY;
+}
+s32 GBAReset(s32 chan, u8* status) {
+    return GBA_NOT_READY;
+}
+s32 GBAGetProcessStatus(s32 chan, u8* percentp) {
+    return GBA_NOT_READY;
+}
+s32 GBARead(s32 chan, u8* dst, u8* status) {
+    return GBA_NOT_READY;
+}
+s32 GBAWrite(s32 chan, u8* src, u8* status) {
+    return GBA_NOT_READY;
+}
+s32 GBAJoyBoot(s32 chan, s32 palette_color, s32 palette_speed, u8* programp, s32 length, u8* status) {
+    return GBA_NOT_READY;
+}
+
 #pragma mark PPC Arch
 // MSR stuff?
 void PPCHalt() {

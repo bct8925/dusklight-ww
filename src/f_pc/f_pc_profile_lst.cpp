@@ -6,6 +6,7 @@
 #endif
 #include "global.h"
 
+#if !TARGET_PC  // On PC the list is src/dusk/ww_profile_list.cpp (tools/gen_profile_list.py).
 process_profile_definition* g_fpcPfLst_ProfileList[] = {
     &g_profile_OVERLAP0,
     &g_profile_OVERLAP1,
@@ -529,3 +530,4 @@ void ModuleProlog() {
 void ModuleEpilog() {
     g_fpcPf_ProfileList_p = NULL;
 }
+#endif

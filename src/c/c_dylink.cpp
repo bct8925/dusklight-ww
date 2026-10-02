@@ -477,7 +477,12 @@ BOOL cCc_Init() {
 #endif
     memset(DMC, 0, sizeof(DMC));
 
+#if TARGET_PC
+    // Every actor is linked into the executable: leave DMC empty, so cDyl_Link* report success.
+    for (int i = 0; i < 0; i++) {
+#else
     for (int i = 0; i < ARRAY_SIZE(DynamicNameTable); i++) {
+#endif
         const cDyl_DynamicName_t & d = DynamicNameTable[i];
         if (d.name == NULL)
             continue;
@@ -603,6 +608,10 @@ cPhs_State cDyl_LinkASync(s16 i_ProfName) {
 
 /* 80022CEC-80022DF8       .text cDyl_InitCallback__FPv */
 BOOL cDyl_InitCallback(void*) {
+#if TARGET_PC
+    // no RELs or string table to load on PC; the profile list is linked in
+    cDyl_Initialized = TRUE; return TRUE;
+#else
     JUT_ASSERT(DEMO_SELECT(230, 303), !cDyl_Initialized);
     JKRFileCache* loader = JKRMountDvdDrive("/", mDoExt_getArchiveHeap(), NULL);
     DynamicModuleControl::initialize();
@@ -619,6 +628,7 @@ BOOL cDyl_InitCallback(void*) {
 #endif
     cDyl_Initialized = TRUE;
     return TRUE;
+#endif
 }
 
 /* 80022DF8-80022E70       .text cDyl_InitAsync__Fv */

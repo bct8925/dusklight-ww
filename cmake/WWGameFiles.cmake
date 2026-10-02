@@ -154,8 +154,6 @@ set(WW_DOL_FILES
         src/d/d_salvage.cpp
         src/d/d_snap.cpp
         src/d/d_point_wind.cpp
-        src/d/d_debug_viewer.cpp
-        src/d/d_debug_pad.cpp
         src/d/actor/d_a_agb.cpp
         src/d/actor/d_a_arrow.cpp
         src/d/actor/d_a_bg.cpp
@@ -482,7 +480,6 @@ set(WW_JSYSTEM_JSupport_FILES
 )
 
 set(WW_JSYSTEM_JGadget_FILES
-        src/JSystem/JGadget/define.cpp
         src/JSystem/JGadget/binary.cpp
         src/JSystem/JGadget/linklist.cpp
         src/JSystem/JGadget/std-vector.cpp

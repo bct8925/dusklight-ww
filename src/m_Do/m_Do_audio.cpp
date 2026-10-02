@@ -133,6 +133,10 @@ static mDoDvdThd_mountArchive_c* l_arcCommand;
 
 /* 80007090-80007224       .text mDoAud_Create__Fv */
 void mDoAud_Create() {
+#if TARGET_PC
+    // audio is not ported yet; src/dusk/ww_audio_null.cpp stands in for JAudio/JAZelAudio
+    mDoAud_zelAudio_c::onInitFlag();  // SyncWidthSound stays off: DVD loads must not wait on the audio thread
+#else
     if (!l_affCommand) {
 #if VERSION == VERSION_DEMO
         l_affCommand = mDoDvdThd_toMainRam_c::create("/Audiores/JaiInit.aaf", JKRArchive::DEFAULT_MOUNT_DIRECTION, NULL);
@@ -187,6 +191,7 @@ void mDoAud_Create() {
         mDoAud_zelAudio_c::onInitFlag();
         mDoDvdThd::SyncWidthSound = 1;
     }
+#endif
 }
 
 /* 80007224-80007268       .text mDoAud_Execute__Fv */
