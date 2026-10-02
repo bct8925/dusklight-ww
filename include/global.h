@@ -121,11 +121,8 @@ extern int __abs(int);
     (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0; (void*)0;
 
 #if TARGET_PC
-// Porting helpers, adapted from dusklight's global.h.
-
-#ifndef DEBUG
-#define DEBUG 0
-#endif
+// Porting helpers, adapted from dusklight's global.h. (DEBUG is deliberately left undefined:
+// TWW tests it with both #ifdef and #if.)
 
 #if defined(_MSVC_LANG) && !defined(__clang__)
 #define __memcpy memcpy

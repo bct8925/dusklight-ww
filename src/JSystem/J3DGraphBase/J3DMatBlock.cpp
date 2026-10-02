@@ -16,6 +16,11 @@
 #include "dolphin/types.h"
 #include "string.h"
 
+#if TARGET_PC
+// aurora's GDGetCurrPointer returns void*; the decomp SDK's returned u8*.
+#define GDGetCurrPointer GDGetCurrPointer2
+#endif
+
 int SizeOfLoadMatColors = 13;
 int SizeOfLoadAmbColors = 13;
 int SizeOfLoadColorChans = 21;

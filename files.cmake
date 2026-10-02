@@ -1,9 +1,25 @@
-# Game sources. The Wind Waker lists (framework, JSystem libraries, actors) are generated from
-# upstream/tww/configure.py and are not wired in yet; until then only the shell builds.
-set(DOLZEL_FILES)
-set(SSYSTEM_FILES)
-set(REL_FILES)
+# Game sources, generated from upstream/tww/configure.py by tools/gen_ww_files.py.
+include(cmake/WWGameFiles.cmake)
+
+set(DOLZEL_FILES ${WW_DOL_FILES})
+set(SSYSTEM_FILES ${WW_SSYSTEM_FILES})
+
+# Actor RELs are linked into the executable. Only the ones listed here are built, so the game can
+# come up one scene at a time; the rest have null profiles (see f_pc_profile_lst).
+set(WW_ENABLED_RELS
+        d_a_title
+)
+set(REL_FILES ${WW_PROFILE_LIST_FILES})
+foreach (rel IN LISTS WW_ENABLED_RELS)
+    list(APPEND REL_FILES src/d/actor/${rel}.cpp)
+endforeach ()
+
+# Each JSystem library is its own static library, as in the original build.
 set(JSYSTEM_LIBRARIES)
+foreach (lib IN LISTS WW_JSYSTEM_LIBS)
+    add_library(JSystem_${lib} STATIC ${WW_JSYSTEM_${lib}_FILES})
+    list(APPEND JSYSTEM_LIBRARIES JSystem_${lib})
+endforeach ()
 
 set(DOLPHIN_FILES
         libs/dolphin/src/gf/GFGeometry.cpp

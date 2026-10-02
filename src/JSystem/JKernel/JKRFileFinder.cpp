@@ -59,9 +59,15 @@ bool JKRDvdFinder::findNextFile() {
         mIsAvailable = DVDReadDir(&mDvdDirectory, &directoryEntry);
 
         if (mIsAvailable) {
+#if TARGET_PC
+            mIsFileOrDirectory = directoryEntry.isDir != 0;
+            mEntryName = directoryEntry.name;
+            mEntryFileIndex = directoryEntry.entryNum;
+#else
             mIsFileOrDirectory = directoryEntry.is_directory != 0;
             mEntryName = directoryEntry.name;
             mEntryFileIndex = directoryEntry.entry_number;
+#endif
             mEntryId = 0;
 
             // only matches with enum

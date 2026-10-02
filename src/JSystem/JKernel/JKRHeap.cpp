@@ -89,7 +89,11 @@ bool JKRHeap::initArena(char** memory, u32* size, int maxHeaps) {
 
     mUserRamStart = ram_start;
     mUserRamEnd = ram_end;
+#if TARGET_PC
+    mMemorySize = codeStart->memorySize;
+#else
     mMemorySize = codeStart->memory_size;
+#endif
 
     OSSetArenaLo(ram_end);
     OSSetArenaHi(ram_end);

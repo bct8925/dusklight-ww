@@ -3,7 +3,11 @@
 
 #include "JSystem/JUtility/JUTAssert.h"
 
+#if TARGET_PC
+#include <dolphin/gx.h>
+#else
 typedef struct _GXRenderModeObj GXRenderModeObj;
+#endif
 class JKRExpHeap;
 class JKRThread;
 class JUTConsole;

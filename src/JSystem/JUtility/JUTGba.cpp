@@ -46,7 +46,11 @@ JUTGba* JUTGba::create() {
     for (int i = 0; i < 4; i++) {
         JUTGbaParam* param = &sManager->mParams[i];
         OSReport(":::GBA: Create Thread %d\n", i);
+#if TARGET_PC
+        OSCreateThread(&sManager->mThreads[i], (void* (*)(void*))&gbaThreadMain, param, sManager->mStacks + i + 1, 0x1000, 8, 0);
+#else
         OSCreateThread(&sManager->mThreads[i], (void*)&gbaThreadMain, param, sManager->mStacks + i + 1, 0x1000, 8, 0);
+#endif
         OSResumeThread(&sManager->mThreads[i]);
     }
 

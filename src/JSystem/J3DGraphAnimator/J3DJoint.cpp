@@ -190,8 +190,13 @@ void J3DJoint::initialize() {
     mScaleCompensate = 0;
     mTransformInfo = j3dDefaultTransformInfo;
     mRadius = 0.0f;
+#if TARGET_PC
+    mMin = Vec{0.0f, 0.0f, 0.0f};
+    mMax = Vec{0.0f, 0.0f, 0.0f};
+#else
     mMin = (Vec){0.0f, 0.0f, 0.0f};
     mMax = (Vec){0.0f, 0.0f, 0.0f};
+#endif
     mMtxCalc = NULL;
     mOldMtxCalc = NULL;
     mMesh = NULL;

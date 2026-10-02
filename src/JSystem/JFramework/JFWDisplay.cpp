@@ -115,7 +115,11 @@ void JFWDisplay::prepareCopyDisp() {
     GXSetDispCopyYScale(y_scaleF);
 #endif
     VIFlush();
+#if TARGET_PC
+    GXSetCopyFilter((GXBool)renderObj->aa, renderObj->sample_pattern, GX_ENABLE, renderObj->vfilter);
+#else
     GXSetCopyFilter((GXBool)renderObj->antialiasing, renderObj->sample_pattern, GX_ENABLE, renderObj->vfilter);
+#endif
     GXSetCopyClamp((GXFBClamp)mClamp);
     GXSetDispCopyGamma((GXGamma)mGamma);
     GXSetZMode(GX_ENABLE, GX_LEQUAL, GX_ENABLE);
@@ -202,7 +206,11 @@ void JFWDisplay::preGX() {
     GXInvalidateTexAll();
     GXInvalidateVtxCache();
 
+#if TARGET_PC
+    if (mpRenderMode->aa) {
+#else
     if (mpRenderMode->antialiasing) {
+#endif
         GXSetPixelFmt(GX_PF_RGB565_Z16, GX_ZC_LINEAR);
         GXSetDither(GX_ENABLE);
     } else {

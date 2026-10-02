@@ -36,12 +36,13 @@ target_include_directories(dusklight_mod_api INTERFACE ${_game_root}/sdk/include
 add_library(dusklight_game_headers INTERFACE)
 target_include_directories(dusklight_game_headers INTERFACE ${_game_include_dirs})
 target_compile_definitions(dusklight_game_headers INTERFACE ${_game_compile_defs})
-# Some decomp headers include dolphin/types.h directly and still expect the decomp SDK's extra
-# types (uint, Mtx33, SVec...), which aurora's SDK lacks; force-include them everywhere.
+# Decomp sources rely on global.h and on the decomp SDK's extra types (uint, Mtx33, SVec...) being
+# visible even when they include dolphin/types.h directly, as MWCC's prefix setup made them.
+# global.h pulls in sdk_compat/pc_sdk_extras.h, so force-include it everywhere.
 if (CMAKE_CXX_COMPILER_FRONTEND_VARIANT STREQUAL "MSVC")
-    target_compile_options(dusklight_game_headers INTERFACE "/FIpc_sdk_extras.h")
+    target_compile_options(dusklight_game_headers INTERFACE "/FIglobal.h")
 else ()
-    target_compile_options(dusklight_game_headers INTERFACE "SHELL:-include pc_sdk_extras.h")
+    target_compile_options(dusklight_game_headers INTERFACE "SHELL:-include global.h")
 endif ()
 
 # Public game ABI for mods

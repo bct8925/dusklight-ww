@@ -52,7 +52,11 @@ public:
     virtual void init(const Vec& vec, const Mtx& mtx) {
         J3DSys::mCurrentS = vec;
 #ifndef DECOMPCTX // Hack, see comment in dolzel.pch for details
+#if TARGET_PC
+        J3DSys::mParentS = Vec{1.0f, 1.0f, 1.0f};
+#else
         J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+#endif
 #endif
         J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;
         J3DSys::mCurrentMtx[0][1] = mtx[0][1] * J3DSys::mCurrentS.y;
@@ -96,7 +100,11 @@ public:
     virtual ~J3DMtxCalcMaya() {}
     virtual void init(const Vec& vec, const Mtx& mtx) {
 #ifndef DECOMPCTX // Hack, see comment in dolzel.pch for details
+#if TARGET_PC
+        J3DSys::mParentS = Vec{1.0f, 1.0f, 1.0f};
+#else
         J3DSys::mParentS = (Vec){1.0f, 1.0f, 1.0f};
+#endif
 #endif
         J3DSys::mCurrentS = vec;
         J3DSys::mCurrentMtx[0][0] = mtx[0][0] * J3DSys::mCurrentS.x;

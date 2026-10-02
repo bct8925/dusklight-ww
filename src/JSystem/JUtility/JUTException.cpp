@@ -57,12 +57,16 @@ JUTExceptionUserCallback JUTException::sPostUserCallback;
 /* 802C4AC8-802C4BAC       .text __ct__12JUTExceptionFP14JUTDirectPrint */
 JUTException::JUTException(JUTDirectPrint* directPrint) : JKRThread(0x4000, 0x10, 0) {
     mDirectPrint = directPrint;
+#if TARGET_PC
+    // Crashes are reported by the port's own crash handler; there are no PowerPC exceptions.
+#else
     OSSetErrorHandler(EXCEPTION_DSI, (OSErrorHandler)errorHandler);
     OSSetErrorHandler(EXCEPTION_ISI, (OSErrorHandler)errorHandler);
     OSSetErrorHandler(EXCEPTION_PROGRAM, (OSErrorHandler)errorHandler);
     OSSetErrorHandler(EXCEPTION_ALIGNMENT, (OSErrorHandler)errorHandler);
     OSSetErrorHandler(EXCEPTION_MEMORY_PROTECTION, (OSErrorHandler)errorHandler);
     setFPException(0);
+#endif
 
     sPreUserCallback = NULL;
     sPostUserCallback = NULL;
@@ -125,6 +129,7 @@ u32 JUTException::fpscr;
 
 /* 802C4CEC-802C5084       .text errorHandler__12JUTExceptionFUsP9OSContextUlUl */
 void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, u32 param_4) {
+#if !TARGET_PC  // PowerPC exception context; the port has its own crash handler
     if (error == 0x10) {
         OSReport("\x1b[41;37m");
 #if VERSION == VERSION_DEMO
@@ -215,16 +220,19 @@ void JUTException::errorHandler(OSError error, OSContext* context, u32 param_3, 
     OSSendMessage(&sMessageQueue, &exCallbackObject, OS_MESSAGE_BLOCK);
     OSEnableScheduler();
     OSYieldThread();
+#endif
 }
 
 /* 802C5084-802C50CC       .text setFPException__12JUTExceptionFUl */
 void JUTException::setFPException(u32 fpscr_enable_bits) {
+#if !TARGET_PC  // PowerPC exception context; the port has its own crash handler
     __OSFpscrEnableBits = fpscr_enable_bits;
     if (fpscr_enable_bits) {
         OSSetErrorHandler(EXCEPTION_FLOATING_POINT_EXCEPTION, (OSErrorHandler)errorHandler);
     } else {
         OSSetErrorHandler(EXCEPTION_FLOATING_POINT_EXCEPTION, NULL);
     }
+#endif
 }
 
 /* 802C50CC-802C525C       .text showFloatSub__12JUTExceptionFif */
@@ -246,6 +254,7 @@ void JUTException::showFloatSub(int index, f32 value) {
 
 /* 802C525C-802C5380       .text showFloat__12JUTExceptionFP9OSContext */
 void JUTException::showFloat(OSContext* context) {
+#if !TARGET_PC  // PowerPC exception context; the port has its own crash handler
     if (!sConsole) {
         return;
     }
@@ -263,10 +272,15 @@ void JUTException::showFloat(OSContext* context) {
     sConsole->print(" ");
     showFloatSub(21, context->fpr[21]);
     sConsole->print("\n");
+#endif
 }
 
 /* 802C5380-802C5440       .text searchPartialModule__12JUTExceptionFUlPUlPUlPUlPUl */
 bool JUTException::searchPartialModule(u32 address, u32* module_id, u32* section_id, u32* section_offset, u32* name_offset) {
+#if TARGET_PC
+    // no REL module list on PC
+    return false;
+#else
     if (!address) {
         return false;
     }
@@ -293,6 +307,7 @@ bool JUTException::searchPartialModule(u32 address, u32* module_id, u32* section
     }
 
     return false;
+#endif
 }
 
 /* 802C5440-802C54B8       .text search_name_part__FPUcPUci */
@@ -319,6 +334,7 @@ void search_name_part(u8* src, u8* dst, int dst_length) {
 
 /* 802C54B8-802C55BC       .text showStack__12JUTExceptionFP9OSContext */
 void JUTException::showStack(OSContext* context) {
+#if !TARGET_PC  // PowerPC exception context; the port has its own crash handler
     if (!sConsole) {
         return;
     }
@@ -341,10 +357,12 @@ void JUTException::showStack(OSContext* context) {
         waitTime(mPrintWaitTime1);
         stackPointer = (u32*)stackPointer[0];
     }
+#endif
 }
 
 /* 802C55BC-802C586C       .text showMainInfo__12JUTExceptionFUsP9OSContextUlUl */
 void JUTException::showMainInfo(u16 error, OSContext* context, u32 dsisr, u32 dar) {
+#if !TARGET_PC  // PowerPC exception context; the port has its own crash handler
     if (!sConsole) {
         return;
     }
@@ -398,10 +416,12 @@ void JUTException::showMainInfo(u16 error, OSContext* context, u32 dsisr, u32 da
     }
     sConsole->print_f("SRR0:   %08XH   SRR1:%08XH\n", context->srr0, context->srr1);
     sConsole->print_f("DSISR:  %08XH   DAR: %08XH\n", dsisr, dar);
+#endif
 }
 
 /* 802C586C-802C592C       .text showGPR__12JUTExceptionFP9OSContext */
 void JUTException::showGPR(OSContext* context) {
+#if !TARGET_PC  // PowerPC exception context; the port has its own crash handler
     if (!sConsole) {
         return;
     }
@@ -412,6 +432,7 @@ void JUTException::showGPR(OSContext* context) {
                           context->gpr[i + 11], i + 22, context->gpr[i + 22]);
     }
     sConsole->print_f("R%02d:%08XH  R%02d:%08XH\n", 10, context->gpr[10], 21, context->gpr[21]);
+#endif
 }
 
 JSUList<JUTException::JUTExMapFile> JUTException::sMapFileList(false);
@@ -467,6 +488,7 @@ bool JUTException::showMapInfo_subroutine(u32 address, bool begin_with_newline) 
 
 /* 802C5A88-802C5B94       .text showGPRMap__12JUTExceptionFP9OSContext */
 void JUTException::showGPRMap(OSContext* context) {
+#if !TARGET_PC  // PowerPC exception context; the port has its own crash handler
     if (!sConsole) {
         return;
     }
@@ -492,10 +514,12 @@ void JUTException::showGPRMap(OSContext* context) {
     if (!found_address_register) {
         sConsole->print("  no register which seem to address.\n");
     }
+#endif
 }
 
 /* 802C5B94-802C5C58       .text showSRR0Map__12JUTExceptionFP9OSContext */
 void JUTException::showSRR0Map(OSContext* context) {
+#if !TARGET_PC  // PowerPC exception context; the port has its own crash handler
     if (!sConsole) {
         return;
     }
@@ -509,6 +533,7 @@ void JUTException::showSRR0Map(OSContext* context) {
         }
         JUTConsoleManager::getManager()->drawDirect(true);
     }
+#endif
 }
 
 /* 802C5C58-802C5D00       .text printDebugInfo__12JUTExceptionFQ212JUTException9EInfoPageUsP9OSContextUlUl */

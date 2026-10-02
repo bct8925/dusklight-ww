@@ -39,9 +39,21 @@
 namespace JUTAssertion {
     u32 getSDevice();
     void showAssert(u32 device, const char * file, int line, const char * assertion);
+#if TARGET_PC
+    void setWarningMessage_f(u32 device, const const char* file, int line, const char * fmt, ...);
+#else
     void setWarningMessage_f(u32 device, char * file, int line, const char * fmt, ...);
+#endif
+#if TARGET_PC
+    void setLogMessage_f(u32 device, const char* file, int line, const char* fmt, ...);
+#else
     void setLogMessage_f(u32 device, char* file, int line, const char* fmt, ...);
+#endif
+#if TARGET_PC
+    void setConfirmMessage(u32 device, const const char* file, int line, bool cond, const char * msg);
+#else
     void setConfirmMessage(u32 device, char * file, int line, bool cond, const char * msg);
+#endif
     void create();
     u32 flush_subroutine();
     void flushMessage();
@@ -49,7 +61,11 @@ namespace JUTAssertion {
     void setVisible(bool);
     void setMessageCount(int);
 
+#if TARGET_PC
+    inline void setWarningMessage(u32 device, const char* file, int line, const char* msg) {
+#else
     inline void setWarningMessage(u32 device, char* file, int line, const char* msg) {
+#endif
         setWarningMessage_f(device, file, line, "%s", msg);
     }
 };

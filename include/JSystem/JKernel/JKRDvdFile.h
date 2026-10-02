@@ -21,9 +21,17 @@ public:
     void initiate(void);
     s32 sync(void);
 
+#if TARGET_PC
+    u32 getFileID() const { return mFileInfo.startAddr; }
+#else
     u32 getFileID() const { return mFileInfo.start_address; }
+#endif
     DVDFileInfo* getFileInfo() { return &mFileInfo; }
+#if TARGET_PC
+    int getStatus() { return DVDGetCommandBlockStatus(&mFileInfo.cb); }
+#else
     int getStatus() { return DVDGetCommandBlockStatus(&mFileInfo.block); }
+#endif
 
 public:
     /* vt[03] */ virtual bool open(const char*);               /* override */

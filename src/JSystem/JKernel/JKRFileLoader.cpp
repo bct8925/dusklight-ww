@@ -7,7 +7,11 @@
 
 #include "JSystem/JKernel/JKRFileLoader.h"
 #include "string.h"
+#if TARGET_PC
+#include <cctype>
+#else
 #include "ctype.h"
+#endif
 #include "global.h"
 
 JKRFileLoader* JKRFileLoader::sCurrentVolume;
