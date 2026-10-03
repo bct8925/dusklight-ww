@@ -42,6 +42,15 @@
       "problemMatcher": [],
     },
     {
+      "label": "run Wind Waker",
+      "type": "shell",
+      "command": "${workspaceFolder}\build\windows-msvc-relwithdebinfo\dusklight.exe",
+      "args": ["--develop", "--trace", "--dvd", "C:\Users\brian\Dev\tww\orig\GZLE01\game.iso"],
+      "options": { "cwd": "${workspaceFolder}\build\windows-msvc-relwithdebinfo" },
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
       "label": "ninja changes_all",
       "type": "shell",
       "command": "ninja changes_all",
