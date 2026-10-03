@@ -7,7 +7,9 @@
    https://github.com/zeldaret/tww.git if missing; it must be the official repo, not a fork);
 2. imports <rev> onto branch `vendor/tww` through a temporary git worktree, so the current
    branch and working tree are left alone (the tree must be clean, though, for the merge);
-3. merges `vendor/tww` into the current branch and lists the conflicts.
+3. merges `vendor/tww` into the current branch, preferring upstream for conflicting hunks
+   (`--manual` leaves them for you), re-runs the PC codemods on the files it touched, and lists
+   the PC-layer lines the merge dropped so you can check that nothing important was lost.
 
 Resolving conflicts (the official code wins once a function is decompiled):
   * A conflict inside a function that upstream has now filled in -> take THEIRS for that
@@ -41,6 +43,8 @@ def main() -> int:
     ap.add_argument("--tww", type=Path, default=ROOT.parent / "tww", help="tww checkout (default: ../tww)")
     ap.add_argument("--rev", default=f"{REMOTE}/main", help=f"revision to import (default: {REMOTE}/main)")
     ap.add_argument("--no-merge", action="store_true", help="only update vendor/tww")
+    ap.add_argument("--manual", action="store_true",
+                    help="leave conflicts for hand resolution instead of preferring upstream")
     args = ap.parse_args()
     tww = args.tww.resolve()
 
@@ -83,14 +87,39 @@ def main() -> int:
 
     if args.no_merge:
         return 0
-    merged = run("git", "merge", "--no-commit", "--no-ff", "vendor/tww", check=False, capture=True)
+    strategy = [] if args.manual else ["-X", "theirs"]
+    merged = run("git", "merge", "--no-commit", "--no-ff", *strategy, "vendor/tww", check=False, capture=True)
     print(merged)
     conflicts = run("git", "diff", "--name-only", "--diff-filter=U", capture=True)
     if conflicts:
         print("\nconflicts (see the notes at the top of tools/update_tww.py):")
         print("\n".join("  " + c for c in conflicts.splitlines()))
         return 2
-    print("\nmerge staged without conflicts; build, then commit")
+
+    changed = [f for f in run("git", "diff", "--cached", "--name-only", "--diff-filter=AM", capture=True).splitlines()
+               if f.startswith(("src/", "include/")) and f.endswith((".cpp", ".h", ".inc"))]
+    if changed:
+        # Upstream code knows nothing about the PC layer: redo the mechanical parts.
+        run(sys.executable, "tools/jkr_new_codemod.py", *changed)
+        sources = [f for f in changed if f.endswith(".cpp") and f.startswith("src/")]
+        if sources:
+            run(sys.executable, "tools/pc_stub_empty.py", "--all", *sources)
+        run("git", "add", "-A", *changed)
+
+    # PC changes that the merge dropped: either upstream finished that code (intended) or a PC
+    # fix was lost (re-apply it). Review these.
+    marker = ("TARGET_PC", "PC_EMPTY_STUB", "uintptr_t", "BE(", "JKR_NEW", "JKR_DELETE", "OFFSET_PTR")
+    dropped = {}
+    for line_info in run("git", "diff", "--cached", "-U0", "HEAD", "--", "src", "include", capture=True).splitlines():
+        if line_info.startswith("+++ b/"):
+            current = line_info[6:]
+        elif line_info.startswith("-") and not line_info.startswith("---") and any(m in line_info for m in marker):
+            dropped[current] = dropped.get(current, 0) + 1
+    if dropped:
+        print("\nfiles where PC-layer lines were removed by the merge (count):")
+        for f, n in sorted(dropped.items(), key=lambda kv: -kv[1]):
+            print(f"  {n:4d}  {f}")
+    print("\nmerge staged; build, fix PC issues in the new code, then commit")
     return 0
 
 
