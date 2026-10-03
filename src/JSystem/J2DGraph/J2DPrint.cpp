@@ -405,7 +405,7 @@ u16 J2DPrint::doEscapeCode(const u8** param_1, u8 param_2) {
         break;
     }
     case 'CC':
-        field_0x8 = getNumberS32(param_1, *(u32*)&mCharColor, *(u32*)&field_0x8, 16);
+        field_0x8 = getNumberS32(param_1, mCharColor.toUInt32(), field_0x8.toUInt32(), 16);
         local_40 = field_0x8;
         local_40.a = local_40.a * param_2 / 0xff;
         local_44.a = local_44.a * param_2 / 0xff;
@@ -419,7 +419,7 @@ u16 J2DPrint::doEscapeCode(const u8** param_1, u8 param_2) {
         mFont->setGradColor(local_40, *local_68);
         break;
     case 'GC':
-        field_0xc = getNumberS32(param_1, *(u32*)&mGradColor, *(u32*)&field_0xc, 16);
+        field_0xc = getNumberS32(param_1, mGradColor.toUInt32(), field_0xc.toUInt32(), 16);
         local_44 = field_0xc;
         local_40.a = local_40.a * param_2 / 0xff;
         local_44.a = local_44.a * param_2 / 0xff;

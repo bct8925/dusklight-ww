@@ -110,8 +110,8 @@ struct J3DTevStage {
     }
 
     void load(u32) const {
-        J3DGDWriteBPCmd(*(u32*)&mTevColorReg);
-        J3DGDWriteBPCmd(*(u32*)&mTevAlphaReg);
+        J3DGDWriteBPCmd(*(BE(u32)*)&mTevColorReg);
+        J3DGDWriteBPCmd(*(BE(u32)*)&mTevAlphaReg);
     }
 
     void getABias() const {}

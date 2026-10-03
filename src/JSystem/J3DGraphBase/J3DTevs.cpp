@@ -131,7 +131,7 @@ bool isTexNoReg(void* param_0) {
 
 /* 802EC37C-802EC388       .text getTexNoReg__FPv */
 u16 getTexNoReg(void* param_0) {
-    return *(u32*)((u8*)param_0 + 1);
+    return *(BE(u32)*)((u8*)param_0 + 1) & 0xFFFFFF;
 }
 
 /* 802EC388-802EC530       .text loadTexNo__FUlRCUs */
