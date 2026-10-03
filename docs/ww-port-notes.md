@@ -209,13 +209,14 @@ off the title path.
 | `ghidra_lookup.py` | Print functions from the Ghidra export by name (`dCamera_c::Run`), substring, or address (`0x8007de94`, resolved through the decomp's `symbols.txt`); `--list` for names only. Export path from `--export` / `GHIDRA_EXPORT` / the default above |
 | `jkr_new_codemod.py` | Rewrote game `new`/`delete` to `JKR_NEW`/`JKR_DELETE` (already applied; rerun on new code) |
 | `port_be_fields.py` | Copy dusklight's `BE()`/`OFFSET_PTR` field annotations onto same-named TWW **structs**, matched by `/* 0xNN */` offset. Use `--dry-run` first. It wraps *our* types. Skip runtime classes and TP-only formats (JPA v2 ≠ our JPA v1) |
+| `pdb_sym.py` | Resolve image offsets to symbols through the PDB (e.g. which static a stray pointer in a log belongs to; log `ptr - GetModuleHandle(NULL)`) |
 | `crashtrace.py` | Debug-API crash reporter / `--sample N` hang sampler (dbghelp, no debugger needed) |
 | `list_stage_actors.py` | Actor RELs a stage room places, from the ISO |
 | `build_errors.py`, `pcpatch.py`, `msvc.cmd` | Build-log tally, patch helpers, VS environment |
 
 ## Status
 
-M1.0–M1.5 are done. M1.6 (archives) is done apart from its exit check. M1.8 (stage loading) is mostly done. Parts of M1.7 (textures, particles) were pulled forward. **Nothing is drawn yet** (black window). The frame loop runs at about 60 fps.
+M1.0–M1.5 are done. M1.6 (archives) is done apart from its exit check. M1.7–M1.10 are working: **the title screen renders and animates** (2026-10-03): the demo camera flies over the sea, the King of Red Lions, Link on the cliff, gulls, clouds, the logo with "the Wind Waker" and PRESS START. The cinemascope bars are the game's own (`dCamera_c` trim); at wide window aspects aurora crops the 4:3 image vertically, so the bars look uneven. Frame rate is about 20 fps in a RelWithDebInfo build.
 
 **Boot sequence that works now** (see `trace.txt`):
 1. `LOGO_SCENE`:
@@ -225,11 +226,20 @@ M1.0–M1.5 are done. M1.6 (archives) is done apart from its exit check. M1.8 (s
    - sets up particles (`common.jpc`) and `ActorDat.bin`.
 2. `OPENING_SCENE`, the title-screen play scene on `sea_T` room 44:
    - creates `KANKYO`, `KYEFF`(2), `ENVSE`, `CAMERA`, `SEA`, `VRBOX`(2), `ROOM_SCENE` and `PLAYER` (Link), then `TITLE` and `METER`;
-   - `SHIP` fails its create legitimately (save flag `MET_KORL` unset), and the cleanup path works.
+   - `SHIP` fails its create legitimately (save flag `MET_KORL` unset), and the cleanup path works;
+   - event 80 runs the `title.stb` demo (JStudio, `Demo51.arc`), which creates the demo actors and drives the camera. `daSea` culls itself in room 44 on purpose (Outset has its own water).
 
-**No crash blocker now.** The game runs the title scene, the overlap fade and the scene change to completion, building about 70 aurora shaders from real draws. Fixed since the last update: J3D tex-matrix, fog and indirect-matrix byte order (this caused an infinite loop in `texScrollCheck`), J3D material info struct padding (`J3DTexCoordInfo`, `J3DTevOrderInfo`, `J3DTevSwapModeInfo`, `J3DIndTevStageInfo`: MSVC ignores `ALIGN_DECL`), and the stale pipeline cache above. **Next:** check what actually appears on screen (J2D, J3D, particles, sea), then the two `dMap_c` stubs reached (`drawActorPointMiniMap`, `mapBufferSendAGB`).
+**Found while bringing the title up** (all in tww-private `pc`; each is a class of bug worth checking elsewhere):
+- J3D joint init data and its index table were never byte-swapped, so every unanimated model had garbage joint matrices (sky box, island).
+- `GFSetVtxDescv` must replace the whole vertex descriptor (the GF call writes the raw CP registers); aurora's `GXSetVtxDescv` only updates the listed attributes.
+- J3D materials bind textures by physical address inside their display lists. On PC `J3DMaterial::load*` first calls `J3DTevBlock::loadTexture()`, which binds real `GXTexObj`s (`J3DTexture::loadGX`, in `J3DTevs.cpp`). `J3DTexture::setResTIMG` keeps data pointers on the side because the relative-offset patching overflows the 32-bit offset fields.
+- `J3DLoadArrayBasePtr` and the model matrix arrays go to aurora as sized commands (`J3DSys::setModelDrawMtx(ptr, count)`).
+- JStudio: stb/fvb data is big-endian (`BE(u32)` reads, swapped copies of list/hermite data), `'STB '`/`'MESG'` multi-character signatures are little-endian on MSVC (use byte arrays), `TLinkList` node offsets are `-offsetof` (the vtable is 8 bytes), and the null audio has to create a `JSND` object.
+- `JKRHeap::alloc` returns zeroed memory on PC: a fresh GameCube heap is zero and the game reads members of new objects before writing them (demo camera, `TVariableValue`, the fast-create request size).
+- Hard-coded structure sizes break with 64-bit pointers (`fpcFCtRq_Request` allocated 0x50 bytes for a larger request).
+- Aurora's cached `GXTexObj`s must outlive the call (`J3DSys::reinitTexture`'s texture object is static now).
 
-Stubs reached by a run to the title (see Ghidra section): `dPa_waveEcallBack::draw`, `dCamera_c::getEvStringData`, `dCamera_c::getEvIntData`, `dCamera_c::pauseEvCamera` (plus `searchEventArgData`, a dependency). The Ghidra rewrites of these live only on tww-private's `ghidra` branch; on `pc` they are still empty `PC_EMPTY_STUB` bodies. Expect `StartEventCamera`/`getEvFloatData`/`getEvXyzData`/`getEvActor` next.
+Stubs reached by a run to the title (see Ghidra section): `dMap_c::drawActorPointMiniMap`, `dMap_c::mapBufferSendAGB`. The `ghidra` branch also rewrites `dCamera_c::getEvStringData`/`getEvIntData`/`pauseEvCamera` and `dPa_waveEcallBack::draw`; running with `pc` only gives the same picture so far. Not yet checked: pressing Start (the title's next scene), audio (null), and the remaining visual differences from the GameCube (Link's lighting, particle/wave details).
 
 **Commits since the fork, in order:**
 
