@@ -29,6 +29,10 @@ typedef struct base_process_class {
     /* 0xAC */ void* mpUserData;
     /* 0xB0 */ u32 mParameters;
     /* 0xB4 */ int mSubType;
+#if TARGET_PC
+    // Puts the vtable pointer at the start of every process (see PC_BASE_MEMBER).
+    virtual ~base_process_class();
+#endif
 } base_process_class;  // Size: 0xB8
 
 BOOL fpcBs_Is_JustOfType(int pType1, int pType2);

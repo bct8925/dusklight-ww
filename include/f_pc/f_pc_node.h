@@ -12,8 +12,13 @@ typedef struct nodedraw_method_class {
     /* 0x10 */ process_method_func mpDrawFunc;
 } nodedraw_method_class;
 
+#if TARGET_PC
+typedef struct process_node_class : public base_process_class {
+    PC_BASE_MEMBER(base_process_class, base)
+#else
 typedef struct process_node_class {
     /* 0x00 */ base_process_class base;
+#endif
     /* 0xB8 */ nodedraw_method_class* mpNodeMtd;
     /* 0xBC */ layer_class mLayer;
     /* 0xE8 */ node_list_class mLayerNodeLists[16];

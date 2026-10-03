@@ -39,8 +39,13 @@ struct view_port_class {
     /* 0x18 */ scissor_class mScissor;
 };
 
+#if TARGET_PC
+struct view_class : public leafdraw_class {
+    PC_BASE_MEMBER(leafdraw_class, base)
+#else
 struct view_class {
     /* 0x000 */ leafdraw_class base;
+#endif
     /* 0x0C0 */ leafdraw_method_class* sub_method;
     /* 0x0C4 */ u8 field_0xc4;
     /* 0x0C8 */ f32 mNear;

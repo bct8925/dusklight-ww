@@ -56,11 +56,16 @@ public:
     J3DDisplayListObj* getSharedDisplayListObj() { return mSharedDLObj; }
     J3DIndBlock* getIndBlock() { return mIndBlock; }
     J3DMaterialAnm* getMaterialAnm() {
+#if TARGET_PC
+        // GameCube addresses >= 0xC0000000 mark "no animation"; PC heap addresses can be anything.
+        return mMaterialAnm;
+#else
         if ((uintptr_t)mMaterialAnm < 0xC0000000) {
             return mMaterialAnm;
         } else {
             return NULL;
         }
+#endif
     }
     J3DNBTScale* getNBTScale() { return mTexGenBlock->getNBTScale(); }
     u16 getTexNo(u32 idx) { return mTevBlock->getTexNo(idx); }

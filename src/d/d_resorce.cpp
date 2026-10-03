@@ -22,6 +22,9 @@
 #include "stdio.h"
 #include "string.h"
 #include "dolphin/os/OSCache.h"
+#if TARGET_PC
+#include "dusk/trace.h"
+#endif
 
 /* 8006D804-8006D824       .text __ct__11dRes_info_cFv */
 dRes_info_c::dRes_info_c()
@@ -203,13 +206,23 @@ int dRes_info_c::loadResource() {
             if (resType == 'BMD ') {
                 pRes = J3DModelLoaderDataBase::load(pRes, 0x51240020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 setToonTex(((J3DModelData*)pRes));
             } else if (resType == 'BMDM') {
                 pRes = J3DModelLoaderDataBase::load(pRes, 0x51240020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 for (u16 j = 0; j < ((J3DModelData*)pRes)->getMaterialNum(); j++) {
                     J3DMaterial* pMaterial = ((J3DModelData*)pRes)->getMaterialNodePointer(j);
@@ -217,7 +230,12 @@ int dRes_info_c::loadResource() {
 
                     J3DMaterialAnm* pAnm = JKR_NEW J3DMaterialAnm();
                     if (pAnm == NULL)
-                        return -1;
+                        {
+#if TARGET_PC
+                            DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                            return -1;
+                        }
                     pMaterial->setMaterialAnm(pAnm);
                 }
 
@@ -225,7 +243,12 @@ int dRes_info_c::loadResource() {
             } else if (resType == 'BMDC') {
                 pRes = J3DModelLoaderDataBase::load(pRes, 0x51240020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 for (u16 j = 0; j < ((J3DModelData*)pRes)->getMaterialNum(); j++) {
                     J3DMaterial* pMaterial = ((J3DModelData*)pRes)->getMaterialNodePointer(j);
@@ -236,7 +259,12 @@ int dRes_info_c::loadResource() {
             } else if (resType == 'BMDS') {
                 pRes = J3DModelLoaderDataBase::load(pRes, 0x00220020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 for (u16 j = 0; j < ((J3DModelData*)pRes)->getMaterialNum(); j++) {
                     J3DMaterial* pMaterial = ((J3DModelData*)pRes)->getMaterialNodePointer(j);
@@ -244,7 +272,12 @@ int dRes_info_c::loadResource() {
 
                     J3DMaterialAnm* pAnm = JKR_NEW J3DMaterialAnm();
                     if (pAnm == NULL)
-                        return -1;
+                        {
+#if TARGET_PC
+                            DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                            return -1;
+                        }
                     pMaterial->setMaterialAnm(pAnm);
                 }
 
@@ -252,14 +285,24 @@ int dRes_info_c::loadResource() {
             } else if (resType == 'BSMD') {
                 pRes = J3DModelLoaderDataBase::load(pRes, 0x01020020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 for (u16 j = 0; j < ((J3DModelData*)pRes)->getMaterialNum(); j++) {
                     J3DMaterial* pMaterial = ((J3DModelData*)pRes)->getMaterialNodePointer(j);
 
                     J3DMaterialAnm* pAnm = JKR_NEW J3DMaterialAnm();
                     if (pAnm == NULL)
-                        return -1;
+                        {
+#if TARGET_PC
+                            DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                            return -1;
+                        }
 
                     pMaterial->setMaterialAnm(pAnm);
                 }
@@ -268,24 +311,44 @@ int dRes_info_c::loadResource() {
             } else if (resType == 'BDL ') {
                 pRes = J3DModelLoaderDataBase::loadBinaryDisplayList(pRes, 0x00002020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 setToonTex(((J3DModelData*)pRes));
             } else if (resType == 'BDLL') {
                 pRes = J3DModelLoaderDataBase::loadBinaryDisplayList(pRes, 0x00001020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
             } else if (resType == 'BDLM') {
                 pRes = J3DModelLoaderDataBase::loadBinaryDisplayList(pRes, 0x00002020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 for (u16 j = 0; j < ((J3DModelData*)pRes)->getMaterialNum(); j++) {
                     J3DMaterial* pMaterial = ((J3DModelData*)pRes)->getMaterialNodePointer(j);
 
                     J3DMaterialAnm* pAnm = JKR_NEW J3DMaterialAnm();
                     if (pAnm == NULL)
-                        return -1;
+                        {
+#if TARGET_PC
+                            DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                            return -1;
+                        }
 
                     pMaterial->setMaterialAnm(pAnm);
                 }
@@ -294,14 +357,24 @@ int dRes_info_c::loadResource() {
             } else if (resType == 'BDLI') {
                 pRes = J3DModelLoaderDataBase::loadBinaryDisplayList(pRes, 0x01002020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 for (u16 j = 0; j < ((J3DModelData*)pRes)->getMaterialNum(); j++) {
                     J3DMaterial* pMaterial = ((J3DModelData*)pRes)->getMaterialNodePointer(j);
 
                     J3DMaterialAnm* pAnm = JKR_NEW J3DMaterialAnm();
                     if (pAnm == NULL)
-                        return -1;
+                        {
+#if TARGET_PC
+                            DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                            return -1;
+                        }
                     pMaterial->setMaterialAnm(pAnm);
                 }
 
@@ -309,13 +382,23 @@ int dRes_info_c::loadResource() {
             } else if (resType == 'BDLC') {
                 pRes = J3DModelLoaderDataBase::loadBinaryDisplayList(pRes, 0x00002020);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 setToonTex(((J3DModelData*)pRes));
             } else if (resType == 'BLS ') {
                 pRes = J3DClusterLoaderDataBase::load(pRes);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
             } else if (resType == 'BCKS' || resType == 'BCK ') {
                 JUTDataFileHeader* fileHeader = (JUTDataFileHeader*)pRes;
                 void *pBasData;
@@ -330,18 +413,33 @@ int dRes_info_c::loadResource() {
 
                 mDoExt_transAnmBas *pAnm  = JKR_NEW mDoExt_transAnmBas(pBasData);
                 if (pAnm == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 J3DAnmLoaderDataBase::setResource(pAnm, pRes);
                 pRes = pAnm;
             } else if (resType == 'BTP ' || resType == 'BTK ' || resType == 'BPK ' || resType == 'BRK ' || resType == 'BLK ' || resType == 'BVA ') {
                 pRes = J3DAnmLoaderDataBase::load(pRes);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
             } else if (resType == 'BMT ') {
                 pRes = J3DModelLoaderDataBase::loadMaterialTable(pRes);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 for (u16 j = 0; j < ((J3DMaterialTable*)pRes)->getMaterialNum(); j++) {
                     J3DMaterial* pMaterial = ((J3DMaterialTable*)pRes)->getMaterialNodePointer(j);
@@ -352,7 +450,12 @@ int dRes_info_c::loadResource() {
             } else if (resType == 'BMTM') {
                 pRes = J3DModelLoaderDataBase::loadMaterialTable(pRes);
                 if (pRes == NULL)
-                    return -1;
+                    {
+#if TARGET_PC
+                        DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                        return -1;
+                    }
 
                 for (u16 j = 0; j < ((J3DMaterialTable*)pRes)->getMaterialNum(); j++) {
                     J3DMaterial* pMaterial = ((J3DMaterialTable*)pRes)->getMaterialNodePointer(j);
@@ -360,7 +463,12 @@ int dRes_info_c::loadResource() {
 
                     J3DMaterialAnm* pAnm = JKR_NEW J3DMaterialAnm();
                     if (pAnm == NULL)
-                        return -1;
+                        {
+#if TARGET_PC
+                            DUSK_TRACE("%s.arc: %08x resource %s failed", mArchiveName, *pResType, pArcFinder->mEntryName);
+#endif
+                            return -1;
+                        }
                     pMaterial->setMaterialAnm(pAnm);
                 }
 

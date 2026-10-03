@@ -62,6 +62,12 @@ void fpcBs_DeleteAppend(base_process_class* i_proc) {
     }
 }
 
+#if TARGET_PC
+base_process_class::~base_process_class() {
+    // Only exists so that the root process class has a vtable.
+}
+#endif
+
 /* 8003C9A0-8003C9FC       .text fpcBs_IsDelete__FP18base_process_class */
 BOOL fpcBs_IsDelete(base_process_class* i_proc) {
     BOOL result;

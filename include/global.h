@@ -221,6 +221,16 @@ void dusk_empty_stub_hit(const char* function);
 #define DUSK_CONSTEXPR IF_DUSK(constexpr)
 
 #if TARGET_PC && defined(__cplusplus)
+// Process classes embed their base as a member named `base` (or `view`). MSVC puts the vtable
+// pointer of a class with virtual functions before a non-polymorphic base, which shifts the
+// process fields of polymorphic actors; so on PC the base is inherited (from a polymorphic
+// base_process_class) and stays reachable under its old name through this property.
+#define PC_BASE_MEMBER(T, name)                                                                    \
+    T& pc_get_##name() const { return const_cast<T&>(static_cast<const T&>(*this)); }             \
+    __declspec(property(get = pc_get_##name)) T& name;
+#endif
+
+#if TARGET_PC && defined(__cplusplus)
 // Game code uses JKR_NEW/JKR_DELETE for its allocations (see JKRNew.h).
 #include "JSystem/JKernel/JKRNew.h"
 #endif

@@ -37,8 +37,13 @@ struct msg_method_class {
     /* 0x00 */ leafdraw_method_class base;
 };
 
+#if TARGET_PC
+struct msg_class : public leafdraw_class {
+    PC_BASE_MEMBER(leafdraw_class, base)
+#else
 struct msg_class {
     /* 0x00 */ leafdraw_class base;
+#endif
     /* 0xC0 */ int mMsgType;
     /* 0xC4 */ create_tag_class draw_tag;
     /* 0xD8 */ msg_method_class* sub_method;

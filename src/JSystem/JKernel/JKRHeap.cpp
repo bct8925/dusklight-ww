@@ -269,9 +269,15 @@ u8 JKRHeap::changeGroupID(u8 groupID) {
 
 /* 802B0918-802B0978       .text getMaxAllocatableSize__7JKRHeapFi */
 u32 JKRHeap::getMaxAllocatableSize(int alignment) {
+#if TARGET_PC
+    // The original derives the alignment slack from the block address, assuming a 16-byte block
+    // header; PC headers are larger. Reserve the worst case so the result is always allocatable.
+    return ~(alignment - 1) & (getFreeSize() - alignment);
+#else
     uintptr_t maxFreeBlock = (uintptr_t)getMaxFreeBlock();
     u32 ptrOffset = (alignment - 1) & alignment - (maxFreeBlock & 0xf);
     return ~(alignment - 1) & (getFreeSize() - ptrOffset);
+#endif
 }
 
 /* 802B0978-802B09B0       .text findFromRoot__7JKRHeapFPv */

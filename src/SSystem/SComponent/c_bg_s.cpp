@@ -153,6 +153,26 @@ void* cBgS::ConvDzb(void* work) {
         return pbgd;
     }
 
+#if TARGET_PC
+    // Collision data is big-endian with 32-bit offsets: keep the tables relative (OffsetPtr), and
+    // swap the vertices in place once, since the collision math reads them as host Vec (as in
+    // dusklight).
+    if (pbgd->m_v_num != 0) {
+        pbgd->m_v_tbl.setBase(pbgd);
+    }
+    pbgd->m_t_tbl.setBase(pbgd);
+    pbgd->m_b_tbl.setBase(pbgd);
+    pbgd->m_tree_tbl.setBase(pbgd);
+    pbgd->m_g_tbl.setBase(pbgd);
+    pbgd->m_ti_tbl.setBase(pbgd);
+    for (s32 i = 0; i < pbgd->m_g_num; i++) {
+        ((cBgD_Grp_t*)pbgd->m_g_tbl)[i].m_name.setBase(pbgd);
+    }
+    for (s32 i = 0; i < pbgd->m_v_num; i++) {
+        Vec& v = pbgd->m_v_tbl[i];
+        v = BE<Vec>::swap(v);
+    }
+#else
     JUT_ASSERT(0x214, ((int)pbgd->m_v_tbl % 4) == 0);
     JUT_ASSERT(0x215, ((int)pbgd->m_t_tbl % 2) == 0);
     JUT_ASSERT(0x216, ((int)pbgd->m_b_tbl % 2) == 0);
@@ -173,6 +193,7 @@ void* cBgS::ConvDzb(void* work) {
         pbgd->m_g_tbl[i].m_name = (char*)((u32)pbgd->m_g_tbl[i].m_name + (uintptr_t)pbgd);
     }
 
+#endif
     return pbgd;
 }
 

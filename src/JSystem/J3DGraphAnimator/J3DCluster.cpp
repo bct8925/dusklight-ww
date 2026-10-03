@@ -308,15 +308,15 @@ int J3DSkinDeform::initMtxIndexArray(J3DModelData* modelData) {
                 if (cmd != GX_TRIANGLEFAN && cmd != GX_TRIANGLESTRIP)
                     break;
 
-                int vtxCount = *(u16*)dl;
+                int vtxCount = *(BE(u16)*)dl;  // display lists are big-endian
                 dl += 2;
 
                 u16 useMtxIdxBuf[10];
                 for (int k = 0; k < vtxCount; k++) {
                     u8* src = &dl[vtxSize * k];
                     u8 pnmtxIdx = (u32)*(u8*)&src[pnmtxIdxOffs] / 3;
-                    u16 posIdx = *(u16*)&src[posOffs];
-                    u16 nrmIdx = *(u16*)&src[nrmOffs];
+                    u16 posIdx = *(BE(u16)*)&src[posOffs];
+                    u16 nrmIdx = *(BE(u16)*)&src[nrmOffs];
 
                     u16 useMtxIdx = shapeMtx->getUseMtxIndex(pnmtxIdx);
                     if (useMtxIdx == 0xFFFF) {
@@ -378,9 +378,9 @@ void J3DSkinDeform::changeFastSkinDL(J3DModelData* pModelData) {
                     if (cmd != GX_TRIANGLEFAN && cmd != GX_TRIANGLESTRIP)
                         break;
 
-                    int vtxCount = *(u16*)dl;
+                    int vtxCount = *(BE(u16)*)dl;  // display lists are big-endian
                     dl += 2;
-                    *(u16*)dst = vtxCount;
+                    *(BE(u16)*)dst = vtxCount;
                     dst += 2;
 
                     for (int k = 0; k < vtxCount; k++) {

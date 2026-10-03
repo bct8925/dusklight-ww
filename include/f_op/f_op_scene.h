@@ -18,9 +18,15 @@ typedef struct scene_process_profile_definition {
     /* 0x24 */ u32 field_0x24; // padding?
 } scene_process_profile_definition;
 
+#if TARGET_PC
+class scene_class : public process_node_class {
+public:
+    PC_BASE_MEMBER(process_node_class, base)
+#else
 class scene_class {
 public:
     /* 0x000 */ process_node_class base;
+#endif
     /* 0x1AC */ scene_method_class* mpMtd;
     /* 0x1B0 */ scene_tag_class mScnTg;
 };
