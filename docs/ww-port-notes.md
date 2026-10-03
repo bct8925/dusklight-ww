@@ -6,7 +6,8 @@ Context for resuming the port. Last updated 2026-10-03, at commit `05f1e6d`.
 
 - A native PC port of *The Legend of Zelda: The Wind Waker* (GZLE01, USA rev 0), built the way
   dusklight ports Twilight Princess. This repo, `bct8925/dusklight-ww`, is a **fork of
-  TwilitRealm/dusklight** (CC0) with TP's game code replaced by the **zeldaret/tww decomp**.
+  TwilitRealm/dusklight** (CC0) with TP's game code replaced by the **zeldaret/tww decomp**,
+  which comes in as the `tww/` submodule (see "Repositories").
 - **Never use melee-pc code** (`bct8925/melee-pc`, GPL). Dusklight's conventions and code only.
 - **The fork is public. Ask before every push.**
 - **Never commit Nintendo data**:
@@ -15,26 +16,47 @@ Context for resuming the port. Last updated 2026-10-03, at commit `05f1e6d`.
 - zeldaret/tww and dusklight upstream reject primarily AI-generated PRs. Keep AI-written code
   here, or on a private tww branch. Anything sent upstream must be the user's own work.
 - **Ghidra-derived code is for personal use.** Functions rewritten from the Wind Waker Ghidra
-  project make the port work. They are never submitted to zeldaret/tww or dusklight. Whether
-  they live in this public fork or on a local-only branch is still undecided; ask before
-  committing them.
+  project make the port work. They are never submitted to zeldaret/tww or dusklight, and live
+  only on the `ghidra` branch of the private `bct8925/tww-private` repo.
 - **Never commit the Ghidra export** (or anything copied wholesale from it). It is derived from
   Nintendo's binary. Only the lookup tool is in the repo.
 - Plan file: `C:\Users\brian\.claude\plans\create-the-plan-for-generic-clarke.md`. It covers
   Milestone 1 "boot to title screen" (M1.0–M1.10) and M2–M6.
+
+## Repositories
+
+Four repos are involved:
+
+| Repo | Visibility | What it holds |
+|---|---|---|
+| `zeldaret/tww` | public, official | The Wind Waker decomp. Never pushed to. |
+| `bct8925/tww-private` | **private** | The decomp as the port builds it. Branches: `main` (mirror of `zeldaret/tww` main), `pc` (main + every PC port change to decomp files: `TARGET_PC` edits, `BE()`, pointer fixes, `JKR_NEW`, `PC_EMPTY_STUB` bodies, `JKRNew.h`; also drops the decomp's Dolphin SDK and PowerPC runtime, which aurora replaces), `ghidra` (pc + functions rewritten from the Ghidra export). |
+| `TwilitRealm/dusklight` | public, official | The engine (Twilight Princess port). Remote `dusklight-upstream`; never pushed to. |
+| `bct8925/dusklight-ww` | **public** | This repo: the engine fork plus the Wind Waker port layer (`src/dusk`, `sdk_compat`, `cmake`, `files.cmake`, `tools`, `docs`). It **does not commit decomp sources**; it pins a `tww-private` `pc` commit as the `tww/` submodule. |
+
+Consequences:
+- Changes to decomp files (`tww/src`, `tww/include`, `tww/assets`) are commits in the `tww/`
+  submodule, on `pc` (or `ghidra` for Ghidra-derived code), pushed to `tww-private`; then bump
+  the submodule pointer here (`git add tww`). Never commit Ghidra-derived code on `pc`.
+- dusklight-ww's committed submodule pointer is always a `pc` commit. To run with the Ghidra
+  rewrites locally, check out `ghidra` in `tww/` (`git -C tww checkout ghidra`) and rebuild;
+  don't commit that pointer.
+- Others can read dusklight-ww but can't build it without access to `tww-private`.
 
 ## Where things are
 
 | What | Path |
 |---|---|
 | This repo | `C:\Users\brian\Dev\dusklight-ww` (branch `main`, remote `origin`) |
+| Decomp, as built | `tww/` submodule here (`bct8925/tww-private`; remote `zeldaret` for the official repo) |
+| Standalone tww-private checkout | `C:\Users\brian\Dev\tww-private` (for work outside the port, e.g. on `ghidra`) |
 | Dusklight upstream | remote `dusklight-upstream` (read TP's PC fixes: `git show dusklight-upstream/main:<path>`) |
-| TWW decomp (source of truth for game code) | `C:\Users\brian\Dev\tww` (GitHub `bct8925/tww`) |
+| Local tww build (DOL assets for `WW_LOCAL_ASSETS`, `symbols.txt`) | `C:\Users\brian\Dev\tww` (GitHub `bct8925/tww`, public fork) |
 | Disc image | `C:\Users\brian\Dev\tww\orig\GZLE01\game.iso` (trimmed dump; `files/` holds only RELs) |
 | User data, logs, `trace.txt` | `%APPDATA%\bct8925\Dusklight-WW\` (`logs\dusklight-*.log`) |
 | Ghidra C export of `main.dol` | `C:\Users\brian\ghidra\WindWaker.rep\main.1.c` (+ `main.1.h` types). Local only; the lookup cache `main.1.c.index` sits beside it |
 
-In the dusklight tree, JSystem lives in `libs/JSystem/...`. In ours it mirrors TWW: `include/JSystem/...` and `src/JSystem/...`.
+In the dusklight tree, JSystem lives in `libs/JSystem/...`. In ours it mirrors TWW: `tww/include/JSystem/...` and `tww/src/JSystem/...`.
 
 ## Build, run, debug
 
@@ -104,7 +126,7 @@ workflow:
    grep "stub hit" "$APPDATA/bct8925/Dusklight-WW/trace.txt"
    ```
 
-   After enabling more actors, run `py tools/pc_stub_empty.py --all src/d/actor/<new>.cpp`.
+   After enabling more actors, run `py tools/pc_stub_empty.py --all tww/src/d/actor/<new>.cpp`.
 2. **Look the function up:**
    - by name: `py tools/ghidra_lookup.py <Class::method>`. Substring by default, `--exact`,
      `--list` for names only;
@@ -146,19 +168,27 @@ off the title path.
 
 ## Repo workflow
 
-- **Updating from the official decomp:** `py tools/update_tww.py` (clean tree on the branch to update, normally `main`).
-  It fetches the `zeldaret` remote of `../tww` (https://github.com/zeldaret/tww.git, added if missing; never a fork),
-  imports it onto `vendor/tww` through a temporary worktree and merges that into the current branch with
-  `-X theirs`: **upstream wins every conflicting hunk**, so a function they have now decompiled replaces our
-  `PC_EMPTY_STUB`/Ghidra body. It then re-runs `jkr_new_codemod.py` and `pc_stub_empty.py --all` on the touched files and
-  prints the files where PC-layer lines (`TARGET_PC`, `uintptr_t`, `BE(`, `JKR_*`) were dropped. **Review that list**: a dropped line is
-  either obsolete (upstream finished the code) or a lost PC fix to re-apply (the first update lost the `uintptr_t` callback parameter in
-  `d_a_player_main.cpp`). Then run `gen_ww_files.py` and `gen_profile_list.py`, rebuild and commit. `--manual` leaves conflicts for hand resolution.
-  Last import: `f5234ec8f4`. Do this on `main`, then `git merge main` into `ghidra-local`.
-- **Branches:** `main` is the public line (no Ghidra-derived code); `ghidra-local` is main plus the Ghidra rewrites and is never pushed.
-- **Imports (manual):** `tools/import_tww.py` imports a committed tww revision onto branch `vendor/tww`, which is then merged into `main`. PC edits live only on `main`. The managed asset folders are `assets/{D44J01,GZLE01,GZLJ01,GZLP01}`.
-- After an import, run:
-  - `py tools/gen_ww_files.py`, which writes `cmake/WWGameFiles.cmake` from `config.libs` in configure.py and skips `DEBUG_ONLY` objects;
+- **Clone:** `git clone --recursive https://github.com/bct8925/dusklight-ww.git` (needs access to
+  `tww-private` for the `tww/` submodule).
+- **Changing decomp code:** edit under `tww/`, commit in the submodule on `pc` (Ghidra-derived
+  code on `ghidra` only), `git -C tww push`, merge `pc` into `ghidra`, then `git add tww` here and
+  commit the pointer. `tools/pcpatch.py` and the codemods take `tww/...` paths.
+- **Updating from the official decomp:** `py tools/update_tww.py` (submodule on a clean `pc`).
+  It fetches the submodule's `zeldaret` remote (https://github.com/zeldaret/tww.git, added if
+  missing; never a fork) and merges `zeldaret/main` into `pc` with `-X theirs`: **upstream wins
+  every conflicting hunk**, so a function they have now decompiled replaces our `PC_EMPTY_STUB`
+  body. Upstream changes to the removed Dolphin SDK / PowerPC runtime paths are dropped. It then
+  re-runs `jkr_new_codemod.py` and `pc_stub_empty.py --all` on the touched files and prints the
+  files where PC-layer lines (`TARGET_PC`, `uintptr_t`, `BE(`, `JKR_*`) were dropped. **Review
+  that list**: a dropped line is either obsolete (upstream finished the code) or a lost PC fix to
+  re-apply (the first update lost the `uintptr_t` callback parameter in `d_a_player_main.cpp`).
+  `--manual` leaves conflicts for hand resolution. Then follow the "Afterwards" steps in the
+  script's docstring: commit and push `pc`, push `zeldaret/main` to tww-private `main`, merge `pc`
+  into `ghidra`, run `gen_ww_files.py` and `gen_profile_list.py`, and commit the submodule pointer.
+  Current base: `f5234ec8f4`.
+- After a decomp update, run:
+  - `py tools/gen_ww_files.py`, which writes `cmake/WWGameFiles.cmake` from `config.libs` in
+    `tww/configure.py` and skips `DEBUG_ONLY` objects;
   - `py tools/gen_profile_list.py`.
 - **Which actors are built:** `files.cmake` → `WW_ENABLED_RELS`. There are no RELs on PC; enabled actors are linked into the exe. After changing the list, run `py tools/gen_profile_list.py`, which writes `src/dusk/ww_profile_list.cpp` plus a name table for `--trace`. Actors that aren't built are `nullptr` and `fpcBs_Create` fails cleanly ("not built" in the trace).
 - **Missing audio symbols at link:** `py tools/gen_audio_null.py build/x.log` adds no-op definitions (`src/dusk/ww_audio_null.cpp`). The wave-load checks *must* return 0, which means "ready". Returning 1 hangs the logo scene.
@@ -168,8 +198,8 @@ off the title path.
 
 | Tool | Purpose |
 |---|---|
-| `import_tww.py` | Import a tww revision to `vendor/tww` |
-| `gen_ww_files.py` | `cmake/WWGameFiles.cmake` from configure.py |
+| `update_tww.py` | Merge the official decomp into the `tww/` submodule's `pc` branch (see Repo workflow) |
+| `gen_ww_files.py` | `cmake/WWGameFiles.cmake` from `tww/configure.py` |
 | `gen_profile_list.py` | Typed profile list (MSVC mangles variable types) + `--trace` name table |
 | `gen_audio_null.py` | Null audio from link errors (`OVERRIDES` table for non-zero bodies) |
 | `gen_gx_compat.py` | `sdk_compat/pc_gx_hw_enums.h` |
@@ -197,7 +227,7 @@ M1.0–M1.5 are done. M1.6 (archives) is done apart from its exit check. M1.8 (s
 
 **No crash blocker now.** The game runs the title scene, the overlap fade and the scene change to completion, building about 70 aurora shaders from real draws. Fixed since the last update: J3D tex-matrix, fog and indirect-matrix byte order (this caused an infinite loop in `texScrollCheck`), J3D material info struct padding (`J3DTexCoordInfo`, `J3DTevOrderInfo`, `J3DTevSwapModeInfo`, `J3DIndTevStageInfo`: MSVC ignores `ALIGN_DECL`), and the stale pipeline cache above. **Next:** check what actually appears on screen (J2D, J3D, particles, sea), then the two `dMap_c` stubs reached (`drawActorPointMiniMap`, `mapBufferSendAGB`).
 
-Stubs reached by a run to the title (see Ghidra section): `dPa_waveEcallBack::draw`, `dCamera_c::getEvStringData`, `dCamera_c::getEvIntData`, `dCamera_c::pauseEvCamera` (plus `searchEventArgData`, a dependency). The Ghidra rewrites of these live only on the local `ghidra-local` branch and are not in `main`; on `main` they are still empty `PC_EMPTY_STUB` bodies. Expect `StartEventCamera`/`getEvFloatData`/`getEvXyzData`/`getEvActor` next.
+Stubs reached by a run to the title (see Ghidra section): `dPa_waveEcallBack::draw`, `dCamera_c::getEvStringData`, `dCamera_c::getEvIntData`, `dCamera_c::pauseEvCamera` (plus `searchEventArgData`, a dependency). The Ghidra rewrites of these live only on tww-private's `ghidra` branch; on `pc` they are still empty `PC_EMPTY_STUB` bodies. Expect `StartEventCamera`/`getEvFloatData`/`getEvXyzData`/`getEvActor` next.
 
 **Commits since the fork, in order:**
 

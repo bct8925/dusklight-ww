@@ -204,12 +204,12 @@ def convert(text: str) -> tuple[str, int]:
 
 
 def main() -> int:
-    roots = [Path(p) for p in sys.argv[1:]] or [ROOT / "src", ROOT / "include"]
+    roots = [Path(p) for p in sys.argv[1:]] or [ROOT / "tww" / "src", ROOT / "tww" / "include"]
     total = files = 0
     for root in roots:
         paths = [root] if root.is_file() else sorted(root.rglob("*"))
         for path in paths:
-            rel = path.resolve().relative_to(ROOT).as_posix()
+            rel = path.resolve().relative_to(ROOT).as_posix().removeprefix("tww/")
             if path.suffix not in EXTS or rel.startswith(SKIP):
                 continue
             raw = path.read_bytes().decode("utf-8", errors="surrogateescape")

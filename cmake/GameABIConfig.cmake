@@ -13,17 +13,21 @@ endif ()
 # Public game headers
 set(_game_abi_include_dirs
         ${_game_root}/include
-        ${_game_root}/assets/GZLE01
+        ${_game_root}/tww/assets/GZLE01
         ${_game_root}/extern/aurora/include/dolphin
         ${_game_root}/extern/aurora/include
         ${_game_root}/sdk_compat
         ${_game_root}/sdk/include
+        # The decomp's headers (the tww submodule; its `pc` branch drops the decomp's own Dolphin SDK
+        # copy, which aurora and sdk_compat replace).
+        ${_game_root}/tww/include
 )
 
 # Internal game headers
 set(_game_include_dirs
         ${_game_abi_include_dirs}
         ${_game_root}/src
+        ${_game_root}/tww/src
         ${_game_root}/extern
         ${CMAKE_CURRENT_BINARY_DIR}
 )

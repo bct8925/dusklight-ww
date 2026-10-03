@@ -22,7 +22,7 @@ With --all, void functions, constructors and destructors get the logging call to
 reports every undecompiled function it reaches (the log and --trace's trace.txt name them).
 Running it again changes nothing.
 
-    python tools/pc_stub_empty.py [--all] src/d/d_camera.cpp [more files...]
+    python tools/pc_stub_empty.py [--all] tww/src/d/d_camera.cpp [more files...]
 """
 
 import re

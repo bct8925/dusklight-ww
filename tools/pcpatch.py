@@ -4,7 +4,7 @@ Use from a script or `python -c`, with paths relative to the repo root:
 
     import sys; sys.path.insert(0, "tools")
     from pcpatch import pc, pc_range, stub_body, rep
-    pc("src/d/d_foo.cpp", "    old line;", "    new line;")
+    pc("tww/src/d/d_foo.cpp", "    old line;", "    new line;")
 
 Edits keep each file's line endings and fail loudly if the old text is not found exactly.
 """

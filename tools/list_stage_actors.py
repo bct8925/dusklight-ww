@@ -137,10 +137,10 @@ def main() -> int:
         files = rarc_files(disc.read(arc))
         placed += [(arc.rsplit("/", 1)[1], *n) for n in actor_names(files[dz])]
 
-    d_stage = (ROOT / "src/d/d_stage.cpp").read_text(encoding="utf-8")
+    d_stage = (ROOT / "tww/src/d/d_stage.cpp").read_text(encoding="utf-8")
     objname = {m.group(1): m.group(2) for m in re.finditer(r'OBJNAME\("([^"]+)",\s*fpcNm_(\w+)_e', d_stage)}
     defs = {}
-    for path in (ROOT / "src").rglob("*.cpp"):
+    for path in (ROOT / "tww" / "src").rglob("*.cpp"):
         for m in re.finditer(r"^\w+\s+g_profile_(\w+)\s*=", path.read_text(encoding="utf-8", errors="replace"), re.M):
             defs.setdefault(m.group(1), path.relative_to(ROOT).as_posix())
     files_cmake = (ROOT / "files.cmake").read_text(encoding="utf-8")
@@ -155,7 +155,7 @@ def main() -> int:
         if src is None:
             print(f"  ? {arc} {tag} {name}: {'no l_objectName entry' if proc is None else 'no profile for ' + proc}")
             continue
-        if src.startswith("src/d/actor/") and src not in in_dol:
+        if src.startswith("tww/src/d/actor/") and src not in in_dol:
             needed.setdefault(Path(src).stem, set()).add(name)
     print(f"{len(placed)} placed actors in {stage} room {room}; actor RELs:")
     for rel in sorted(needed):

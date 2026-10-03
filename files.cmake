@@ -1,4 +1,4 @@
-# Game sources, generated from upstream/tww/configure.py by tools/gen_ww_files.py.
+# Game sources (the tww submodule), generated from tww/configure.py by tools/gen_ww_files.py.
 include(cmake/WWGameFiles.cmake)
 
 set(DOLZEL_FILES ${WW_DOL_FILES})
@@ -27,7 +27,7 @@ set(WW_ENABLED_RELS
 )
 set(REL_FILES ${WW_PROFILE_LIST_FILES})
 foreach (rel IN LISTS WW_ENABLED_RELS)
-    list(APPEND REL_FILES src/d/actor/${rel}.cpp)
+    list(APPEND REL_FILES tww/src/d/actor/${rel}.cpp)
 endforeach ()
 
 # Each JSystem library is its own static library, as in the original build.

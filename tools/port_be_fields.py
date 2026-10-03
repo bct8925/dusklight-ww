@@ -7,7 +7,7 @@ with different field names, so this lines up each struct with dusklight's by nam
 field by its /* 0xNN */ offset comment (or by name), and rewrites TWW's plain type where
 dusklight's is the endian-aware one. Every change is printed; review the diff afterwards.
 
-    python tools/port_be_fields.py include/JSystem/J3DGraphBase/J3DStruct.h [...]
+    python tools/port_be_fields.py tww/include/JSystem/J3DGraphBase/J3DStruct.h [...]
         [--ref dusklight-upstream/main] [--dry-run]
 
 The dusklight path is derived from the TWW one (include/JSystem/... -> libs/JSystem/include/
@@ -32,6 +32,7 @@ SKIP_TYPES = {"return", "typedef", "using", "friend", "static", "virtual", "enum
 
 
 def dusklight_path(tww_path: str) -> str:
+    tww_path = tww_path.removeprefix("tww/")
     if tww_path.startswith("include/JSystem/"):
         return "libs/JSystem/" + tww_path
     if tww_path.startswith("src/JSystem/"):

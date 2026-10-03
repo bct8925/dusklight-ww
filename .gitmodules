@@ -10,3 +10,7 @@
 [submodule "mods/cosmetics"]
 	path = mods/cosmetics
 	url = https://github.com/TwilitRealm/dusklight-cosmetics
+[submodule "tww"]
+	path = tww
+	url = https://github.com/bct8925/tww-private.git
+	branch = pc
