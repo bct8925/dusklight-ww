@@ -37,7 +37,7 @@ namespace daObjSwlight {
             PRM_TYPE_S = 0x10,
         };
    
-        f32 get_power() const { return mPower; }
+        void get_power() const {}
         bool is_switch() const {
             return fopAcM_isSwitch(const_cast<Act_c*>(this), prm_get_swSave());
         }
@@ -98,7 +98,7 @@ namespace daObjSwlight {
         /* 0xF28 */ s32 mF28;
         /* 0xF2C */ s16 mF2C;
         /* 0xF2E */ u8 mF2E[0xF30 - 0xF2E];
-        /* 0xF30 */ f32 mPower;
+        /* 0xF30 */ f32 mF30;
         /* 0xF34 */ u8 mF34[0xF38 - 0xF34];
         /* 0xF38 */ Mtx mF38;
     };  // Size: 0xF68

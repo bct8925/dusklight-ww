@@ -152,6 +152,9 @@ JAIZelBasic::JAIZelBasic() {
 /* 802A1EB4-802A2F48       .text zeldaGFrameWork__11JAIZelBasicFv */
 void JAIZelBasic::zeldaGFrameWork() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A2F48-802A2F54       .text heartGaugeOn__11JAIZelBasicFv */
@@ -311,6 +314,9 @@ void JAIZelBasic::bgmStreamPlay() {
 /* 802A34A4-802A4658       .text bgmStart__11JAIZelBasicFUlUll */
 void JAIZelBasic::bgmStart(u32, u32, s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A4658-802A4770       .text bgmStop__11JAIZelBasicFUll */
@@ -368,26 +374,41 @@ void JAIZelBasic::mainBgmStopOnly(u32 param_1) {
 /* 802A47B8-802A4CDC       .text subBgmStart__11JAIZelBasicFUl */
 void JAIZelBasic::subBgmStart(u32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A4CDC-802A4DA4       .text subBgmStop__11JAIZelBasicFv */
 void JAIZelBasic::subBgmStop() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A4DA4-802A4EB8       .text subBgmStopInner__11JAIZelBasicFv */
 void JAIZelBasic::subBgmStopInner() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A4EB8-802A53B4       .text bgmNowBattle__11JAIZelBasicFf */
 void JAIZelBasic::bgmNowBattle(f32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A53B4-802A5548       .text bgmBattleGFrame__11JAIZelBasicFv */
 void JAIZelBasic::bgmBattleGFrame() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A5548-802A55AC       .text stopBattleBgm__11JAIZelBasicFv */
@@ -420,6 +441,9 @@ void JAIZelBasic::bgmNowKaitengiri() {
 /* 802A564C-802A579C       .text bgmHitSound__11JAIZelBasicFl */
 void JAIZelBasic::bgmHitSound(s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A579C-802A57A4       .text bgmSetSwordUsing__11JAIZelBasicFl */
@@ -446,6 +470,9 @@ void JAIZelBasic::onEnemyDamage() {
 /* 802A5818-802A591C       .text mbossBgmMuteProcess__11JAIZelBasicFv */
 void JAIZelBasic::mbossBgmMuteProcess() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A591C-802A59B0       .text mbossBgmNearByProcess__11JAIZelBasicFf */
@@ -550,6 +577,9 @@ void JAIZelBasic::enemyNearBy() {
 /* 802A5BA4-802A5C8C       .text enemyNearByGFrame__11JAIZelBasicFv */
 void JAIZelBasic::enemyNearByGFrame() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A5C8C-802A5D0C       .text bgmAllMute__11JAIZelBasicFUl */
@@ -597,11 +627,17 @@ void JAIZelBasic::taktModeMuteOff() {
 /* 802A5F24-802A61AC       .text cbPracticePlay__11JAIZelBasicFP3Vec */
 void JAIZelBasic::cbPracticePlay(Vec*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A61AC-802A6434       .text cbPracticeProcess__11JAIZelBasicFv */
 void JAIZelBasic::cbPracticeProcess() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A6434-802A6508       .text cbPracticeStop__11JAIZelBasicFv */
@@ -758,13 +794,20 @@ void JAIZelBasic::seDeleteObject(Vec* param_1) {
 }
 
 /* 802A86A8-802A8748       .text getLinkVoiceVowel__11JAIZelBasicFUl */
-u8 JAIZelBasic::getLinkVoiceVowel(u32) {
+u8 JAIZelBasic::getLinkVoiceVowel(u32 i_soundID) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 802A8748-802A892C       .text linkVoiceStart__11JAIZelBasicFUlP3VecUcSc */
-void JAIZelBasic::linkVoiceStart(u32, Vec*, u8, s8) {
+void JAIZelBasic::linkVoiceStart(u32 i_soundID, Vec* i_sePos, u8, s8) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A892C-802A8958       .text monsSeInit__11JAIZelBasicFv */
@@ -778,31 +821,49 @@ void JAIZelBasic::monsSeInit() {
 /* 802A8958-802A8B24       .text monsSeStart__11JAIZelBasicFUlP3VecUlUlSc */
 void JAIZelBasic::monsSeStart(u32 i_seNum, Vec*, u32, u32, s8) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A8B24-802A8BE4       .text kuroboMotionPlay__11JAIZelBasicFUlP3VecUlSc */
 void JAIZelBasic::kuroboMotionPlay(u32, Vec*, u32, s8) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A8BE4-802A8CB4       .text kuroboVoicePlay__11JAIZelBasicFUlP3VecSc */
 void JAIZelBasic::kuroboVoicePlay(u32, Vec*, s8) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A8CB4-802A8F58       .text setLevObjSE__11JAIZelBasicFUlP3VecSc */
 void JAIZelBasic::setLevObjSE(u32, Vec*, s8) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A8F58-802A90C0       .text processLevObjSE__11JAIZelBasicFv */
 void JAIZelBasic::processLevObjSE() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A90C0-802A9120       .text initLevObjSE__11JAIZelBasicFv */
 void JAIZelBasic::initLevObjSE() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A9120-802A91CC       .text charVoicePlay__11JAIZelBasicFllP3VecSc */
@@ -824,11 +885,17 @@ void JAIZelBasic::charVoicePlay(s32 param_1, s32 param_2, Vec* param_3, s8 param
 /* 802A91CC-802A92CC       .text messageSePlay__11JAIZelBasicFUsP3VecSc */
 void JAIZelBasic::messageSePlay(u16, Vec*, s8) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A92CC-802A965C       .text shipCruiseSePlay__11JAIZelBasicFP3Vecf */
 void JAIZelBasic::shipCruiseSePlay(Vec*, f32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802A965C-802A9664       .text setShipSailState__11JAIZelBasicFl */
@@ -1477,6 +1544,10 @@ void JAIZelBasic::load1stDynamicWave() {
 /* 802AB678-802AB6F4       .text check1stDynamicWave__11JAIZelBasicFv */
 BOOL JAIZelBasic::check1stDynamicWave() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 802AB6F4-802AB858       .text load2ndDynamicWave__11JAIZelBasicFv */
@@ -1510,6 +1581,9 @@ s32 JAIZelBasic::checkFirstWaves() {
 /* 802AB8B0-802AB9F4       .text setLinkHp__11JAIZelBasicFll */
 void JAIZelBasic::setLinkHp(s32, s32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802AB9F4-802ABA44       .text setLinkSwordType__11JAIZelBasicFll */
@@ -1554,6 +1628,9 @@ void JAIZelBasic::setLinkOnBoard(s32 param_1) {
 /* 802ABB18-802ABBD0       .text bgmMute__11JAIZelBasicFPP8JAISoundUllUl */
 void JAIZelBasic::bgmMute(JAISound**, u32, s32, u32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802ABBD0-802ABC3C       .text checkStreamPlaying__11JAIZelBasicFUl */
@@ -1598,6 +1675,9 @@ void JAIZelBasic::stSkyCloisters() {
 /* 802ABD34-802ABDE0       .text stSkyCloistersProcess__11JAIZelBasicFv */
 void JAIZelBasic::stSkyCloistersProcess() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802ABDE0-802ABE10       .text getRandomU32__11JAIZelBasicFUl */
@@ -1721,11 +1801,18 @@ JAISound* JAIZelBasic::makeSound(u32 param_1) {
 /* 802AC258-802AC300       .text checkSeqIDDemoPlaying__11JAIZelBasicFUl */
 void JAIZelBasic::checkSeqIDDemoPlaying(u32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802AC300-802AC400       .text checkDemoFanfarePlaying__11JAIZelBasicFv */
 u32 JAIZelBasic::checkDemoFanfarePlaying() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+    return {};
+#endif
 }
 
 /* 802AC400-802AC468       .text processDemoFanfareMute__11JAIZelBasicFv */
@@ -1745,16 +1832,25 @@ void JAIZelBasic::processDemoFanfareMute() {
 /* 802AC468-802AC594       .text muteMainBgmAll__11JAIZelBasicFv */
 void JAIZelBasic::muteMainBgmAll() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802AC594-802AC6C0       .text unmuteMainBgmAll__11JAIZelBasicFv */
 void JAIZelBasic::unmuteMainBgmAll() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802AC6C0-802AC758       .text demoBgmStop__11JAIZelBasicFUl */
 void JAIZelBasic::demoBgmStop(u32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 802AC758-802AC788       .text isDemo__11JAIZelBasicFv */

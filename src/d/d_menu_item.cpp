@@ -1298,7 +1298,7 @@ void dMenu_Item_c::itemnoteSet() {
 #if VERSION > VERSION_DEMO
         u32 color = msgDataProc.getIconColor(i);
         if (color == 0xFFFFFFFF) {
-            color = 0xFF;
+            color = 0x000000FF;
         }
 #endif
         if (iconNo == 0xFF) {
@@ -2089,10 +2089,7 @@ void dMenu_Item_c::_delete() {
 
     JKR_DELETE(scrn);
     JKR_DELETE(stick);
-
-    if (outFont != NULL) {
-        JKR_DELETE(outFont);
-    }
+    JKR_DELETE(outFont);
     
     dMs_c->_delete();
     JKR_DELETE(dMs_c);

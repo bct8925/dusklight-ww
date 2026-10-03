@@ -929,17 +929,16 @@ dDlst_alphaModel_c::dDlst_alphaModel_c() {
 
 /* 80082E58-80082EFC       .text create__18dDlst_alphaModel_cFi */
 dDlst_alphaModel_c * dDlst_alphaModel_c::create(int num) {
-    dDlst_alphaModel_c * i_this = JKR_NEW dDlst_alphaModel_c();
-    if (i_this != NULL) {
+    dDlst_alphaModel_c * alphaModel = JKR_NEW dDlst_alphaModel_c();
+    if (alphaModel != NULL) {
         dDlst_alphaModelData_c * pData = JKR_NEW_ARRAY(dDlst_alphaModelData_c, num);
         if (pData != NULL) {
-            i_this->mpData = pData;
-            i_this->mCapacity = num;
-            return i_this;
+            alphaModel->mpData = pData;
+            alphaModel->mCapacity = num;
+            return alphaModel;
         }
 
-        if (i_this != NULL)
-            JKR_DELETE(i_this);
+        JKR_DELETE(alphaModel);
     }
     return NULL;
 }
@@ -2009,10 +2008,8 @@ dDlst_list_c::~dDlst_list_c() {
     JKR_DELETE(mpOpaListInvisible);
     JKR_DELETE(mpXluListInvisible);
     JKR_DELETE(mpOpaList2D);
-    if (mpAlphaModel != NULL)
-        JKR_DELETE(mpAlphaModel);
-    if (mpSpotModel != NULL)
-        JKR_DELETE(mpSpotModel);
+    JKR_DELETE(mpAlphaModel);
+    JKR_DELETE(mpSpotModel);
 }
 
 /* 80086368-80086490       .text reset__12dDlst_list_cFv */
