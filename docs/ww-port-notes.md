@@ -1,6 +1,6 @@
 # Wind Waker PC port — working notes
 
-Context for resuming the port. Last updated 2026-10-03, at commit `05f1e6d`.
+Context for resuming the port. Last updated 2026-10-03 (title screen renders).
 
 ## Goal and ground rules
 
@@ -354,10 +354,7 @@ When something crashes, it's almost always one of these:
 
 ## Known gaps and deferred items
 
-- **J2D/BLO loading** (current blocker). Then everything visual (M1.7–M1.10):
-  - J2D drawing;
-  - J3D drawing: dusklight passes the vertex descriptors to `J3DShapeDraw` on PC and uses `GDSetArraySized`; display lists are parsed by aurora in big-endian;
-  - toon/alpha paths, `d_a_sea` water, LOD terrain, trees/grass/flowers, JPA v1 drawing, the title logo.
+- **Visual polish after the title** (M1.9/M1.10 leftovers): Link's lighting/colours, particles and waves, `d_a_sea` water outside room 44, LOD terrain, and everything past the title (pressing Start, file select, the first stage).
 - **J3D cluster (blend-shape `BLS`) loading isn't ported.** It needs dusklight's `J3DClusterLoader`/`J3DDeformer` rework, because clusters are copied with 32-bit pointers inside. Nothing loaded so far uses it.
 - **J3D `J3DAnmVtxColorIndexData::mpData`** (vertex-colour animations) is still a raw pointer field.
 - **M1.6 exit check:** compare `item_table.bin` and `ActorDat.bin` contents with a Dolphin memory dump.
