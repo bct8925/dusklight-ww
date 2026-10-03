@@ -1,6 +1,6 @@
 # Wind Waker PC port — working notes
 
-Context for resuming the port. Last updated 2026-10-03, at commit `c7f9bfe`.
+Context for resuming the port. Last updated 2026-10-03, at commit `05f1e6d`.
 
 ## Goal and ground rules
 
@@ -14,6 +14,12 @@ Context for resuming the port. Last updated 2026-10-03, at commit `c7f9bfe`.
   - binaries built with `WW_LOCAL_ASSETS`.
 - zeldaret/tww and dusklight upstream reject primarily AI-generated PRs. Keep AI-written code
   here, or on a private tww branch. Anything sent upstream must be the user's own work.
+- **Ghidra-derived code is for personal use.** Functions rewritten from the Wind Waker Ghidra
+  project make the port work. They are never submitted to zeldaret/tww or dusklight. Whether
+  they live in this public fork or on a local-only branch is still undecided; ask before
+  committing them.
+- **Never commit the Ghidra export** (or anything copied wholesale from it). It is derived from
+  Nintendo's binary. Only the lookup tool is in the repo.
 - Plan file: `C:\Users\brian\.claude\plans\create-the-plan-for-generic-clarke.md`. It covers
   Milestone 1 "boot to title screen" (M1.0–M1.10) and M2–M6.
 
@@ -26,6 +32,7 @@ Context for resuming the port. Last updated 2026-10-03, at commit `c7f9bfe`.
 | TWW decomp (source of truth for game code) | `C:\Users\brian\Dev\tww` (GitHub `bct8925/tww`) |
 | Disc image | `C:\Users\brian\Dev\tww\orig\GZLE01\game.iso` (trimmed dump; `files/` holds only RELs) |
 | User data, logs, `trace.txt` | `%APPDATA%\bct8925\Dusklight-WW\` (`logs\dusklight-*.log`) |
+| Ghidra C export of `main.dol` | `C:\Users\brian\ghidra\WindWaker.rep\main.1.c` (+ `main.1.h` types). Local only; the lookup cache `main.1.c.index` sits beside it |
 
 In the dusklight tree, JSystem lives in `libs/JSystem/...`. In ours it mirrors TWW: `include/JSystem/...` and `src/JSystem/...`.
 
@@ -81,6 +88,60 @@ cd build/windows-msvc-relwithdebinfo && cmd //c start "" dusklight.exe --develop
 - Full rebuilds take a few minutes. Run long builds in the background if needed.
 - Copyright: the ISO and extracted data stay local.
 
+## Ghidra: rewriting functions the decomp has not decompiled
+
+The decomp still has about 3,300 empty (`/* Nonmatching */`) functions, mostly in actors. On PC
+an empty function does nothing, so if the game reaches one, behaviour silently differs. The
+workflow:
+
+1. **Find out what is actually reached.** Every empty function in the built code calls
+   `PC_EMPTY_STUB()` on PC. The first hit of each is logged ("… is a stub") and, with `--trace`,
+   written to `trace.txt` as `stub hit: <function>`:
+
+   ```bash
+   grep "stub hit" "$APPDATA/bct8925/Dusklight-WW/trace.txt"
+   ```
+
+   After enabling more actors, run `py tools/pc_stub_empty.py --all src/d/actor/<new>.cpp`.
+2. **Look the function up:**
+   - by name: `py tools/ghidra_lookup.py <Class::method>`. Substring by default, `--exact`,
+     `--list` for names only;
+   - by address: use the `/* 8xxxxxxx-8xxxxxxx */` comment above the decomp function, e.g.
+     `py tools/ghidra_lookup.py 0x8007de94`. Named functions carry no address in the export, so
+     the tool maps the address to a name through the decomp's `symbols.txt`
+     (`C:\Users\brian\Dev\tww\config\GZLE01\symbols.txt`, or `TWW_SYMBOLS`). Unnamed ones are
+     `FUN_<address>`.
+
+   Ghidra wraps long signatures over several lines; the indexer handles that (39,333
+   functions). The index cache is rebuilt automatically when the export changes.
+3. **Rewrite it** inside the existing empty body, under `#if TARGET_PC` (the empty original
+   stays under `#else`). Write readable, functional C++, not a matching decompilation:
+   - map Ghidra's `field30_0x30`-style names and raw offsets to the decomp's member names
+     (check the class's `/* 0xNN */` offset comments);
+   - replace Ghidra's `FUN_8xxxxxxx` calls with the decomp's named functions (look up the
+     address in `symbols.txt`);
+   - apply the PC rules from this doc: `JKR_NEW`/`JKR_DELETE`, `BE()` for file data, no 32-bit
+     pointer casts;
+   - remove the `PC_EMPTY_STUB()` call.
+4. Verify by running past the point that needed it, and compare behaviour with Dolphin where it
+   matters.
+
+**Coverage:** the export only has `main.dol`. Actor code (`d_a_*`, RELs on the GameCube) is not
+in it; export a REL's program from Ghidra the same way if an actor function is needed.
+
+**Status 2026-10-03:** a full run to the current blocker hits **no** stubs, so nothing has needed
+rewriting yet. Empty functions the title is likely to reach soon:
+- `d_particle`: four draw callbacks:
+  - `dPa_smokePcallBack::draw` (213 lines in the export);
+  - `dPa_waveEcallBack::draw` (78);
+  - `dPa_stripesEcallBack::draw` (129);
+  - `dPa_ripplePcallBack::draw` (153).
+- `d_ev_camera`: entirely empty; needed if the title uses an event/demo camera.
+- `d_camera`: partly matched (38%) at the plan's last count; check the stub hits.
+
+The other empty functions in built files (menus, map, message paper, minigame, name entry) are
+off the title path.
+
 ## Repo workflow
 
 - **Imports:** `tools/import_tww.py` imports a committed tww revision onto branch `vendor/tww`, which is then merged into `main`. PC edits live only on `main`. The managed asset folders are `assets/{D44J01,GZLE01,GZLJ01,GZLP01}`.
@@ -100,7 +161,8 @@ cd build/windows-msvc-relwithdebinfo && cmd //c start "" dusklight.exe --develop
 | `gen_profile_list.py` | Typed profile list (MSVC mangles variable types) + `--trace` name table |
 | `gen_audio_null.py` | Null audio from link errors (`OVERRIDES` table for non-zero bodies) |
 | `gen_gx_compat.py` | `sdk_compat/pc_gx_hw_enums.h` |
-| `pc_stub_empty.py` | PC bodies for empty non-void decomp functions (`PC_EMPTY_STUB()`) |
+| `pc_stub_empty.py` | PC bodies for empty decomp functions: `PC_EMPTY_STUB()` logs the first hit. Default: non-void only (adds `return {};`). `--all` covers void functions, constructors and destructors too. Already applied with `--all` to every built file; rerun on newly enabled actors |
+| `ghidra_lookup.py` | Print functions from the Ghidra export by name (`dCamera_c::Run`), substring, or address (`0x8007de94`, resolved through the decomp's `symbols.txt`); `--list` for names only. Export path from `--export` / `GHIDRA_EXPORT` / the default above |
 | `jkr_new_codemod.py` | Rewrote game `new`/`delete` to `JKR_NEW`/`JKR_DELETE` (already applied; rerun on new code) |
 | `port_be_fields.py` | Copy dusklight's `BE()`/`OFFSET_PTR` field annotations onto same-named TWW **structs**, matched by `/* 0xNN */` offset. Use `--dry-run` first. It wraps *our* types. Skip runtime classes and TP-only formats (JPA v2 ≠ our JPA v1) |
 | `crashtrace.py` | Debug-API crash reporter / `--sample N` hang sampler (dbghelp, no debugger needed) |
@@ -141,6 +203,8 @@ M1.0–M1.5 are done. M1.6 (archives) is done apart from its exit check. M1.8 (s
 | `446e9ad` | `ActorDat.bin` |
 | `11732c8` | Stage chunks, title actors, process fixes |
 | `c7f9bfe` | Process vtable layout, DZB collision, Link |
+| `d4aacf4` | These notes |
+| `05f1e6d` + follow-up | Every reached empty function reports itself; Ghidra export lookup |
 
 ## How the PC layer is built (things to know before changing code)
 
@@ -245,8 +309,8 @@ When something crashes, it's almost always one of these:
 - **M1.9 asset task:** replace the `WW_LOCAL_ASSETS` generated `assets/*.h` includes with runtime reads from `main.dol` (`dvd_asset.cpp`), so no local decomp build is needed.
 - **Camera risk (from the plan):**
   - `d_camera` is 38% matched and `d_ev_camera` 0% in the decomp;
-  - the title may need stubs or decomp work there;
-  - use Dolphin Branch Watch to find what's actually called.
+  - the stub hits will show what's actually called;
+  - rewrite from the Ghidra export (see the Ghidra section).
 - **Optional `--trace` instrumentation** added during debugging and left in:
   - logo steps (`d_s_logo.cpp`);
   - scene change requests (`f_op_scene_mng.cpp`);

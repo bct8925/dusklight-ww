@@ -7,7 +7,7 @@ outside the repo. Point this at it with --export or the GHIDRA_EXPORT environmen
 
     python tools/ghidra_lookup.py dPa_control_c::draw          # functions whose name contains this
     python tools/ghidra_lookup.py --exact dCamera_c::Run       # exact qualified name
-    python tools/ghidra_lookup.py 0x8007b3a0                   # by address (FUN_/LAB_ names)
+    python tools/ghidra_lookup.py 0x8007de94                   # by address (via the decomp's symbols.txt)
     python tools/ghidra_lookup.py --list dEvent_manager_c::    # names only
 
 The decompiled code is a reference for writing functional (non-matching) C++ on PC; it uses
@@ -22,35 +22,66 @@ import sys
 from pathlib import Path
 
 DEFAULT = Path(os.environ.get("USERPROFILE", "~")) / "ghidra" / "WindWaker.rep" / "main.1.c"
+# Named functions carry no address in the export; map addresses through the decomp's symbols.
+SYMBOLS = Path(os.environ.get("TWW_SYMBOLS", r"C:\Users\brian\Dev\tww\config\GZLE01\symbols.txt"))
+
+
+def symbol_name(address: int):
+    """Class::method (or plain name) for a main.dol address, from the decomp's symbols.txt."""
+    if not SYMBOLS.exists():
+        return None
+    for line in SYMBOLS.read_text(encoding="utf-8", errors="replace").splitlines():
+        m = re.match(r"(\S+) = \.text:0x([0-9A-Fa-f]+);", line)
+        if m and int(m.group(2), 16) == address:
+            mangled = m.group(1)
+            cm = re.match(r"(\w+?)__(\d+)(\w+)", mangled)
+            if cm:
+                method, length, rest = cm.group(1), int(cm.group(2)), cm.group(3)
+                return f"{rest[:length]}::{method}"
+            return mangled.split("__")[0]
+    return None
 # A function definition starts at column 0 with "<type> <name>(...)" and its body at "{".
 DEF = re.compile(r"^(?!\s)(?!//)([^\n;{}]*?)\b([\w:~<>,\s*&]+?)\s*\(([^\n;]*)\)\s*$", re.M)
 SIG_COMMENT = re.compile(r"^// (.*)$")
 
 
 def build_index(path: Path):
-    text = path.read_text(encoding="utf-8", errors="replace")
-    lines = text.split("\n")
-    funcs = []  # (name, signature comment, start line, end line)
-    i = 0
+    """(name, signature comment, first line, last line) for every function in the export.
+
+    Ghidra writes an optional "// <signature>" comment (possibly wrapped over several "//" lines),
+    a blank line, the definition header (long ones wrap onto indented lines), a blank line, then
+    "{" in column 0; the body ends at the next "}" in column 0.
+    """
+    lines = path.read_text(encoding="utf-8", errors="replace").split("\n")
+    funcs = []
     n = len(lines)
+    i = 0
     while i < n:
-        line = lines[i]
-        if line and not line[0].isspace() and line.endswith(")") and not line.startswith("//") \
-                and i + 2 < n and lines[i + 1] == "" and lines[i + 2] == "{":
-            m = re.match(r"^(.*?)([\w:~]+(?:<[^()]*>)?(?:::[\w~]+)*)\s*\(", line)
-            name = m.group(2) if m else line
-            # Ghidra writes "// <signature>", a blank line, then the definition.
-            c = i - 2 if i >= 2 and lines[i - 1] == "" else i - 1
-            comment = lines[c][3:] if c >= 0 and lines[c].startswith("// ") else ""
-            # The body ends at the first "}" in column 0 (inner braces are indented; brace
-            # counting breaks on string literals).
-            j = i + 3
-            while j < n and lines[j] != "}":
-                j += 1
-            funcs.append((name, comment, c if comment else i, j))
-            i = j + 1
+        if lines[i] != "{" or i < 2 or lines[i - 1] != "":
+            i += 1
             continue
-        i += 1
+        # Header: the non-blank lines above the blank line before "{".
+        h = i - 2
+        while h > 0 and lines[h - 1] != "" and not lines[h - 1].startswith("//"):
+            h -= 1
+        header = " ".join(l.strip() for l in lines[h:i - 1])
+        m = re.search(r"([\w~]+(?:::[\w~]+)*)\s*\(", header)
+        name = m.group(1) if m else header
+        # Comment block above the header (skipping one blank line).
+        c = h - 1 if h > 0 and lines[h - 1] == "" else h
+        first = h
+        comment_lines = []
+        while c - 1 >= 0 and lines[c - 1].startswith("//"):
+            c -= 1
+            comment_lines.insert(0, lines[c][2:].strip())
+        if comment_lines:
+            first = c
+        comment = " ".join(l for l in comment_lines if not l.startswith("WARNING"))
+        j = i + 1
+        while j < n and lines[j] != "}":
+            j += 1
+        funcs.append((name, comment, first, j))
+        i = j + 1
     return funcs
 
 
@@ -78,8 +109,12 @@ def main() -> int:
 
     q = args.query
     if re.fullmatch(r"(0x)?8[0-9a-fA-F]{7}", q):
-        q = "_" + q[-8:].lower()
-        hits = [f for f in funcs if f[0].lower().endswith(q)]
+        name = symbol_name(int(q, 16))
+        if name:
+            print(f"// {q} is {name} in symbols.txt", file=sys.stderr)
+            hits = [f for f in funcs if f[0] == name]
+        else:
+            hits = [f for f in funcs if f[0].lower().endswith("_" + q[-8:].lower())]
     elif args.exact:
         hits = [f for f in funcs if f[0] == q]
     else:
