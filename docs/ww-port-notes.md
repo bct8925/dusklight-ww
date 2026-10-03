@@ -195,7 +195,7 @@ M1.0–M1.5 are done. M1.6 (archives) is done apart from its exit check. M1.8 (s
 
 **No crash blocker now.** Since `4caf2b6` the game runs frames in the title (`OPENING_SCENE`) without crashing; **nothing is drawn yet** (black window). Fixed on the way: the `.blo` loader (64-bit `JSUMemoryInputStream`, big-endian `JSUInputStream` readers, J2D block headers), `event_list.dat` (big-endian structs, f32/int arrays swapped once in `setData`), the JPA texture-index table, 32-bit pointer casts (ARAM archive, player animation buffers, `mDoExt_MtxCalc*` callbacks). **Next:** the scene change to the next scene waits in `fopOvlpReq_phase_IsWaitOfFadeout` (the overlap fade needs drawing/timers); then make J2D, J3D, particles and the sea draw (M1.7-M1.10).
 
-Stubs reached by a run to the title (see Ghidra section): `dPa_waveEcallBack::draw`, `dCamera_c::getEvStringData`, `dCamera_c::getEvIntData`, `dCamera_c::pauseEvCamera` (plus `searchEventArgData`, a dependency). Rewritten from Ghidra, **not committed yet** pending the public-fork decision. Expect `StartEventCamera`/`getEvFloatData`/`getEvXyzData`/`getEvActor` next.
+Stubs reached by a run to the title (see Ghidra section): `dPa_waveEcallBack::draw`, `dCamera_c::getEvStringData`, `dCamera_c::getEvIntData`, `dCamera_c::pauseEvCamera` (plus `searchEventArgData`, a dependency). The Ghidra rewrites of these live only on the local `ghidra-local` branch and are not in `main`; on `main` they are still empty `PC_EMPTY_STUB` bodies. Expect `StartEventCamera`/`getEvFloatData`/`getEvXyzData`/`getEvActor` next.
 
 **Commits since the fork, in order:**
 
