@@ -35,7 +35,6 @@ int JAIZelInst::setStickPos(int,int) { return {}; }
 class JAIZelBasic * JAIZelBasic::zel_basic;
 unsigned char JAIZelBasic::getLinkVoiceVowel(unsigned int) { return {}; }
 JStudio_JAudio::TCreateObject::~TCreateObject() {}
-bool JStudio_JAudio::TCreateObject::create(class JStudio::TObject * *,class JStudio::stb::data::TParse_TBlock_object const &) { return {}; }
 class JAISound * JAIBasic::makeSound(unsigned int) { return {}; }
 class JAISound * JAIZelBasic::makeSound(unsigned int) { return {}; }
 float JAIBasic::getMapInfoFxParameter(unsigned int) { return {}; }

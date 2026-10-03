@@ -18,7 +18,6 @@ public: int __cdecl JAIZelInst::setStickPos(int,int)
 public: static class JAIZelBasic * JAIZelBasic::zel_basic
 public: unsigned char __cdecl JAIZelBasic::getLinkVoiceVowel(unsigned int)
 public: virtual __cdecl JStudio_JAudio::TCreateObject::~TCreateObject(void)
-public: virtual bool __cdecl JStudio_JAudio::TCreateObject::create(class JStudio::TObject * *,class JStudio::stb::data::TParse_TBlock_object const &)
 public: virtual class JAISound * __cdecl JAIBasic::makeSound(unsigned int)
 public: virtual class JAISound * __cdecl JAIZelBasic::makeSound(unsigned int)
 public: virtual float __cdecl JAIBasic::getMapInfoFxParameter(unsigned int)

@@ -93,6 +93,7 @@ set(DUSK_GAME_GLUE_FILES
         src/dusk/ww_game_main.cpp
         src/dusk/ww_profile_list.cpp
         src/dusk/ww_audio_null.cpp
+        src/dusk/ww_audio_extra.cpp
         src/dusk/trace.cpp
         src/dusk/dvd_asset.cpp
         src/dusk/dvd_asset.hpp

@@ -8,6 +8,9 @@
 extern "C" {
 
 void GFSetVtxDescv(GXVtxDescList* list) {
+    // The GF version writes the whole vertex descriptor, so attributes missing from the list are
+    // off. GXSetVtxDescv only updates the listed ones; clear first.
+    GXClearVtxDesc();
     GXSetVtxDescv(list);
 }
 
