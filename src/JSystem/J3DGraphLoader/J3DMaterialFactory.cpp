@@ -492,7 +492,22 @@ J3DTexMtx* J3DMaterialFactory::newTexMtx(int idx, int stage) const {
     J3DTexMtx* ret = NULL;
     J3DMaterialInitData* initData = &mpMaterialInitData[mpMaterialID[idx]];
     if (initData->mTexMtxIdx[stage] != 0xFFFF)
+#if TARGET_PC
+    {
+        J3DTexMtxInfo info = mpTexMtxInfo[initData->mTexMtxIdx[stage]];
+        be_swap(info.mCenter);
+        be_swap(info.mSRT.mScaleX);
+        be_swap(info.mSRT.mScaleY);
+        be_swap(info.mSRT.mRotation);
+        be_swap(info.mSRT.mTranslationX);
+        be_swap(info.mSRT.mTranslationY);
+        for (int i = 0; i < 16; i++)
+            be_swap(info.mEffectMtx[i / 4][i % 4]);
+        ret = JKR_NEW J3DTexMtx(info);
+    }
+#else
         ret = JKR_NEW J3DTexMtx(mpTexMtxInfo[initData->mTexMtxIdx[stage]]);
+#endif
     return ret;
 }
 
@@ -600,7 +615,17 @@ J3DIndTexOrder J3DMaterialFactory::newIndTexOrder(int idx, int stage) const {
 J3DIndTexMtx J3DMaterialFactory::newIndTexMtx(int idx, int stage) const {
     J3DIndTexMtx ret;
     if (mpIndInitData[idx].mEnabled == true)
+    {
+#if TARGET_PC
+        J3DIndTexMtxInfo info = mpIndInitData[idx].mIndTexMtxInfo[stage];
+        for (int i = 0; i < 2; i++)
+            for (int j = 0; j < 3; j++)
+                be_swap(info.mOffsetMtx[i][j]);
+        return J3DIndTexMtx(info);
+#else
         return J3DIndTexMtx(mpIndInitData[idx].mIndTexMtxInfo[stage]);
+#endif
+    }
     else
         return ret;
 }
@@ -627,7 +652,21 @@ J3DIndTexCoordScale J3DMaterialFactory::newIndTexCoordScale(int idx, int stage) 
 J3DFog* J3DMaterialFactory::newFog(int idx) const {
     J3DMaterialInitData* initData = &mpMaterialInitData[mpMaterialID[idx]];
     if (initData->mFogIdx != 0xFFFF)
+    {
+#if TARGET_PC
+        J3DFogInfo info = mpFogInfo[initData->mFogIdx];
+        be_swap(info.mCenter);
+        be_swap(info.mStartZ);
+        be_swap(info.mEndZ);
+        be_swap(info.mNearZ);
+        be_swap(info.mFarZ);
+        for (int i = 0; i < 10; i++)
+            be_swap(info.mFogAdjTable[i]);
+        return JKR_NEW J3DFog(info);
+#else
         return JKR_NEW J3DFog(mpFogInfo[initData->mFogIdx]);
+#endif
+    }
     else
         return JKR_NEW J3DFog();
 }
