@@ -72,7 +72,7 @@ cd build/windows-msvc-relwithdebinfo && cmd //c start "" dusklight.exe --develop
 
 ## Environment gotchas
 
-- **Stale aurora pipeline cache.** `%APPDATA%ct8925\Dusklight-WW\pipeline_cache.db*` stores every GX shader config the game has drawn, and aurora recompiles them at startup. Configs recorded while the port was broken (garbage texgens, TEV state) make aurora `FATAL` at startup (`unhandled tcg src 21`, `GX_TG_BINRM/TANGENT requires NBT`) before the game draws anything, even after the cause is fixed. If a GX FATAL looks impossible, delete the `pipeline_cache.db*` files first.
+- **Stale aurora pipeline cache.** `%APPDATA%/bct8925/Dusklight-WW/pipeline_cache.db*` stores every GX shader config the game has drawn, and aurora recompiles them at startup. Configs recorded while the port was broken (garbage texgens, TEV state) make aurora `FATAL` at startup (`unhandled tcg src 21`, `GX_TG_BINRM/TANGENT requires NBT`) before the game draws anything, even after the cause is fixed. If a GX FATAL looks impossible, delete the `pipeline_cache.db*` files first.
 
 - `python` is the Microsoft Store stub here. **Use `py`.**
 - **Bash heredocs mangle backslashes** (`'\n'`, `[\\/]`, `\\` macro continuations, `\(` in regexes).
