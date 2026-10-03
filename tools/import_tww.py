@@ -89,14 +89,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--tww", type=Path, required=True, help="path to a zeldaret/tww checkout")
     parser.add_argument("--rev", default="HEAD", help="commit to import (default: HEAD)")
+    parser.add_argument("--remote", default="origin",
+                        help="tww remote whose URL is recorded in UPSTREAM_COMMIT (default: origin)")
+    parser.add_argument("--root", type=Path, default=None,
+                        help="tree to import into (default: the repo containing this script)")
     args = parser.parse_args()
 
-    root = Path(__file__).resolve().parent.parent
+    root = (args.root or Path(__file__).resolve().parent.parent).resolve()
     tww = args.tww.resolve()
     sha = git(tww, "rev-parse", f"{args.rev}^{{commit}}").decode().strip()
     date = git(tww, "show", "-s", "--format=%cI", sha).decode().strip()
     try:
-        origin = git(tww, "remote", "get-url", "origin").decode().strip()
+        origin = git(tww, "remote", "get-url", args.remote).decode().strip()
     except subprocess.CalledProcessError:
         origin = "unknown"
 
