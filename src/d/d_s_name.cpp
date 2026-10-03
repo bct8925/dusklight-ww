@@ -252,6 +252,9 @@ void dScnName_c::bmg_data_read_all() {
 #if VERSION == VERSION_PAL
 void dScnName_c::bmg_data_set() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 #endif
@@ -259,6 +262,9 @@ void dScnName_c::bmg_data_set() {
 #if VERSION == VERSION_PAL
 void dScnName_c::tex_data_set() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 #endif
 
@@ -309,30 +315,45 @@ void dScnName_c::buttonIconCreate() {
 #if VERSION == VERSION_PAL
 void dScnName_c::buttonIconTexChange(u8, u8) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::PaneAlphaLangTxt(s16, u8) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::languageTexChange() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::langTexChg() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 #endif
 
 #if VERSION == VERSION_PAL
 void dScnName_c::langTexChgFast() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 #endif
 

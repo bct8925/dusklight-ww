@@ -18,9 +18,11 @@ a call that logs the function the first time it runs and a value-initialized ret
     #endif
     }
 
-Void functions, constructors and destructors are left alone. Running it again changes nothing.
+With --all, void functions, constructors and destructors get the logging call too, so a run
+reports every undecompiled function it reaches (the log and --trace's trace.txt name them).
+Running it again changes nothing.
 
-    python tools/pc_stub_empty.py src/d/d_camera.cpp [more files...]
+    python tools/pc_stub_empty.py [--all] src/d/d_camera.cpp [more files...]
 """
 
 import re
@@ -45,17 +47,21 @@ def returns_value(signature: str) -> bool:
     return bool(return_type) and return_type != ["void"]
 
 
-def process(path: Path) -> int:
+def process(path: Path, all_functions: bool) -> int:
     with open(path, encoding="utf-8", errors="surrogateescape", newline="") as f:
         text = f.read()
     count = 0
 
     def fix(m):
         nonlocal count
-        if not returns_value(m.group("sig")):
-            return m.group(0)
-        count += 1
         nl, ind = m.group("nl"), m.group("indent") or "    "
+        if not returns_value(m.group("sig")):
+            if not all_functions:
+                return m.group(0)
+            count += 1
+            return (f"{m.group('sig')}{nl}{ind}/* Nonmatching */{nl}#if TARGET_PC{nl}"
+                    f"{ind}PC_EMPTY_STUB();{nl}#endif{nl}}}")
+        count += 1
         return (f"{m.group('sig')}{nl}{ind}/* Nonmatching */{nl}#if TARGET_PC{nl}"
                 f"{ind}PC_EMPTY_STUB();{nl}{ind}return {{}};{nl}#endif{nl}}}")
 
@@ -67,9 +73,12 @@ def process(path: Path) -> int:
 
 
 def main() -> int:
+    args = sys.argv[1:]
+    all_functions = "--all" in args
+    args = [a for a in args if a != "--all"]
     total = 0
-    for arg in sys.argv[1:]:
-        n = process(Path(arg))
+    for arg in args:
+        n = process(Path(arg), all_functions)
         if n:
             print(f"{arg}: {n}")
         total += n

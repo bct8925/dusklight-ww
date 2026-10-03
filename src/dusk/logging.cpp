@@ -1,4 +1,5 @@
 #include "dusk/logging.h"
+#include "dusk/trace.h"
 
 #include <tracy/Tracy.hpp>
 
@@ -46,6 +47,7 @@ extern "C" void dusk_empty_stub_hit(const char* function) {
     std::lock_guard lock(mutex);
     if (seen.emplace(function).second) {
         DuskLog.warn("{} is a stub (not decompiled yet)", function);
+        DUSK_TRACE("stub hit: %s", function);
     }
 }
 

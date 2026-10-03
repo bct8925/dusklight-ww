@@ -1130,11 +1130,17 @@ void dMenu_Fmap2_c::gsMoonAnimeInit() {
 /* 801BFCEC-801C002C       .text gsMoonAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::gsMoonAnime() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C002C-801C0378       .text gsShipAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::gsShipAnime() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 #if VERSION > VERSION_JPN
@@ -1148,6 +1154,9 @@ void dMenu_Fmap2_c::gsIconAnimeInit() {
 /* 801C039C-801C04CC       .text gsIconAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::gsIconAnime() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 #endif
 
@@ -1239,6 +1248,9 @@ void dMenu_Fmap2_c::trTrifAnimeInit() {
 /* 801C0AF8-801C0C0C       .text trTrifAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::trTrifAnime() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 #endif
 
@@ -1681,21 +1693,33 @@ void dMenu_Fmap2_c::changeSelCmap() {
 /* 801C3070-801C3210       .text changeSelCmap2__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeSelCmap2() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3210-801C3354       .text cmapAlphaSet__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cmapAlphaSet() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3354-801C33B0       .text changeZoomCmap__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeZoomCmap() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C33B0-801C36C8       .text ChangeProcMode__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::ChangeProcMode() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C36C8-801C376C       .text _open__13dMenu_Fmap2_cFv */
@@ -1719,71 +1743,113 @@ bool dMenu_Fmap2_c::_close() {
 /* 801C3858-801C38E0       .text _draw__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::_draw() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C38E0-801C39A4       .text _delete__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::_delete() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C39A4-801C39EC       .text fCursorInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::fCursorInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C39EC-801C3CCC       .text fCursorMove__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::fCursorMove() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3CCC-801C3D5C       .text fCursorAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::fCursorAnime() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3D5C-801C3D9C       .text cCursorAnimeInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cCursorAnimeInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3D9C-801C3E2C       .text cCursorAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cCursorAnime() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3E2C-801C3E54       .text cCursorHide__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cCursorHide() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3E54-801C3E6C       .text cSelCursorInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cSelCursorInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3E6C-801C3E88       .text cSelCursorAnimeInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cSelCursorAnimeInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3E88-801C3F90       .text cSelCursorAnime__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cSelCursorAnime() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3F90-801C3FA8       .text cSelCursorHide__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cSelCursorHide() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3FA8-801C3FC4       .text playerPointGridAnimeInit__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::playerPointGridAnimeInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C3FC4-801C4290       .text playerPointGridAnime__13dMenu_Fmap2_cFP18fopMsgM_pane_class */
 void dMenu_Fmap2_c::playerPointGridAnime(fopMsgM_pane_class*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C4290-801C43C4       .text changeFmapTexture__13dMenu_Fmap2_cFv */
@@ -1801,36 +1867,57 @@ void dMenu_Fmap2_c::changeFmapTexture() {
 /* 801C43C4-801C44E8       .text changeIslandName__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeIslandName() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C44E8-801C4634       .text fmapPlayerPosDisp__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::fmapPlayerPosDisp() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C4634-801C4834       .text fmapPlayerPosDispCheck__13dMenu_Fmap2_cFPfPf */
 void dMenu_Fmap2_c::fmapPlayerPosDispCheck(f32*, f32*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C4834-801C4B1C       .text changeCmapName__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::changeCmapName() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C4B1C-801C4CF4       .text cmapPlayerPosDisp__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cmapPlayerPosDisp() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C4CF4-801C4F80       .text cmapSalvagePosDisp__13dMenu_Fmap2_cFv */
 void dMenu_Fmap2_c::cmapSalvagePosDisp() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C4F80-801C50FC       .text cmapPlayerPosDispCheck__13dMenu_Fmap2_cFPfPf */
 void dMenu_Fmap2_c::cmapPlayerPosDispCheck(f32*, f32*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801C50FC-801C5350       .text paneTransBase__13dMenu_Fmap2_cFsUcffUcUci */

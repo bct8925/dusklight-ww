@@ -50,16 +50,25 @@ static BOOL createHeap_CB(fopAc_ac_c*) {
 /* 800FDB1C-800FDB8C       .text _createHeap__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::_createHeap() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FDB8C-800FDCAC       .text searchCreateHeap__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::searchCreateHeap() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FDCAC-800FDDBC       .text beamCreateHeap__Q212daObj_Search5Act_cFi */
 void daObj_Search::Act_c::beamCreateHeap(int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FDDBC-800FDE08       .text nodeControl_CB__FP7J3DNodei */
@@ -74,101 +83,161 @@ static BOOL nodeControl_CB(J3DNode*, int) {
 /* 800FDE08-800FE10C       .text _nodeControl__Q212daObj_Search5Act_cFP7J3DNodeP8J3DModel */
 void daObj_Search::Act_c::_nodeControl(J3DNode*, J3DModel*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FE10C-800FE110       .text modeSearchRndInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchRndInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FE110-800FE200       .text modeSearchRnd__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchRnd() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FE200-800FE244       .text modeSearchPathInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchPathInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FE244-800FEA6C       .text modeSearchPath__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchPath() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FEA6C-800FEA80       .text modeStopInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeStopInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FEA80-800FEA84       .text modeStop__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeStop() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FEA84-800FEA88       .text modeToSearchInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeToSearchInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FEA88-800FEB30       .text modeToSearch__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeToSearch() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FEB30-800FEBB4       .text modeToStopInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeToStopInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FEBB4-800FEECC       .text modeToStop__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeToStop() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FEECC-800FEF80       .text modeFindInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeFindInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FEF80-800FF44C       .text modeFind__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeFind() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FF44C-800FF49C       .text modeFind2ndInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeFind2ndInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FF49C-800FF7A4       .text modeFind2nd__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeFind2nd() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FF7A4-800FF7A8       .text modeSearchBdkInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchBdkInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FF7A8-800FFE78       .text modeSearchBdk__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::modeSearchBdk() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800FFE78-80100080       .text modeProc__Q212daObj_Search5Act_cFQ312daObj_Search5Act_c6Proc_ei */
 void daObj_Search::Act_c::modeProc(daObj_Search::Act_c::Proc_e, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 80100080-801001C4       .text __ct__Q212daObj_Search5Bgc_cFv */
 daObj_Search::Bgc_c::Bgc_c() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801001C4-801002D4       .text wall_pos__Q212daObj_Search5Bgc_cFPCQ212daObj_Search5Act_cP4cXyzP4cXyzPbPf */
 void daObj_Search::Bgc_c::wall_pos(const daObj_Search::Act_c*, cXyz*, cXyz*, bool*, float*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 bool daObj_Search::Act_c::m_find_flag;
@@ -176,16 +245,25 @@ bool daObj_Search::Act_c::m_find_flag;
 /* 801002D4-801002E0       .text attr__Q212daObj_Search5Act_cCFv */
 void daObj_Search::Act_c::attr() const {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801002E0-8010035C       .text SetArgData__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::SetArgData() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 8010035C-8010071C       .text CreateInit__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::CreateInit() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 8010071C-80100B08       .text _create__Q212daObj_Search5Act_cFv */
@@ -200,6 +278,9 @@ cPhs_State daObj_Search::Act_c::_create() {
 /* 80100F9C-801010C4       .text smoke_set__Q212daObj_Search5Act_cFfi */
 void daObj_Search::Act_c::smoke_set(float, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801010C4-801013AC       .text _execute__Q212daObj_Search5Act_cFv */
@@ -214,56 +295,89 @@ bool daObj_Search::Act_c::_execute() {
 /* 801013AC-80101464       .text check_bk_control__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::check_bk_control() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 80101464-801014E4       .text set_mtx_base__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_mtx_base() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801014E4-801018A8       .text set_mtx_light_A__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_mtx_light_A() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 801018A8-80101BAC       .text set_mtx_light_B__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_mtx_light_B() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 80101BAC-80101C30       .text set_moveBG_mtx_base__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_base() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 80101C30-80101CB0       .text set_moveBG_mtx_light_A__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_light_A() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 80101CB0-80101D30       .text set_moveBG_mtx_light_B__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_moveBG_mtx_light_B() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 80101D30-80101D94       .text bg_check__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::bg_check() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 80101D94-8010234C       .text player_check__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::player_check() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 8010234C-80102384       .text set_path_info__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::set_path_info() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 80102384-80102398       .text is_path_info__Q212daObj_Search5Act_cFv */
 void daObj_Search::Act_c::is_path_info() {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 80102398-801026F8       .text _draw__Q212daObj_Search5Act_cFv */

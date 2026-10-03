@@ -10,41 +10,65 @@
 /* 800B004C-800B0174       .text StartEventCamera__9dCamera_cFiie */
 void dCamera_c::StartEventCamera(int, int, ...) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B0174-800B01BC       .text EndEventCamera__9dCamera_cFi */
 void dCamera_c::EndEventCamera(int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B01BC-800B0248       .text searchEventArgData__9dCamera_cFPc */
 void dCamera_c::searchEventArgData(char*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B0248-800B0310       .text getEvIntData__9dCamera_cFPiPc */
 void dCamera_c::getEvIntData(int*, char*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B0310-800B03BC       .text getEvStringPntData__9dCamera_cFPc */
 void dCamera_c::getEvStringPntData(char*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B03BC-800B0484       .text getEvIntData__9dCamera_cFPiPci */
 void dCamera_c::getEvIntData(int*, char*, int) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B0484-800B055C       .text getEvFloatData__9dCamera_cFPfPcf */
 void dCamera_c::getEvFloatData(f32*, char*, f32) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B055C-800B066C       .text getEvXyzData__9dCamera_cFP4cXyzPc4cXyz */
 void dCamera_c::getEvXyzData(cXyz*, char*, cXyz) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B066C-800B074C       .text getEvStringData__9dCamera_cFPcPcPc */
@@ -59,16 +83,25 @@ bool dCamera_c::getEvStringData(char*, char*, char*) {
 /* 800B074C-800B07F4       .text getEvStringPntData__9dCamera_cFPcPc */
 void dCamera_c::getEvStringPntData(char*, char*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B07F4-800B0904       .text getEvActor__9dCamera_cFPc */
 void dCamera_c::getEvActor(char*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B0904-800B0A20       .text getEvActor__9dCamera_cFPcPc */
 void dCamera_c::getEvActor(char*, char*) {
     /* Nonmatching */
+#if TARGET_PC
+    PC_EMPTY_STUB();
+#endif
 }
 
 /* 800B0A20-800B0AF8       .text pauseEvCamera__9dCamera_cFv */
