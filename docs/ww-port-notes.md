@@ -144,7 +144,17 @@ off the title path.
 
 ## Repo workflow
 
-- **Imports:** `tools/import_tww.py` imports a committed tww revision onto branch `vendor/tww`, which is then merged into `main`. PC edits live only on `main`. The managed asset folders are `assets/{D44J01,GZLE01,GZLJ01,GZLP01}`.
+- **Updating from the official decomp:** `py tools/update_tww.py` (clean tree on the branch to update, normally `main`).
+  It fetches the `zeldaret` remote of `../tww` (https://github.com/zeldaret/tww.git, added if missing; never a fork),
+  imports it onto `vendor/tww` through a temporary worktree and merges that into the current branch with
+  `-X theirs`: **upstream wins every conflicting hunk**, so a function they have now decompiled replaces our
+  `PC_EMPTY_STUB`/Ghidra body. It then re-runs `jkr_new_codemod.py` and `pc_stub_empty.py --all` on the touched files and
+  prints the files where PC-layer lines (`TARGET_PC`, `uintptr_t`, `BE(`, `JKR_*`) were dropped. **Review that list**: a dropped line is
+  either obsolete (upstream finished the code) or a lost PC fix to re-apply (the first update lost the `uintptr_t` callback parameter in
+  `d_a_player_main.cpp`). Then run `gen_ww_files.py` and `gen_profile_list.py`, rebuild and commit. `--manual` leaves conflicts for hand resolution.
+  Last import: `f5234ec8f4`. Do this on `main`, then `git merge main` into `ghidra-local`.
+- **Branches:** `main` is the public line (no Ghidra-derived code); `ghidra-local` is main plus the Ghidra rewrites and is never pushed.
+- **Imports (manual):** `tools/import_tww.py` imports a committed tww revision onto branch `vendor/tww`, which is then merged into `main`. PC edits live only on `main`. The managed asset folders are `assets/{D44J01,GZLE01,GZLJ01,GZLP01}`.
 - After an import, run:
   - `py tools/gen_ww_files.py`, which writes `cmake/WWGameFiles.cmake` from `config.libs` in configure.py and skips `DEBUG_ONLY` objects;
   - `py tools/gen_profile_list.py`.
