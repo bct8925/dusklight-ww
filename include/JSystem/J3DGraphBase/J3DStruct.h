@@ -161,6 +161,9 @@ struct J3DIndTexOrderInfo {
 struct J3DTevSwapModeInfo {
     /* 0x0 */ ALIGN_DECL(4, u8 mRasSel);
     /* 0x1 */ u8 mTexSel;
+#if TARGET_PC
+    /* 0x2 */ u8 pad[2];  // ALIGN_DECL does not pad on MSVC; the file stride is 4
+#endif
 };
 
 struct J3DTevSwapModeTableInfo {
@@ -203,6 +206,9 @@ struct J3DIndTevStageInfo {
     /* 0x6 */ u8 mPrev;
     /* 0x7 */ u8 mLod;
     /* 0x8 */ u8 mAlphaSel;
+#if TARGET_PC
+    /* 0x9 */ u8 pad[3];
+#endif
 };
 
 struct J3DTexCoordInfo {
@@ -215,6 +221,9 @@ struct J3DTexCoordInfo {
     /* 0x0 */ ALIGN_DECL(4, u8 mTexGenType);
     /* 0x1 */ u8 mTexGenSrc;
     /* 0x2 */ u8 mTexGenMtx;
+#if TARGET_PC
+    /* 0x3 */ u8 pad;
+#endif
 };
 
 struct J3DIndTexCoordScaleInfo {
@@ -240,6 +249,9 @@ struct J3DTevOrderInfo {
     /* 0x0 */ ALIGN_DECL(2, u8 mTexCoord);
     /* 0x1 */ u8 mTexMap;
     /* 0x2 */ u8 mColorChan;
+#if TARGET_PC
+    /* 0x3 */ u8 pad;
+#endif
 };
 
 struct J3DColorChanInfo {
