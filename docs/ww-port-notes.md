@@ -60,6 +60,8 @@ In the dusklight tree, JSystem lives in `libs/JSystem/...`. In ours it mirrors T
 
 ## Build, run, debug
 
+VS Code: open `dusklight-ww.code-workspace` (repo + `tww/` submodule as two folders; tasks for configure, build, run, crashtrace and switching `tww/` between `pc` and `ghidra`; clangd reads `build/windows-msvc-relwithdebinfo/compile_commands.json`, written by the configure task). A prompt for starting a new session is in `docs/continue-prompt.md`.
+
 All commands run from the repo root in Git Bash.
 
 ```bash

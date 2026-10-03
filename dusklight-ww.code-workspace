@@ -1,0 +1,97 @@
+{
+  // Wind Waker PC port. Open with: code dusklight-ww.code-workspace
+  // Folders: this repo (engine fork + port layer) and the tww/ submodule (bct8925/tww-private:
+  // the decomp with the PC changes), shown separately so each gets its own Source Control entry.
+  "folders": [
+    { "name": "dusklight-ww", "path": "." },
+    { "name": "tww (tww-private)", "path": "tww" }
+  ],
+  "settings": {
+    // The submodule has its own root above; hide it inside the dusklight-ww folder.
+    "files.exclude": { "tww": true },
+    "search.exclude": { "tww": true, "build/**": true, "extern/**": true, ".cache/**": true },
+    "files.watcherExclude": { "**/build/**": true, "**/extern/**": true },
+    "git.detectSubmodules": false,
+
+    // CMake Tools: use the preset the docs use (configure/build through tools/msvc.cmd tasks
+    // below if CMake Tools can't find the Visual Studio environment).
+    "cmake.useCMakePresets": "always",
+    "cmake.configureOnOpen": false,
+    "cmake.configureSettings": { "CMAKE_EXPORT_COMPILE_COMMANDS": "ON" },
+
+    // clangd reads the compile database written by the "configure" task.
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+      "--compile-commands-dir=${workspaceFolder:dusklight-ww}/build/windows-msvc-relwithdebinfo",
+      "--function-arg-placeholders=0",
+      "-header-insertion=never"
+    ],
+
+    "files.associations": { "*.inc": "cpp" },
+    "files.insertFinalNewline": true,
+    "editor.tabSize": 4,
+    "terminal.integrated.defaultProfile.windows": "Git Bash"
+  },
+  "tasks": {
+    "version": "2.0.0",
+    "options": { "cwd": "${workspaceFolder:dusklight-ww}" },
+    "tasks": [
+      {
+        "label": "configure",
+        "type": "process",
+        "command": "cmd",
+        "args": ["/c", "tools\\msvc.cmd", "cmake", "--preset", "windows-msvc-relwithdebinfo",
+                 "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"],
+        "problemMatcher": []
+      },
+      {
+        "label": "build",
+        "type": "process",
+        "command": "cmd",
+        "args": ["/c", "tools\\msvc.cmd", "cmake", "--build", "build/windows-msvc-relwithdebinfo",
+                 "--target", "dusklight", "--", "-k", "0"],
+        "group": { "kind": "build", "isDefault": true },
+        "problemMatcher": "$msCompile"
+      },
+      {
+        "label": "run Wind Waker",
+        "type": "process",
+        "command": "${workspaceFolder:dusklight-ww}/build/windows-msvc-relwithdebinfo/dusklight.exe",
+        "args": ["--develop", "--trace", "--dvd", "C:/Users/brian/Dev/tww/orig/GZLE01/game.iso"],
+        "options": { "cwd": "${workspaceFolder:dusklight-ww}/build/windows-msvc-relwithdebinfo" },
+        "isBackground": true,
+        "problemMatcher": []
+      },
+      {
+        "label": "run with crashtrace",
+        "type": "process",
+        "command": "py",
+        "args": ["tools/crashtrace.py", "build/windows-msvc-relwithdebinfo/dusklight.exe", "--develop",
+                 "--trace", "--dvd", "C:/Users/brian/Dev/tww/orig/GZLE01/game.iso"],
+        "problemMatcher": []
+      },
+      {
+        "label": "use Ghidra rewrites (tww -> ghidra)",
+        "detail": "Local runs only; never commit the submodule pointer while on ghidra",
+        "type": "process",
+        "command": "git",
+        "args": ["-C", "tww", "checkout", "ghidra"],
+        "problemMatcher": []
+      },
+      {
+        "label": "use public PC branch (tww -> pc)",
+        "type": "process",
+        "command": "git",
+        "args": ["-C", "tww", "checkout", "pc"],
+        "problemMatcher": []
+      }
+    ]
+  },
+  "extensions": {
+    "recommendations": [
+      "llvm-vs-code-extensions.vscode-clangd",
+      "ms-vscode.cmake-tools",
+      "ms-python.python"
+    ]
+  }
+}
