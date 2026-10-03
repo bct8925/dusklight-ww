@@ -6,6 +6,9 @@
 #include "d/dolzel.h" // IWYU pragma: keep
 #include "d/d_event_manager.h"
 #include "d/d_com_inf_game.h"
+#if TARGET_PC
+#include <unordered_set>
+#endif
 
 enum {
     ACT_WAIT,
@@ -149,6 +152,18 @@ void dEvent_manager_c::setData(const char* data) {
         mList.setCutP((dEvDtCut_c*)(data + mList.getCutTop()));
     if (mList.getDataNum() > 0)
         mList.setDataP((dEvDtData_c*)(data + mList.getDataTop()));
+#if TARGET_PC
+    // The f32/int data arrays are handed out as raw pointers, so swap them once in place.
+    static std::unordered_set<const char*> sSwapped;
+    if (sSwapped.insert(data).second) {
+        u32* fdata = (u32*)(data + mList.getFDataTop());
+        for (s32 i = 0; i < mList.getFDataNum(); i++)
+            be_swap(fdata[i]);
+        u32* idata = (u32*)(data + mList.getIDataTop());
+        for (s32 i = 0; i < mList.getIDataNum(); i++)
+            be_swap(idata[i]);
+    }
+#endif
     if (mList.getFDataNum() > 0)
         mList.setFDataP((f32*)(data + mList.getFDataTop()));
     if (mList.getIDataNum() > 0)

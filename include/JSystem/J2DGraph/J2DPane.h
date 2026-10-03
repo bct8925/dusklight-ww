@@ -35,8 +35,8 @@ struct J2DPaneHeader {
 class J2DPane {
 public:
     struct J2DScrnBlockHeader {
-        /* 0x00 */ u32 mMagic;
-        /* 0x04 */ u32 mSize;
+        /* 0x00 */ BE(u32) mMagic;
+        /* 0x04 */ BE(u32) mSize;
     };
 
     J2DPane();
