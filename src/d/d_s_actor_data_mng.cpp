@@ -86,8 +86,13 @@ dADM::dADM() {
 dADM::~dADM() {}
 
 /* 800C2C78-800C2CC0       .text FindTag__4dADMFUlPUlPUl */
+#if TARGET_PC
+bool dADM::FindTag(u32 tag, u32* pSize, u32* pOffs) {
+    const BE(u32)* pData = (const BE(u32)*)mpData;  // big-endian block headers
+#else
 bool dADM::FindTag(u32 tag, u32* pSize, u32* pOffs) {
     u32 *pData = (u32*)mpData;
+#endif
     for (s32 i = 0; i < mBlockCount; i++) {
         if (tag == pData[0]) {
             *pSize = pData[1];
@@ -103,6 +108,36 @@ bool dADM::FindTag(u32 tag, u32* pSize, u32* pOffs) {
 
 /* 800C2CC0-800C2DFC       .text SetData__4dADMFPv */
 void dADM::SetData(void* pData) {
+#if TARGET_PC
+    // ActorDat.bin is big-endian, and the game relocates its string tables in place into 32-bit
+    // pointers. Keep the offsets relative and build host pointer tables instead.
+    {
+        u8* base = (u8*)pData;
+        mBlockCount = *(const BE(s32)*)base;
+        mpData = base + 4;
+
+        u32 row, rowOffs, name, nameOffs, dat_size, dataOffs;
+        if (!FindTag('ACFN', &row, &rowOffs) || !FindTag('ACNA', &name, &nameOffs) ||
+            !FindTag('ACDS', &dat_size, &dataOffs)) {
+            return;
+        }
+        JUT_ASSERT(202, row * name == dat_size);
+
+        char** pFmt = JKR_NEW_ARRAY(char*, row);
+        const BE(u32)* fmtOffs = (const BE(u32)*)(base + rowOffs);
+        for (u32 i = 0; i < row; i++) {
+            pFmt[i] = (char*)(base + fmtOffs[i]);
+        }
+        char** pName = JKR_NEW_ARRAY(char*, name);
+        const BE(u32)* nameOffsTbl = (const BE(u32)*)(base + nameOffs);
+        for (u32 i = 0; i < name; i++) {
+            pName[i] = (char*)(base + nameOffsTbl[i]);
+        }
+        mCharTbl.cDT::Set(row, pFmt, name, pName, base + dataOffs);
+        mCharTbl.SetUpIndex();
+        return;
+    }
+#endif
     u32 row, rowOffs;
     u32 name, nameOffs;
     u32 dat_size, dataOffs;
