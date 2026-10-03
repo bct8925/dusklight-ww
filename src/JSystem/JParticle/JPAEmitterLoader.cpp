@@ -4,6 +4,9 @@
 //
 
 #include "JSystem/JSystem.h" // IWYU pragma: keep
+#if TARGET_PC
+#include <unordered_set>
+#endif
 
 #include "JSystem/JParticle/JPAEmitterLoader.h"
 #include "JSystem/JParticle/JPAEmitter.h"
@@ -165,6 +168,16 @@ void JPAEmitterArchiveLoader_v10::load() {
                 break;
             case 'TDB1':
                 pLinkInfo->texDataBase = (u16*)&block->blockData;
+#if TARGET_PC
+                {
+                    // Texture index table is read in place as raw u16s; swap it once.
+                    static std::unordered_set<const void*> sSwapped;
+                    if (sSwapped.insert(&block->blockData).second) {
+                        for (u32 k = 0; k < ptcl->textureNum; k++)
+                            be_swap(pLinkInfo->texDataBase[k]);
+                    }
+                }
+#endif
                 break;
             }
 

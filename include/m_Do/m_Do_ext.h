@@ -280,7 +280,7 @@ struct mDoExt_MtxCalcAnmBlendTbl : public J3DMtxCalcMaya {
 };
 
 struct mDoExt_MtxCalcAnmBlendTblOld : public mDoExt_MtxCalcAnmBlendTbl {
-    typedef int (*CalcCallback)(u32, u16, J3DTransformInfo*, Quaternion*);
+    typedef int (*CalcCallback)(uintptr_t, u16, J3DTransformInfo*, Quaternion*);
 
     mDoExt_MtxCalcAnmBlendTblOld(mDoExt_MtxCalcOldFrame* oldFrame, int num, mDoExt_AnmRatioPack* anmRatio) : mDoExt_MtxCalcAnmBlendTbl(num, anmRatio) {
         mOldFrame = oldFrame;

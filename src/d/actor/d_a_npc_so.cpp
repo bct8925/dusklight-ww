@@ -321,7 +321,7 @@ BOOL daNpc_So_c::_createHeap() {
     if (mpMorf == NULL || mpMorf->getModel() == NULL) {
         return FALSE;
     }
-    mpMorf->getModel()->setUserArea(reinterpret_cast<u32>(this));
+    mpMorf->getModel()->setUserArea(reinterpret_cast<uintptr_t>(this));
 
 #if VERSION > VERSION_DEMO
     J3DAnmTexPattern* btp = static_cast<J3DAnmTexPattern*>(dComIfG_getObjectRes(m_arc_name, dRes_INDEX_SO_BTP_SO_e));

@@ -406,7 +406,7 @@ int dRes_info_c::loadResource() {
 #if TARGET_PC
                     pBasData = (char*)pRes + fileHeader->mSeAnmOffset;
 #else
-                    pBasData = (char*)fileHeader->mSeAnmOffset + (u32)pRes;
+                    pBasData = (char*)fileHeader->mSeAnmOffset + (uintptr_t)pRes;
 #endif
                 else
                     pBasData = NULL;

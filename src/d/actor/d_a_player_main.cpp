@@ -382,7 +382,7 @@ BOOL daPy_lk_c::jointBeforeCB(int jnt_no, J3DTransformInfo* param_2, Quaternion*
 }
 
 /* 80103A88-80103AAC       .text daPy_jointBeforeCallback__FUlUsP16J3DTransformInfoP10Quaternion */
-static BOOL daPy_jointBeforeCallback(u32 userArea, u16 jnt_no, J3DTransformInfo* param_2, Quaternion* param_3) {
+static BOOL daPy_jointBeforeCallback(uintptr_t userArea, u16 jnt_no, J3DTransformInfo* param_2, Quaternion* param_3) {
     return reinterpret_cast<daPy_lk_c*>(userArea)->jointBeforeCB(jnt_no, param_2, param_3);
 }
 
@@ -414,7 +414,7 @@ BOOL daPy_lk_c::jointAfterCB(int jnt_no, J3DTransformInfo* param_2, Quaternion* 
 }
 
 /* 80103C1C-80103C40       .text daPy_jointAfterCallback__FUlUsP16J3DTransformInfoP10Quaternion */
-static BOOL daPy_jointAfterCallback(u32 userArea, u16 jnt_no, J3DTransformInfo* param_2, Quaternion* param_3) {
+static BOOL daPy_jointAfterCallback(uintptr_t userArea, u16 jnt_no, J3DTransformInfo* param_2, Quaternion* param_3) {
     return reinterpret_cast<daPy_lk_c*>(userArea)->jointAfterCB(jnt_no, param_2, param_3);
 }
 
@@ -12170,12 +12170,12 @@ void daPy_lk_c::playerInit() {
         handsModelData->getJointNodePointer(jnt_no)->getMesh()->getShape()->hide();
     }
     
-    u32 buffer_start = reinterpret_cast<u32>(m_anm_heap_under[UNDER_MOVE0_e].m_buffer) + 0x2400;
+    uintptr_t buffer_start = reinterpret_cast<uintptr_t>(m_anm_heap_under[UNDER_MOVE0_e].m_buffer) + 0x2400;
     m_anm_heap_under[UNDER_MOVE1_e].m_buffer = reinterpret_cast<void*>(buffer_start);
-    buffer_start = reinterpret_cast<u32>(m_anm_heap_under[UNDER_MOVE0_e].m_buffer) + 0x4800;
+    buffer_start = reinterpret_cast<uintptr_t>(m_anm_heap_under[UNDER_MOVE0_e].m_buffer) + 0x4800;
     m_anm_heap_upper[UPPER_MOVE0_e].m_buffer = reinterpret_cast<void*>(buffer_start);
     for (int i = UPPER_MOVE1_e; i <= UPPER_MOVE2_e; i++) {
-        buffer_start = reinterpret_cast<u32>(m_anm_heap_upper[UPPER_MOVE0_e].m_buffer) + i*0x2400;
+        buffer_start = reinterpret_cast<uintptr_t>(m_anm_heap_upper[UPPER_MOVE0_e].m_buffer) + i*0x2400;
         m_anm_heap_upper[i].m_buffer = reinterpret_cast<void*>(buffer_start);
     }
     
@@ -12289,7 +12289,7 @@ void daPy_lk_c::playerInit() {
     mSightPacket.setSightTex(tmp_tex);
     ResTIMG* tmp_img = (ResTIMG*)dComIfG_getObjectRes(l_arcName, dRes_INDEX_LINK_BTI_ROCK_MARK_e);
     JUT_ASSERT(VERSION_SELECT(21506, 21613, 21693, 21693), tmp_img != NULL);
-    void* tmp_img_data = reinterpret_cast<void*>(reinterpret_cast<u32>(tmp_img) + tmp_img->imageOffset);
+    void* tmp_img_data = reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(tmp_img) + tmp_img->imageOffset);
     mSightPacket.setLockTex(tmp_img_data);
     mSightPacket.setImage(tmp_img);
     
