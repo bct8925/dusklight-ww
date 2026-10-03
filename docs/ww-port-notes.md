@@ -183,7 +183,9 @@ M1.0–M1.5 are done. M1.6 (archives) is done apart from its exit check. M1.8 (s
    - creates `KANKYO`, `KYEFF`(2), `ENVSE`, `CAMERA`, `SEA`, `VRBOX`(2), `ROOM_SCENE` and `PLAYER` (Link), then `TITLE` and `METER`;
    - `SHIP` fails its create legitimately (save flag `MET_KORL` unset), and the cleanup path works.
 
-**Current blocker:** `J2DScreen::checkSignature` → `JSUMemoryInputStream::readData` reads a bad address. This happens while loading a `.blo` 2D screen, either the title logo (`d_a_title`) or the HUD (`METER`). This is the J2D BLO1 work in M1.7. Dusklight has fixes for J2D (`J2DScreen`, panes, `JSUInputStream`); port them like the J3D ones.
+**No crash blocker now.** Since `4caf2b6` the game runs frames in the title (`OPENING_SCENE`) without crashing; **nothing is drawn yet** (black window). Fixed on the way: the `.blo` loader (64-bit `JSUMemoryInputStream`, big-endian `JSUInputStream` readers, J2D block headers), `event_list.dat` (big-endian structs, f32/int arrays swapped once in `setData`), the JPA texture-index table, 32-bit pointer casts (ARAM archive, player animation buffers, `mDoExt_MtxCalc*` callbacks). **Next:** the scene change to the next scene waits in `fopOvlpReq_phase_IsWaitOfFadeout` (the overlap fade needs drawing/timers); then make J2D, J3D, particles and the sea draw (M1.7-M1.10).
+
+Stubs reached by a run to the title (see Ghidra section): `dPa_waveEcallBack::draw`, `dCamera_c::getEvStringData`, `dCamera_c::getEvIntData`, `dCamera_c::pauseEvCamera` (plus `searchEventArgData`, a dependency). Rewritten from Ghidra, **not committed yet** pending the public-fork decision. Expect `StartEventCamera`/`getEvFloatData`/`getEvXyzData`/`getEvActor` next.
 
 **Commits since the fork, in order:**
 
