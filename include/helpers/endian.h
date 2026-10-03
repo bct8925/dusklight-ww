@@ -345,10 +345,28 @@ constexpr void be_swap(Mtx& val) noexcept {
     }
 }
 
+// A big-endian JGeometry::TVec3 as stored in file data (members x, y, z).
+template <typename T>
+struct BEVec3 {
+    BE<T> x, y, z;
+
+    // Converts to any vector type with x, y, z members (JGeometry::TVec3<T>, Vec, ...).
+    template <typename V>
+    operator V() const {
+        V v;
+        v.x = x;
+        v.y = y;
+        v.z = z;
+        return v;
+    }
+};
+
 #define LE(T) T
 #define BE(T) BE<T>
+#define BE_TVEC3(T) BEVec3<T>
 #define BE_HOST(T) (T.host())
 #else
 #define BE(T) T
+#define BE_TVEC3(T) JGeometry::TVec3<T>
 #define BE_HOST(T) (T)
 #endif

@@ -137,7 +137,7 @@ void JPASetRMtxSTVecfromMtx(const MtxP src, Mtx dst, JGeometry::TVec3<f32>& scal
 }
 
 /* 80259DD0-80259E7C       .text JPAGetKeyFrameValue__FfUsPCf */
-f32 JPAGetKeyFrameValue(f32 time, u16 frameNum, const f32* pFrames) {
+f32 JPAGetKeyFrameValue(f32 time, u16 frameNum, const BE(f32)* pFrames) {
     /* keyframes are time, value, tangent out, tangent in */
 
     if (time < pFrames[0])

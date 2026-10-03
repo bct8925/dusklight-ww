@@ -4,6 +4,7 @@
 #include "JSystem/JUtility/JUTTexture.h"
 #include "dolphin/gx/GX.h"
 #include "dolphin/types.h"
+#include "helpers/endian.h"
 
 class JKRHeap;
 

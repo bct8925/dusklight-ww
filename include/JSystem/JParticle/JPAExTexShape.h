@@ -2,9 +2,10 @@
 #define JPAEXTEXSHAPE_H
 
 #include "dolphin/gx/GX.h"
+#include "helpers/endian.h"
 
 struct JPAExTexShapeData {
-    /* 0x00 */ u32 mFlags;
+    /* 0x00 */ BE(u32) mFlags;
     /* 0x04 */ Mtx23 mIndTexMtx;
     /* 0x1C */ s8 mExpScale;
     /* 0x1D */ u8 field_0x1d[3];
