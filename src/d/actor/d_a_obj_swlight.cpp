@@ -133,17 +133,17 @@ cPhs_State Act_c::_create() {
 
             if (mF24 == 0) {
                 if (is_switch()) {
-                    mPower = 1.0f;
+                    mF30 = 1.0f;
                     mode_norm_sun_init();
                 } else {
-                    mPower = 0.0f;
+                    mF30 = 0.0f;
                     mode_norm_moon_init();
                 }
             } else if (is_switch2() || is_switch()) {
-                mPower = 1.0f;
+                mF30 = 1.0f;
                 mode_active_sun_init();
             } else {
-                mPower = 0.0f;
+                mF30 = 0.0f;
                 mode_active_moon_init();
             }
         } else {
@@ -270,12 +270,12 @@ bool Act_c::chk_light() {
 
 /* 0000115C-0000119C       .text power_up__Q212daObjSwlight5Act_cFv */
 bool Act_c::power_up() {
-    return cLib_chaseF(&mPower, 1.0f, 0.033333335f);
+    return cLib_chaseF(&mF30, 1.0f, 0.033333335f);
 }
 
 /* 0000119C-000011DC       .text power_down__Q212daObjSwlight5Act_cFv */
 bool Act_c::power_down() {
-    return cLib_chaseF(&mPower, 0.0f, 0.033333335f);
+    return cLib_chaseF(&mF30, 0.0f, 0.033333335f);
 }
 
 /* 000011DC-000011F4       .text mode_norm_moon_init__Q212daObjSwlight5Act_cFv */
@@ -366,7 +366,7 @@ void Act_c::mode_active_sun_init() {
 
 /* 00001530-0000162C       .text mode_active_sun__Q212daObjSwlight5Act_cFv */
 void Act_c::mode_active_sun() {
-    if (mPower > 0.5f) {
+    if (mF30 > 0.5f) {
         fopAcM_seStart(this, JA_SE_OBJ_LIGHT_SW_SUNSHINE, 0);
     }
 
@@ -447,7 +447,7 @@ bool Act_c::_draw() {
     dComIfGd_setListBG();
 
     J3DModelData* pJVar5 = m298->getModelData();
-    u8 pJVar1 = mPower * 255.0f;
+    u8 pJVar1 = mF30 * 255.0f;
 
     for (u16 i = 1; i <= 3; i++) {
         setMaterial(pJVar5->getJointNodePointer(i)->getMesh(), pJVar1);
