@@ -2,15 +2,6 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Wind Waker (MSVC)",
-            "type": "cppvsdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/build/windows-msvc-relwithdebinfo/dusklight.exe",
-            "args": ["--develop", "--trace", "--dvd", "C:/Users/brian/Dev/tww/orig/GZLE01/game.iso"],
-            "cwd": "${workspaceFolder}/build/windows-msvc-relwithdebinfo",
-            "console": "integratedTerminal"
-        },
-        {
             "name": "(gdb) Launch Dusklight MSVC",
             "type": "cppvsdbg",
             "request": "launch",
