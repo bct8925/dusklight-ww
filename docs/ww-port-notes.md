@@ -72,6 +72,8 @@ cd build/windows-msvc-relwithdebinfo && cmd //c start "" dusklight.exe --develop
 
 ## Environment gotchas
 
+- **Stale aurora pipeline cache.** `%APPDATA%ct8925\Dusklight-WW\pipeline_cache.db*` stores every GX shader config the game has drawn, and aurora recompiles them at startup. Configs recorded while the port was broken (garbage texgens, TEV state) make aurora `FATAL` at startup (`unhandled tcg src 21`, `GX_TG_BINRM/TANGENT requires NBT`) before the game draws anything, even after the cause is fixed. If a GX FATAL looks impossible, delete the `pipeline_cache.db*` files first.
+
 - `python` is the Microsoft Store stub here. **Use `py`.**
 - **Bash heredocs mangle backslashes** (`'\n'`, `[\\/]`, `\\` macro continuations, `\(` in regexes).
   For any patch script that contains backslashes, write it with the Write tool into the
@@ -193,7 +195,7 @@ M1.0–M1.5 are done. M1.6 (archives) is done apart from its exit check. M1.8 (s
    - creates `KANKYO`, `KYEFF`(2), `ENVSE`, `CAMERA`, `SEA`, `VRBOX`(2), `ROOM_SCENE` and `PLAYER` (Link), then `TITLE` and `METER`;
    - `SHIP` fails its create legitimately (save flag `MET_KORL` unset), and the cleanup path works.
 
-**No crash blocker now.** Since `4caf2b6` the game runs frames in the title (`OPENING_SCENE`) without crashing; **nothing is drawn yet** (black window). Fixed on the way: the `.blo` loader (64-bit `JSUMemoryInputStream`, big-endian `JSUInputStream` readers, J2D block headers), `event_list.dat` (big-endian structs, f32/int arrays swapped once in `setData`), the JPA texture-index table, 32-bit pointer casts (ARAM archive, player animation buffers, `mDoExt_MtxCalc*` callbacks). **Next:** the scene change to the next scene waits in `fopOvlpReq_phase_IsWaitOfFadeout` (the overlap fade needs drawing/timers); then make J2D, J3D, particles and the sea draw (M1.7-M1.10).
+**No crash blocker now.** The game runs the title scene, the overlap fade and the scene change to completion, building about 70 aurora shaders from real draws. Fixed since the last update: J3D tex-matrix, fog and indirect-matrix byte order (this caused an infinite loop in `texScrollCheck`), J3D material info struct padding (`J3DTexCoordInfo`, `J3DTevOrderInfo`, `J3DTevSwapModeInfo`, `J3DIndTevStageInfo`: MSVC ignores `ALIGN_DECL`), and the stale pipeline cache above. **Next:** check what actually appears on screen (J2D, J3D, particles, sea), then the two `dMap_c` stubs reached (`drawActorPointMiniMap`, `mapBufferSendAGB`).
 
 Stubs reached by a run to the title (see Ghidra section): `dPa_waveEcallBack::draw`, `dCamera_c::getEvStringData`, `dCamera_c::getEvIntData`, `dCamera_c::pauseEvCamera` (plus `searchEventArgData`, a dependency). The Ghidra rewrites of these live only on the local `ghidra-local` branch and are not in `main`; on `main` they are still empty `PC_EMPTY_STUB` bodies. Expect `StartEventCamera`/`getEvFloatData`/`getEvXyzData`/`getEvActor` next.
 
