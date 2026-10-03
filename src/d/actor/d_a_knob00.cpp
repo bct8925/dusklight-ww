@@ -13,6 +13,9 @@
 #include "m_Do/m_Do_graphic.h"
 #include "d/d_com_inf_game.h"
 #include "ctype.h"
+#if TARGET_PC
+#include <cctype>
+#endif
 
 const char daKnob00_c::M_arcname[] = "knob";
 

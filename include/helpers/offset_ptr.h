@@ -9,7 +9,7 @@ struct OffsetPtr {
     // Top bit is used to store "already relocated" flag as a guard thing.
     BE<s32> value;
 
-    bool setBase(void* base);
+    bool setBase(void* base, bool zeroIsNull = true);
     bool isRelocated();
 
     template<typename T>
@@ -34,8 +34,8 @@ template<typename T>
 struct OffsetPtrT {
     OffsetPtr value;
 
-    bool setBase(void* base) {
-        return value.setBase(base);
+    bool setBase(void* base, bool zeroIsNull = true) {
+        return value.setBase(base, zeroIsNull);
     }
     bool isRelocated() {
         return value.isRelocated();

@@ -38,12 +38,12 @@ BOOL fopScnM_DeleteReq(scene_class* i_scene) {
     return sceneRequestID != -1;
 }
 
-BOOL fopScnM_CreateReq(s16 procName, s16 fadeProcName, u16 fadePeekTime, u32 user) {
+BOOL fopScnM_CreateReq(s16 procName, s16 fadeProcName, u16 fadePeekTime, uintptr_t user) {  // user may be a pointer
     uint sceneRequestID = fopScnRq_Request(0, 0, procName, (void*)user, fadeProcName, fadePeekTime);
     return sceneRequestID != -1;
 }
 
-u32 fopScnM_ReRequest(s16 procName, u32 user) {
+u32 fopScnM_ReRequest(s16 procName, uintptr_t user) {
     if (l_scnRqID == -1) {
         return 0;
     }

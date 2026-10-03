@@ -231,7 +231,11 @@ static BOOL dOvlpFd2_Delete(dOvlpFd2_c*) {
 
 /* 8022423C-80224268       .text dOvlpFd2_Create__FPv */
 static cPhs_State dOvlpFd2_Create(void* i_this) {
+#if TARGET_PC
+    new (i_this) dOvlpFd2_c;  // default-init: keep the process fields
+#else
     new (i_this) dOvlpFd2_c();
+#endif
     return cPhs_COMPLEATE_e;
 }
 

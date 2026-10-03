@@ -6,8 +6,9 @@ bool OffsetPtr::isRelocated() {
     return value & 0x8000'0000;
 }
 
-bool OffsetPtr::setBase(void* base) {
-    JUT_ASSERT(__LINE__, value != 0);
+bool OffsetPtr::setBase(void* base, bool zeroIsNull) {
+    // Some offsets (e.g. path points into the point chunk) are legitimately 0.
+    JUT_ASSERT(__LINE__, value != 0 || !zeroIsNull);
 
     if (isRelocated()) {
         // Already relocated, don't touch it again!

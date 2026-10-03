@@ -2,6 +2,7 @@
 #define STB_DATA_H
 
 #include "dolphin/types.h"
+#include "helpers/endian.h"
 
 namespace JStudio {
 namespace stb {
@@ -36,29 +37,29 @@ struct THeader {
     };
 
     /* 0x00 */ char signature[4];
-    /* 0x04 */ u16 byte_order;  // must be 0xFEFF
-    /* 0x06 */ u16 version;     // 0-1 = obselete, 2-7 = OK
-    /* 0x08 */ u32 _8;
-    /* 0x0C */ u32 block_number;
+    /* 0x04 */ BE(u16) byte_order;  // must be 0xFEFF
+    /* 0x06 */ BE(u16) version;     // 0-1 = obselete, 2-7 = OK
+    /* 0x08 */ BE(u32) _8;
+    /* 0x0C */ BE(u32) block_number;
     /* 0x10 */ Target target;
     /* 0x20 */ u8 content[0];
 };
 
 struct TBlock {
-    /* 0x0 */ u32 size;
-    /* 0x4 */ u32 type;  // char[4] JMSG, JSND, JACT, ...
+    /* 0x0 */ BE(u32) size;
+    /* 0x4 */ BE(u32) type;  // char[4] JMSG, JSND, JACT, ...
 };
 
 struct TBlock_object : TBlock {
-    /* 0x8 */ u16 flag;
-    /* 0xA */ u16 id_size;
+    /* 0x8 */ BE(u16) flag;
+    /* 0xA */ BE(u16) id_size;
     /* 0xC */ u8 id[0];  // unique identifier
     ///* ??? */ u8 content[0];
 };
 
 struct TParagraph {
-    /* 0x0 */ u16 _0;
-    /* 0x2 */ u16 id_size;
+    /* 0x0 */ BE(u16) _0;
+    /* 0x2 */ BE(u16) id_size;
     /* 0x4 */ u8 id[0];  // unique identifier
 };
 

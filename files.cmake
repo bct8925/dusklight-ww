@@ -7,7 +7,23 @@ set(SSYSTEM_FILES ${WW_SSYSTEM_FILES})
 # Actor RELs are linked into the executable. Only the ones listed here are built, so the game can
 # come up one scene at a time; the rest have null profiles (see f_pc_profile_lst).
 set(WW_ENABLED_RELS
+        d_a_bridge
+        d_a_grass
+        d_a_kamome
+        d_a_kanban
+        d_a_kb
+        d_a_kn
+        d_a_knob00
+        d_a_kytag01
+        d_a_lwood
+        d_a_obj_ikada
+        d_a_obj_lpalm
+        d_a_obj_toripost
+        d_a_obj_wood
+        d_a_ship
+        d_a_stone2
         d_a_title
+        d_a_tsubo
 )
 set(REL_FILES ${WW_PROFILE_LIST_FILES})
 foreach (rel IN LISTS WW_ENABLED_RELS)

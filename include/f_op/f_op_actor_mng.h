@@ -2,6 +2,9 @@
 #define F_OP_ACTOR_MNG_H_
 
 #include "new.h" // IWYU pragma: export // Used by the fopAcM_ct macro.
+#include "helpers/endian.h"
+#include "helpers/endian_ssystem.h"
+#include "helpers/offset_ptr.h"
 #include "f_op/f_op_actor.h"
 #include "f_op/f_op_actor_iter.h"
 #include "f_pc/f_pc_manager.h"
@@ -12,9 +15,16 @@
 #include "d/d_event.h"
 
 // The name of this macro is official and comes from a TP debug assert: "fopAcM_ct No Call !!"
+#if TARGET_PC
+// Default-initialize: "ClassName()" value-initializes classes without a user-provided
+// constructor, zeroing the process fields fpcBs_Create already set (as in dusklight).
+#define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName
+#else
+#define fopAcM_ct_placement(ptr, ClassName) new (ptr) ClassName()
+#endif
 #define fopAcM_ct(ptr, ClassName)                                                                  \
     if (!fopAcM_CheckCondition(ptr, fopAcCnd_INIT_e)) {                                            \
-        new (ptr) ClassName();                                                                     \
+        fopAcM_ct_placement(ptr, ClassName);                                                       \
         fopAcM_OnCondition(ptr, fopAcCnd_INIT_e);                                                  \
     }
 
@@ -36,10 +46,10 @@ class J3DModelData;
 class daItem_c;
 
 struct fopAcM_prmBase_class {
-    /* 0x00 */ u32 parameters;
-    /* 0x04 */ cXyz position;
-    /* 0x10 */ csXyz angle;
-    /* 0x16 */ u16 setID;
+    /* 0x00 */ BE(u32) parameters;
+    /* 0x04 */ BE(cXyz) position;
+    /* 0x10 */ BE(csXyz) angle;
+    /* 0x16 */ BE(u16) setID;
 };  // Size = 0x18
 
 struct fopAcM_prmScale_class {

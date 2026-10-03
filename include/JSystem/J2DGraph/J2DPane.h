@@ -2,6 +2,7 @@
 #define J2DPANE_H
 
 #include "JSystem/JGeometry.h"
+#include "helpers/endian.h"
 #include "JSystem/JSupport/JSUList.h"
 #include "dolphin/mtx/mtx.h"
 
@@ -27,8 +28,8 @@ enum J2DBasePosition {
 };
 
 struct J2DPaneHeader {
-    /* 0x0 */ u32 mMagic;
-    /* 0x4 */ u32 mSize;
+    /* 0x0 */ BE(u32) mMagic;
+    /* 0x4 */ BE(u32) mSize;
 };
 
 class J2DPane {

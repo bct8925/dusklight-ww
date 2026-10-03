@@ -79,6 +79,7 @@ void JAIZelBasic::load2ndDynamicWave() {}
 void JAIZelBasic::loadStaticWaves() {}
 void JAIZelBasic::messageSePlay(unsigned short,struct Vec *,signed char) {}
 void JAIZelBasic::monsSeInit() {}
+void JAIZelBasic::monsSeStart(unsigned int,struct Vec *,unsigned int,unsigned int,signed char) {}
 void JAIZelBasic::onEnemyDamage() {}
 void JAIZelBasic::prepareLandingDemo(int) {}
 void JAIZelBasic::rainPlay(int) {}
@@ -105,6 +106,8 @@ void JAIZelBasic::setLinkShieldType(int,int) {}
 void JAIZelBasic::setLinkSwordType(int,int) {}
 void JAIZelBasic::setOutputMode(unsigned int) {}
 void JAIZelBasic::setSceneName(char *,int,int) {}
+void JAIZelBasic::setShipSailState(int) {}
+void JAIZelBasic::shipCruiseSePlay(struct Vec *,float) {}
 void JAIZelBasic::stSkyCloisters() {}
 void JAIZelBasic::startLandingDemo() {}
 void JAIZelBasic::subBgmStart(unsigned int) {}

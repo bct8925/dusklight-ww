@@ -13,23 +13,39 @@
 extern actor_process_profile_definition g_profile_AGB;
 extern actor_process_profile_definition g_profile_ARROW;
 extern actor_process_profile_definition g_profile_BOOMERANG;
+extern actor_process_profile_definition g_profile_BRIDGE;
 extern actor_process_profile_definition g_profile_Bomb2;
 extern actor_process_profile_definition g_profile_DEMO00;
 extern actor_process_profile_definition g_profile_DISAPPEAR;
 extern actor_process_profile_definition g_profile_ESA;
+extern actor_process_profile_definition g_profile_GRASS;
 extern actor_process_profile_definition g_profile_GRID;
 extern actor_process_profile_definition g_profile_HIMO2;
 extern actor_process_profile_definition g_profile_HOOKSHOT;
 extern actor_process_profile_definition g_profile_ITEM;
 extern actor_process_profile_definition g_profile_Iball;
+extern actor_process_profile_definition g_profile_KAMOME;
+extern actor_process_profile_definition g_profile_KANBAN;
+extern actor_process_profile_definition g_profile_KB;
+extern actor_process_profile_definition g_profile_KN;
+extern actor_process_profile_definition g_profile_KNOB00;
+extern actor_process_profile_definition g_profile_KYTAG01;
+extern actor_process_profile_definition g_profile_Lwood;
 extern actor_process_profile_definition g_profile_NH;
 extern actor_process_profile_definition g_profile_NPC_FA1;
+extern actor_process_profile_definition g_profile_OBJ_IKADA;
 extern actor_process_profile_definition g_profile_OBJ_SEARCH;
+extern actor_process_profile_definition g_profile_OBJ_TORIPOST;
+extern actor_process_profile_definition g_profile_Obj_Lpalm;
+extern actor_process_profile_definition g_profile_Obj_Wood;
 extern actor_process_profile_definition g_profile_SEA;
+extern actor_process_profile_definition g_profile_SHIP;
 extern actor_process_profile_definition g_profile_SPC_ITEM01;
 extern actor_process_profile_definition g_profile_STANDITEM;
+extern actor_process_profile_definition g_profile_Stone2;
 extern actor_process_profile_definition g_profile_THROWSTONE;
 extern actor_process_profile_definition g_profile_TITLE;
+extern actor_process_profile_definition g_profile_TSUBO;
 extern actor_process_profile_definition g_profile_VRBOX2;
 extern actor_process_profile_definition g_profile_VRBOX;
 extern actor_process_profile_definition2 g_profile_BG;
@@ -154,13 +170,13 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_OBJ_OTBLE (d_a_obj_otble not built)
     nullptr,  // g_profile_OBJ_WARPT (d_a_obj_warpt not built)
     reinterpret_cast<process_profile_definition*>(&g_profile_OBJ_SEARCH),
-    nullptr,  // g_profile_OBJ_TORIPOST (d_a_obj_toripost not built)
-    nullptr,  // g_profile_OBJ_IKADA (d_a_obj_ikada not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_OBJ_TORIPOST),
+    reinterpret_cast<process_profile_definition*>(&g_profile_OBJ_IKADA),
     nullptr,  // g_profile_OBJ_MJDOOR (d_a_obj_majyuu_door not built)
     nullptr,  // g_profile_OBJ_PFALL (d_a_obj_pfall not built)
     nullptr,  // g_profile_OBJ_HOLE (d_a_obj_hole not built)
     nullptr,  // g_profile_Obj_Stair (d_a_obj_stair not built)
-    nullptr,  // g_profile_Obj_Lpalm (d_a_obj_lpalm not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_Obj_Lpalm),
     nullptr,  // g_profile_Obj_Mtest (d_a_obj_mtest not built)
     nullptr,  // g_profile_Obj_Mkie (d_a_obj_mkie not built)
     nullptr,  // g_profile_Obj_Mkiek (d_a_obj_mkiek not built)
@@ -176,7 +192,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_Obj_Smplbg (d_a_obj_smplbg not built)
     nullptr,  // g_profile_Obj_Akabe (d_a_obj_akabe not built)
     nullptr,  // g_profile_Obj_Ashut (d_a_obj_ashut not built)
-    nullptr,  // g_profile_BRIDGE (d_a_bridge not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_BRIDGE),
     nullptr,  // g_profile_MSW (d_a_msw not built)
     nullptr,  // g_profile_MFLFT (d_a_mflft not built)
     nullptr,  // g_profile_KLFT (d_a_klft not built)
@@ -252,7 +268,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_Obj_Ebomzo (d_a_obj_ebomzo not built)
     nullptr,  // g_profile_Obj_Kanat (d_a_obj_kanat not built)
     nullptr,  // g_profile_Obj_Aygr (d_a_obj_aygr not built)
-    nullptr,  // g_profile_SHIP (d_a_ship not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_SHIP),
     nullptr,  // g_profile_Obj_Jump (d_a_obj_jump not built)
     reinterpret_cast<process_profile_definition*>(&g_profile_PLAYER),
     reinterpret_cast<process_profile_definition*>(&g_profile_HOOKSHOT),
@@ -268,7 +284,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_OSHIP (d_a_oship not built)
     nullptr,  // g_profile_RECTANGLE (d_a_rectangle not built)
     nullptr,  // g_profile_BB (d_a_bb not built)
-    nullptr,  // g_profile_KANBAN (d_a_kanban not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_KANBAN),
     nullptr,  // g_profile_HITOBJ (d_a_hitobj not built)
     nullptr,  // g_profile_KT (d_a_kt not built)
     nullptr,  // g_profile_EP (d_a_ep not built)
@@ -280,7 +296,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_TN (d_a_tn not built)
     nullptr,  // g_profile_MANT (d_a_mant not built)
     nullptr,  // g_profile_KANTERA (d_a_kantera not built)
-    nullptr,  // g_profile_KAMOME (d_a_kamome not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_KAMOME),
 #if VERSION == VERSION_DEMO
     nullptr,  // g_profile_KAMOME2 (d_a_kamome2 not built)
 #endif
@@ -289,7 +305,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_DEMO_KMM (d_a_demo_kmm not built)
     nullptr,  // g_profile_NZ (d_a_nz not built)
     nullptr,  // g_profile_NZG (d_a_nzg not built)
-    nullptr,  // g_profile_KN (d_a_kn not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_KN),
     nullptr,  // g_profile_DEMO_DK (d_a_demo_dk not built)
     nullptr,  // g_profile_AM (d_a_am not built)
     nullptr,  // g_profile_AM2 (d_a_am2 not built)
@@ -309,7 +325,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_BWD (d_a_bwd not built)
     nullptr,  // g_profile_BWDS (d_a_bwds not built)
     nullptr,  // g_profile_BWDG (d_a_bwdg not built)
-    nullptr,  // g_profile_KB (d_a_kb not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_KB),
     reinterpret_cast<process_profile_definition*>(&g_profile_ESA),
     nullptr,  // g_profile_DR (d_a_dr not built)
     nullptr,  // g_profile_DR2 (d_a_dr2 not built)
@@ -356,7 +372,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_Obj_Demo_Barrel (d_a_obj_demo_barrel not built)
     nullptr,  // g_profile_Obj_Dmgroom (d_a_obj_dmgroom not built)
     nullptr,  // g_profile_Obj_Doguu (d_a_obj_doguu not built)
-    nullptr,  // g_profile_Obj_Wood (d_a_obj_wood not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_Obj_Wood),
     nullptr,  // g_profile_Obj_Flame (d_a_obj_flame not built)
     nullptr,  // g_profile_Obj_Buoyrace (d_a_obj_buoyrace not built)
     nullptr,  // g_profile_Obj_Coming (d_a_obj_coming not built)
@@ -395,7 +411,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_ATDOOR (d_a_atdoor not built)
     nullptr,  // g_profile_MDOOR (d_a_mdoor not built)
     nullptr,  // g_profile_KDDOOR (d_a_kddoor not built)
-    nullptr,  // g_profile_KNOB00 (d_a_knob00 not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_KNOB00),
     nullptr,  // g_profile_MTOGE (d_a_mtoge not built)
     nullptr,  // g_profile_ANDSW0 (d_a_andsw0 not built)
     nullptr,  // g_profile_ANDSW2 (d_a_andsw2 not built)
@@ -474,7 +490,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_NPC_AH (d_a_npc_ah not built)
     nullptr,  // g_profile_AUCTION (d_a_auction not built)
     nullptr,  // g_profile_KYTAG00 (d_a_kytag00 not built)
-    nullptr,  // g_profile_KYTAG01 (d_a_kytag01 not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_KYTAG01),
     nullptr,  // g_profile_KYTAG02 (d_a_kytag02 not built)
     nullptr,  // g_profile_KYTAG03 (d_a_kytag03 not built)
     nullptr,  // g_profile_KYTAG04 (d_a_kytag04 not built)
@@ -498,7 +514,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_OBJ_FIGURE (d_a_obj_figure not built)
     nullptr,  // g_profile_OBJ_HAT (d_a_obj_hat not built)
     reinterpret_cast<process_profile_definition*>(&g_profile_DEMO00),
-    nullptr,  // g_profile_Lwood (d_a_lwood not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_Lwood),
     nullptr,  // g_profile_Dummy (d_a_dummy not built)
     nullptr,  // g_profile_TAG_EVENT (d_a_tag_event not built)
     nullptr,  // g_profile_TAG_HINT (d_a_tag_hint not built)
@@ -528,7 +544,7 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     reinterpret_cast<process_profile_definition*>(&g_profile_AGB),
     nullptr,  // g_profile_AGBSW0 (d_a_agbsw0 not built)
     nullptr,  // g_profile_MAGMA (d_a_magma not built)
-    nullptr,  // g_profile_GRASS (d_a_grass not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_GRASS),
     reinterpret_cast<process_profile_definition*>(&g_profile_KY_THUNDER),
     reinterpret_cast<process_profile_definition*>(&g_profile_VRBOX),
     reinterpret_cast<process_profile_definition*>(&g_profile_VRBOX2),
@@ -547,9 +563,9 @@ process_profile_definition* g_fpcPfLst_ProfileList[] = {
     nullptr,  // g_profile_Hys (d_a_hys not built)
     nullptr,  // g_profile_SWHIT0 (d_a_swhit0 not built)
     nullptr,  // g_profile_TAG_GSHIP (d_a_tag_ghostship not built)
-    nullptr,  // g_profile_TSUBO (d_a_tsubo not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_TSUBO),
     nullptr,  // g_profile_STONE (d_a_stone not built)
-    nullptr,  // g_profile_Stone2 (d_a_stone2 not built)
+    reinterpret_cast<process_profile_definition*>(&g_profile_Stone2),
     nullptr,  // g_profile_Obj_Barrel (d_a_obj_barrel not built)
     nullptr,  // g_profile_Obj_Barrel2 (d_a_obj_barrel2 not built)
     nullptr,  // g_profile_Obj_Try (d_a_obj_try not built)

@@ -2,6 +2,7 @@
 #define J2DTEXTBOX_H
 
 #include "JSystem/J2DGraph/J2DPane.h"
+#include "helpers/endian.h"
 #include "JSystem/JKernel/JKRArchive.h"
 #include "JSystem/JUtility/JUTFont.h"
 #include "JSystem/JUtility/JUTResFont.h"
@@ -19,8 +20,8 @@ enum J2DTextBoxVBinding {
 };
 
 struct J2DTbxBlockHeader {
-    /* 0x00 */ u32 mMagic;
-    /* 0x04 */ s32 mSize;
+    /* 0x00 */ BE(u32) mMagic;
+    /* 0x04 */ BE(s32) mSize;
 };
 
 class J2DTextBox : public J2DPane {

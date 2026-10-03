@@ -3,6 +3,9 @@
 
 #include "math.h" // IWYU pragma: keep
 #include "dolphin/mtx/vec.h"
+#if TARGET_PC
+#include "helpers/endian.h"
+#endif
 
 struct cXy {
     f32 x;
@@ -36,6 +39,11 @@ struct cXyz : Vec {
         y = pY;
         z = pZ;
     }
+#if TARGET_PC
+    // Positions read in place from big-endian file data (stage chunks, paths).
+    cXyz(const BE<Vec>& vec) : cXyz((Vec)vec) {}
+    void operator=(const BE<Vec>& vec) { *this = (Vec)vec; }
+#endif
     cXyz(const Vec& vec) {
         x = vec.x;
         y = vec.y;

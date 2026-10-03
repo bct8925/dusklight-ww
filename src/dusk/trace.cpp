@@ -1,4 +1,5 @@
 #include "dusk/trace.h"
+#include "dusk/main.h"
 
 #include <borealis/log.hpp>
 
@@ -32,6 +33,24 @@ void Trace(const char* fmt, ...) {
     std::vsnprintf(buf, sizeof(buf), fmt, args);
     va_end(args);
     TraceLog.info("{}", buf);
+
+    // Also write straight to trace.txt, flushed per line, so the last lines before a crash
+    // survive (the log file is buffered).
+    static std::mutex sFileMutex;
+    std::lock_guard lock(sFileMutex);
+    static FILE* sFile = [] {
+        std::filesystem::path path = CachePath / "trace.txt";
+#if _WIN32
+        return _wfopen(path.c_str(), L"w");
+#else
+        return std::fopen(path.c_str(), "w");
+#endif
+    }();
+    if (sFile != nullptr) {
+        std::fputs(buf, sFile);
+        std::fputc('\n', sFile);
+        std::fflush(sFile);
+    }
 }
 
 const char* TraceSymbol(const void* addr) {

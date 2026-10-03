@@ -1396,10 +1396,17 @@ void dStage_playerInitIkada(fopAcM_prm_class* player_prm, void* i_file) {
     }
     pos.y += seaHeight;
     pos.y += 500.0f;
+#if TARGET_PC
+    player_prm->base.position = pos;
+
+    s16 angleZ = (((csXyz)ikada_data->base.angle).x & 0xFF) << 8;
+    player_prm->base.angle = csXyz(0, ((csXyz)ikada_data->base.angle).y, angleZ);
+#else
     player_prm->base.position.set(pos);
     
     s16 angleZ = (ikada_data->base.angle.x & 0xFF) << 8;
     player_prm->base.angle.set(0, ikada_data->base.angle.y, angleZ);
+#endif
 }
 
 /* 800419D0-80041AEC       .text dStage_chkPlayerId__Fii */
@@ -1732,6 +1739,16 @@ int dStage_tgscInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 /* 8004259C-80042628       .text dStage_roomReadInit__FP11dStage_dt_cPviPv */
 int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int i_num, void* i_file) {
     roomRead_class* rtbl = (roomRead_class*)((int*)i_data + 1);
+#if TARGET_PC
+    // The room table holds file offsets; mark them relative to the file (as in dusklight).
+    OFFSET_PTR(roomRead_data_class)* rtbl_entries = rtbl->m_entries;
+    i_stage->setRoom(rtbl);
+
+    for (int i = 0; i < rtbl->num; i++) {
+        rtbl_entries[i].setBase(i_file);
+        rtbl_entries[i]->m_rooms.setBase(i_file);
+    }
+#else
     roomRead_data_class** rtbl_entries = rtbl->m_entries;
     i_stage->setRoom(rtbl);
 
@@ -1739,6 +1756,7 @@ int dStage_roomReadInit(dStage_dt_c* i_stage, void* i_data, int i_num, void* i_f
         rtbl_entries[i] = (roomRead_data_class*)((uintptr_t)i_file + (uintptr_t)rtbl_entries[i]);
         rtbl_entries[i]->m_rooms = (u8*)((uintptr_t)i_file + (uintptr_t)rtbl_entries[i]->m_rooms);
     }
+#endif
 
     return 1;
 }
@@ -1766,7 +1784,11 @@ int dStage_pathInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPathInfo(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
+#if TARGET_PC
+        pPath->m_points.setBase(i_stage->getPntInf()->m_pnt_offset, false);  // offsets into the point chunk; 0 is valid
+#else
         pPath->m_points = (dPnt*)((uintptr_t)pPath->m_points + i_stage->getPntInf()->m_pnt_offset);
+#endif
     return 1;
 }
 
@@ -1784,7 +1806,11 @@ int dStage_rpatInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
 
     i_stage->setPath2Info(pStagePath);
     for (s32 i = 0; i < pStagePath->num; pPath++, i++)
+#if TARGET_PC
+        pPath->m_points.setBase(i_stage->getPnt2Inf()->m_pnt_offset, false);  // offsets into the point chunk; 0 is valid
+#else
         pPath->m_points = (dPnt*)((uintptr_t)pPath->m_points + i_stage->getPnt2Inf()->m_pnt_offset);
+#endif
     return 1;
 }
 
@@ -1815,7 +1841,11 @@ int dStage_memaInfoInit(dStage_dt_c* i_stage, void* i_data, int i_num, void*) {
     i_stage->setMemoryMap(pd);
 
     if (pd != NULL) {
+#if TARGET_PC
+        BE(u32)* entry_p = pd->m_entries;  // big-endian sizes
+#else
         u32* entry_p = pd->m_entries;
+#endif
 
         for (int i = 0; i < pd->num; i++) {
             JKRExpHeap* heap = dStage_roomControl_c::createMemoryBlock(i, *entry_p + 0x300);
@@ -1865,7 +1895,12 @@ bool dStage_setShipPos(int param_0, int i_roomNo) {
                         }
                     }
                 } else {
-                    ship_p->initStartPos(&ship_data_p->m_pos, ship_data_p->m_angle);
+    #if TARGET_PC
+                cXyz shipPos = ship_data_p->m_pos;  // big-endian in the stage data
+                ship_p->initStartPos(&shipPos, ship_data_p->m_angle);
+#else
+                ship_p->initStartPos(&ship_data_p->m_pos, ship_data_p->m_angle);
+#endif
                 }
                 return true;
             }
@@ -1903,7 +1938,12 @@ bool dStage_setShipPos(int param_0, int i_roomNo) {
         if (ship_data_p != NULL) {
             daShip_c* ship_p = (daShip_c*)fopAcM_SearchByName(fpcNm_SHIP_e);
             if (ship_p != NULL) {
+#if TARGET_PC
+                cXyz shipPos = ship_data_p->m_pos;  // big-endian in the stage data
+                ship_p->initStartPos(&shipPos, ship_data_p->m_angle);
+#else
                 ship_p->initStartPos(&ship_data_p->m_pos, ship_data_p->m_angle);
+#endif
                 return true;
             }
         }
@@ -2048,9 +2088,14 @@ void dStage_dt_c_offsetToPtr(void* i_data) {
     dStage_nodeHeader* p_tno = file->m_nodes;
 
     for (int i = 0; i < file->m_chunkCount; i++) {
+#if TARGET_PC
+        // Offsets stay relative (64-bit pointers do not fit); OffsetPtr marks them relocated.
+        p_tno->m_offset.setBase(i_data);
+#else
         if (p_tno->m_offset != 0) {
             p_tno->m_offset += (uintptr_t)i_data;
         }
+#endif
         p_tno++;
     }
 }

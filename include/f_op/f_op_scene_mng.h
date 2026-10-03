@@ -9,8 +9,8 @@ typedef struct base_process_class base_process_class;
 scene_class* fopScnM_SearchByID(fpc_ProcID id);
 BOOL fopScnM_ChangeReq(scene_class*, s16, s16, u16);
 BOOL fopScnM_DeleteReq(scene_class*);
-BOOL fopScnM_CreateReq(s16, s16, u16, u32);
-u32 fopScnM_ReRequest(s16, u32);
+BOOL fopScnM_CreateReq(s16, s16, u16, uintptr_t);
+u32 fopScnM_ReRequest(s16, uintptr_t);
 void fopScnM_Management(void);
 void fopScnM_Init(void);
 

@@ -69,6 +69,25 @@ def fields(body: str) -> list[re.Match]:
     return result
 
 
+def map_type(ours: str, theirs: str):
+    """Apply dusklight's kind of annotation to our own type (TP's field types can differ)."""
+    ours = ours.replace(" ", "")
+    pointer = ours.endswith("*")
+    base = ours.rstrip("*")
+    if theirs.startswith("OFFSET_PTR(") or theirs.startswith("OFFSET_PTR_RAW"):
+        # Relocated in place by OffsetPtr::setBase; keep it typed when ours is a pointer.
+        if pointer:
+            return f"OFFSET_PTR({base})" if base != "void" else "OFFSET_PTR_RAW"
+        return theirs
+    if theirs == "OFFSET_PTR_V0":
+        return "OFFSET_PTR_V0"
+    if theirs.rstrip(" *").startswith(("BE(", "BE<")):
+        if theirs.endswith("*") != pointer:
+            return None
+        return f"BE({base})*" if pointer else f"BE({base})"
+    return None
+
+
 def port(tww_rel: str, ref: str, dry: bool) -> int:
     path = ROOT / tww_rel
     text = path.read_bytes().decode("utf-8")
@@ -102,9 +121,10 @@ def port(tww_rel: str, ref: str, dry: bool) -> int:
                 # Same offset but array vs. scalar; leave it for a human.
                 print(f"  ? {name}::{m.group('name')}: {ours}{m.group('arr') or ''} vs {theirs}{ref.group('arr') or ''}")
                 continue
-            new = theirs
-            if theirs.startswith("OFFSET_PTR(") or theirs.startswith("OFFSET_PTR_RAW"):
-                new = "OFFSET_PTR_V0"
+            new = map_type(ours, theirs)
+            if new is None:
+                print(f"  ? {name}::{m.group('name')}: {ours} vs {theirs}")
+                continue
             ts, te = s + m.start("type"), s + m.end("type")
             edits.append((ts, te, new + (" " if not new.endswith("*") else ""), f"{name}::{m.group('name')}: {ours} -> {new}"))
     for *_, msg in edits:
